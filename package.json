@@ -1,5 +1,5 @@
 {
-  "name": "uv-web",
+  "name": "pagina-uv",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,12 +9,16 @@
     "lint": "next lint"
   },
   "dependencies": {
+    "jquery": "^3.7.1",
+    "next": "14.2.3",
+    "owl.carousel": "^2.3.4",
     "react": "^18",
     "react-dom": "^18",
-    "next": "14.2.3"
+    "react-owl-carousel": "^2.3.3"
   },
   "devDependencies": {
     "eslint": "^8",
-    "eslint-config-next": "14.2.3"
+    "eslint-config-next": "14.2.3",
+    "webpack": "^5.91.0"
   }
 }

@@ -11,7 +11,66 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={inter.className}>{children}</body>
+      <head>
+        {/* favicons Icons */}
+        <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-touch-icon.png" />
+        <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png" />
+        <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicons/favicon-16x16.png" />
+        <link rel="manifest" href="/assets/images/favicons/site.webmanifest" />
+        <meta name="description" content="Sonchoy HTML 5 Template" />
+
+        {/* fonts */}
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="true" />
+        <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+        <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
+
+        {/* Vendor CSS */}
+        <link rel="stylesheet" href="/assets/vendors/bootstrap/css/bootstrap.min.css" />
+        <link rel="stylesheet" href="/assets/vendors/animate/animate.min.css" />
+        <link rel="stylesheet" href="/assets/vendors/animate/custom-animate.css" />
+        <link rel="stylesheet" href="/assets/vendors/fontawesome/css/all.min.css" />
+        <link rel="stylesheet" href="/assets/vendors/jarallax/jarallax.css" />
+        <link rel="stylesheet" href="/assets/vendors/jquery-magnific-popup/jquery.magnific-popup.css" />
+        <link rel="stylesheet" href="/assets/vendors/odometer/odometer.min.css" />
+        <link rel="stylesheet" href="/assets/vendors/swiper/swiper.min.css" />
+        <link rel="stylesheet" href="/assets/vendors/sonchoy-icon/style.css" />
+        <link rel="stylesheet" href="/assets/vendors/owl-carousel/owl.carousel.min.css" />
+        <link rel="stylesheet" href="/assets/vendors/owl-carousel/owl.theme.default.min.css" />
+        <link rel="stylesheet" href="/assets/vendors/bootstrap-select/css/bootstrap-select.min.css" />
+        <link rel="stylesheet" href="/assets/vendors/jquery-ui/jquery-ui.css" />
+        <link rel="stylesheet" href="/assets/vendors/nice-select/nice-select.css" />
+
+        {/* template styles */}
+        <link rel="stylesheet" href="/assets/css/sonchoy.css" />
+        <link rel="stylesheet" href="/assets/css/sonchoy-responsive.css" />
+      </head>
+
+      <body >{children}
+        {/* scripts  */}
+        <script src="/assets/vendors/jquery/jquery-3.6.0.min.js" />
+        <script src="/assets/vendors/bootstrap/js/bootstrap.bundle.min.js" />
+        <script src="/assets/vendors/jarallax/jarallax.min.js" />
+        <script src="/assets/vendors/jquery-ajaxchimp/jquery.ajaxchimp.min.js" />
+        <script src="/assets/vendors/jquery-appear/jquery.appear.min.js" />
+        <script src="/assets/vendors/jquery-circle-progress/jquery.circle-progress.min.js" />
+        <script src="/assets/vendors/jquery-magnific-popup/jquery.magnific-popup.min.js" />
+        <script src="/assets/vendors/jquery-validate/jquery.validate.min.js" />
+        <script src="/assets/vendors/odometer/odometer.min.js" />
+        <script src="/assets/vendors/swiper/swiper.min.js" />
+        <script src="/assets/vendors/wnumb/wNumb.min.js" />
+        <script src="/assets/vendors/wow/wow.js" />
+        <script src="/assets/vendors/isotope/isotope.js" />
+         {/* <script src="/assets/vendors/owl-carousel/owl.carousel.min.js" />  */}
+        <script src="/assets/vendors/bootstrap-select/js/bootstrap-select.min.js" />
+        <script src="/assets/vendors/jquery-ui/jquery-ui.js" />
+        <script src="/assets/vendors/jquery.circle-type/jquery.circleType.js" />
+        <script src="/assets/vendors/jquery.circle-type/jquery.lettering.min.js" />
+        <script src="/assets/vendors/nice-select/jquery.nice-select.min.js" />
+        <script src="/assets/vendors/marquee/marquee.min.js" />
+        {/* Fin de los scripts */}
+        <script src="assets/js/sonchoy.js"></script>
+      </body>
     </html>
   );
 }
