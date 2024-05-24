@@ -13,16 +13,12 @@ import SearchPopup from "@/components/layout/SearchPopup";
 export default function Home() {
   return (
     <>
-      <div class="custom-cursor__cursor"></div>
-      <div class="custom-cursor__cursor-two"></div>
-
-
-      {/* <div class="preloader">
-        <div class="preloader__image"></div>
-      </div> */}
       
-      <div className="page-wrapper">
-        <Header></Header>
+
+
+      
+      
+      
         <Slider></Slider>
         <SeccionServicios></SeccionServicios>
         <SliderSecundario></SliderSecundario>
@@ -31,13 +27,7 @@ export default function Home() {
         <SeccionVarios></SeccionVarios>
         <SeccionDescargaApp></SeccionDescargaApp>
 
-        <Footer></Footer>
-      </div>
-      <div className="mobile-nav__wrapper">
-        <MobileNav></MobileNav>
-      </div>
-      <SearchPopup />
-      <a href="#" data-target="html" class="scroll-to-target scroll-to-top"><i class="fas fa-arrow-up"></i></a>
+        
     </>
   );
 }

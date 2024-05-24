@@ -1,7 +1,15 @@
 import { Inter } from "next/font/google";
 import "./globals.css";
 
+
+import Header from "../components/layout/Header";
+import Footer from "../components/layout/Footer";
+import MobileNav from "@/components/layout/MobileNav";
+import SearchPopup from "@/components/layout/SearchPopup";
+
+
 const inter = Inter({ subsets: ["latin"] });
+
 
 export const metadata = {
   title: "Create Next App",
@@ -46,7 +54,25 @@ export default function RootLayout({ children }) {
         <link rel="stylesheet" href="/assets/css/sonchoy-responsive.css" />
       </head>
 
-      <body >{children}
+      <body >
+        <div class="custom-cursor__cursor"></div>
+        <div class="custom-cursor__cursor-two"></div>
+        {/* <div class="preloader">
+        <div class="preloader__image"></div>
+      </div> */}
+        <div className="page-wrapper">
+          <Header></Header>
+          {children}
+
+          <Footer></Footer>
+        </div>
+        <div className="mobile-nav__wrapper">
+          <MobileNav></MobileNav>
+        </div>
+        <SearchPopup />
+        <a href="#" data-target="html" class="scroll-to-target scroll-to-top"><i class="fas fa-arrow-up"></i></a>
+
+
         {/* scripts  */}
         <script src="/assets/vendors/jquery/jquery-3.6.0.min.js" />
         <script src="/assets/vendors/bootstrap/js/bootstrap.bundle.min.js" />
@@ -61,7 +87,7 @@ export default function RootLayout({ children }) {
         <script src="/assets/vendors/wnumb/wNumb.min.js" />
         <script src="/assets/vendors/wow/wow.js" />
         <script src="/assets/vendors/isotope/isotope.js" />
-         {/* <script src="/assets/vendors/owl-carousel/owl.carousel.min.js" />  */}
+        {/* <script src="/assets/vendors/owl-carousel/owl.carousel.min.js" />  */}
         <script src="/assets/vendors/bootstrap-select/js/bootstrap-select.min.js" />
         <script src="/assets/vendors/jquery-ui/jquery-ui.js" />
         <script src="/assets/vendors/jquery.circle-type/jquery.circleType.js" />

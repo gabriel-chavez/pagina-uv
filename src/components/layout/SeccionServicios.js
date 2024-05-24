@@ -1,7 +1,7 @@
 // Services.js
 'use client'
 import { useEffect } from 'react';
-
+import Tarjeta1 from '../common/Tarjeta1'
 const SeccionServicios = () => {
   useEffect(() => {
     if (typeof window !== 'undefined') {
@@ -41,7 +41,7 @@ const SeccionServicios = () => {
 
   return (
     <>
-      
+
       <section className="services-one">
         <div className="services-one__shape-1 float-bob-x">
           <img
@@ -68,113 +68,34 @@ const SeccionServicios = () => {
           </div>
           <div className="services-one__bottom">
             <div className="services-one__carousel owl-carousel owl-theme thm-owl__carousel">
-              {/*Services One Single Start*/}
-              <div className="item">
-                <div className="services-one__single">
-                  <div className="services-one__title-box">
-                    <h3 className="services-one__title">
-                      <a href="#">Accidentes Personales</a>
-                    </h3>
-                  </div>
-                  <div className="services-one__img-box">
-                    <div className="services-one__img">
-                      <img
-                        src="/assets/images/services/Seguro-de-accidentes-1.jpg"
-                        alt=""
-                      />
-                    </div>
-                    <div className="services-one__icon">
-                      <span className="icon-healthcare"></span>
-                    </div>
-                  </div>
-                  <div className="services-one__read-more">
-                    <a href="#">
-                      LEER MÁS<span className="icon-next"></span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-              {/*Services One Single End*/}
-
-              {/* Repeat for other services */}
-              <div className="item">
-                <div className="services-one__single">
-                  <div className="services-one__title-box">
-                    <h3 className="services-one__title">
-                      <a href="#">Seguro de vida</a>
-                    </h3>
-                  </div>
-                  <div className="services-one__img-box">
-                    <div className="services-one__img">
-                      <img
-                        src="/assets/images/services/seguro-vida.jpg"
-                        alt=""
-                      />
-                    </div>
-                    <div className="services-one__icon">
-                      <span className="icon-family-insurance"></span>
-                    </div>
-                  </div>
-                  <div className="services-one__read-more">
-                    <a href="#">
-                      LEER MÁS<span className="icon-next"></span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              <div className="item">
-                <div className="services-one__single">
-                  <div className="services-one__title-box">
-                    <h3 className="services-one__title">
-                      <a href="">Seguro de desgravamen</a>
-                    </h3>
-                  </div>
-                  <div className="services-one__img-box">
-                    <div className="services-one__img">
-                      <img
-                        src="/assets/images/services/seguro-desgravamen.jpg"
-                        alt=""
-                      />
-                    </div>
-                    <div className="services-one__icon">
-                      <span className="icon-risk-management"></span>
-                    </div>
-                  </div>
-                  <div className="services-one__read-more">
-                    <a href="">
-                      LEER MÁS<span className="icon-next"></span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-
-              <div className="item">
-                <div className="services-one__single">
-                  <div className="services-one__title-box">
-                    <h3 className="services-one__title">
-                      <a href="">Seguro de cesantia</a>
-                    </h3>
-                  </div>
-                  <div className="services-one__img-box">
-                    <div className="services-one__img">
-                      <img
-                        src="/assets/images/services/services-1-1.jpg"
-                        alt=""
-                      />
-                    </div>
-                    <div className="services-one__icon">
-                      <span className="icon-family-insurance"></span>
-                    </div>
-                  </div>
-                  <div className="services-one__read-more">
-                    <a href="">
-                      LEER MÁS<span className="icon-next"></span>
-                    </a>
-                  </div>
-                </div>
-              </div>
-              {/* Add other services similarly */}
+                    
+              <Tarjeta1
+                titulo="Accidentes Personales"
+                link="#"
+                imgSrc="/assets/images/services/Seguro-de-accidentes-1.jpg"               
+                iconClass="icon-healthcare"               
+              />
+           
+              <Tarjeta1
+                titulo="Seguro de vida"
+                link="#"
+                imgSrc="/assets/images/services/seguro-vida.jpg"               
+                iconClass="icon-family-insurance"               
+              />
+             
+              <Tarjeta1
+                titulo="Seguro de desgravamen"
+                link="#"
+                imgSrc="/assets/images/services/seguro-vida.jpg"               
+                iconClass="icon-family-insurance"               
+              />
+              <Tarjeta1
+                titulo="Seguro de cesantia"
+                link="#"
+                imgSrc="/assets/images/services/services-1-1.jpg"               
+                iconClass="icon-family-insurance"               
+              />
+          
             </div>
           </div>
         </div>
