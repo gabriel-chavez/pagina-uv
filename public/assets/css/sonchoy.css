@@ -43,6 +43,10 @@
   --insur-base: rgb(0, 114, 180);
   --insur-font-two: "Poppins", sans-serif;
   --insur-white:#ffffff;
+  /*Uv*/
+  --uv-base:#0960a9;
+  --uv-plomo:#f6f7fb;
+  
 }
 
 /*Boton*/
@@ -128,7 +132,7 @@ body {
   font-size: 16px;
   line-height: 30px;
   font-weight: 400;
-  color: var(--sonchoy-gray);
+  /* color: var(--sonchoy-gray); */
 }
 
 body.locked {
@@ -177,9 +181,9 @@ h6 {
   margin: 0;
 }
 
-p {
+/* p {
   margin: 0;
-}
+} */
 
 dl,
 ol,
@@ -13835,9 +13839,9 @@ Project Style1
 .insurance-details__points li .icon span {
   position: relative;
   display: inline-block;
-  font-size: 16px;
-  color: var(--sonchoy-base);
+  font-size: 20px;  
 }
+.icon span 
 
 .insurance-details__points li>p {
   margin-left: 15px;
@@ -16255,7 +16259,12 @@ Project Style1
 }
 
 
-
+.color-tiulo-uv{
+  color: var(--uv-base)
+}
+.color-fondo-uv{
+  background-color: var(--uv-plomo);
+}
 
 /*--------------------------------------------------------------
 # End

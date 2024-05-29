@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 
-const InsuranceDetails = ({ titulo1, puntos, titulo2, texto }) => {
+const Contenido2 = ({ titulo1, puntos, titulo2, texto }) => {
   return (
     <div className="insurance-details__points-and-text-box" style={{marginTop:"40px"}}>
       <div className="insurance-details__points-box">
@@ -26,4 +26,4 @@ const InsuranceDetails = ({ titulo1, puntos, titulo2, texto }) => {
 };
 
 
-export default InsuranceDetails;
+export default Contenido2;
