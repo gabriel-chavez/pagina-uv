@@ -1,7 +1,7 @@
 
 import Contenido3 from "@/components/common/Contenido3";
 import EncabezadoPagina from "@/components/common/EncabezadoPagina";
-
+import Plan from "@/components/common/Plan";
 export default function Home() {
     const breadcrumbs = [
         { label: 'Inicio', url: '/' },
@@ -33,6 +33,54 @@ export default function Home() {
      Por ejemplo con el Plan A de nuestro Seguro de Vida Individual, en caso de invalidez total y permanente el asegurado recibirá un monto de Bs.7.500. En caso de fallecimiento la empresa pagará Bs.15.000 a los beneficiarios, además de Bs.1.500 para gastos de sepelio</p>`
     const textoRequisitosHtml = '<span>¿Cómo <b>Asegurarte?</b></span>'
     const textoExclusionesHtml = '<span>Exclusiones del <b>Seguro de Vida Individual</b></span>'
+    const coberturasYMonto = [
+        { cobertura: "Muerte por cualquier causa", monto: 70000 },
+        { cobertura: "Invalidez total y permanente", monto: 35000 },
+        { cobertura: "Gastos de sepelio", monto: 6000 }
+    ];
+    const planes = [
+        {
+            nombre: "Plan A",
+            precio: 45,
+            coberturas: [
+                { cobertura: "Cobertura 1", monto: 10000 },
+                { cobertura: "Cobertura 2", monto: 20000 },
+                { cobertura: "Cobertura 3", monto: 30000 }
+            ],
+            beneficios: ["Beneficio 1", "Beneficio 2", "Beneficio 3"]
+        },
+        {
+            nombre: "Plan A",
+            precio: 45,
+            coberturas: [
+                { cobertura: "Cobertura 1", monto: 10000 },
+                { cobertura: "Cobertura 2", monto: 20000 },
+                { cobertura: "Cobertura 3", monto: 30000 }
+            ],
+            beneficios: ["Beneficio 1", "Beneficio 2", "Beneficio 3"]
+        },
+        {
+            nombre: "Plan A",
+            precio: 45,
+            coberturas: [
+                { cobertura: "Cobertura 1", monto: 10000 },
+                { cobertura: "Cobertura 2", monto: 20000 },
+                { cobertura: "Cobertura 3", monto: 30000 }
+            ],
+            beneficios: ["Beneficio 1", "Beneficio 2", "Beneficio 3"]
+        },
+        {
+            nombre: "Plan A",
+            precio: 45,
+            coberturas: [
+                { cobertura: "Cobertura 1", monto: 10000 },
+                { cobertura: "Cobertura 2", monto: 20000 },
+                { cobertura: "Cobertura 3", monto: 30000 }
+            ],
+            beneficios: ["Beneficio 1", "Beneficio 2", "Beneficio 3"]
+        }
+
+    ];
     return (
         <>
             <EncabezadoPagina
@@ -42,7 +90,7 @@ export default function Home() {
             />
             <section class="mt-5">
                 <Contenido3
-                    titulo={tituloBeneficiosHtml}                                             
+                    titulo={tituloBeneficiosHtml}
                     texto={textoBeneficiosHtml}
                 />
                 <Contenido3
@@ -50,7 +98,49 @@ export default function Home() {
                     puntos={puntosCobertura}
                     fondo={true}
                 />
-                <p>Planes</p>
+                <div class="container-fluid">
+                    <div class="text-center m-4">
+                        <h3 class="color-tiulo-uv">Elige tu plan de <b>Seguro de Vida Individual</b> </h3>
+                    </div>
+                    <div className="row ">
+                        <div className="d-flex flex-wrap justify-content-center align-items-start">
+                            {planes.map((plan, index) => (
+                                <div className="mb-4" key={index}>
+                                    <Plan
+                                        nombrePlan={plan.nombre}
+                                        precioAnual={plan.precio}
+                                        coberturas={coberturasYMonto}
+                                        textoBoton="Solicitar Seguro"
+                                    />
+                                </div>
+                            ))}
+                        </div>
+                    </div>
+                    <div class="text-center m-5">
+                        <h4 class="color-tiulo-uv m-2">Precio único para todas las edades (Edad mínima 18 años y edad máxima 60 años)</h4>
+                        <h3 class="color-tiulo-uv m-2 fw-bold fst-italic">Cláusula Adicional de Aviso de Siniestro 10 días.</h3>
+                    </div>
+                    <div class="container ">
+                        <div className="row m-5">
+                            <div class="col-md-8">
+                                <h5 className="text-info">Puedes contactarte con nuestros ejecutivos o auxiliares comerciales para adrquirir el seguro que se acomode a tus necesidades</h5>
+                            </div>
+                            <div class="col-md-4">
+                                <div className="d-grid gap-2">
+                                    <button className="btn btn-info btn-block text-white btn-md p-3">Contactar un ejecutivo comercial</button>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+
+
+
+
                 <Contenido3
                     titulo={textoRequisitosHtml}
                     puntos={puntosRequisitos}
@@ -60,6 +150,7 @@ export default function Home() {
                     titulo={textoExclusionesHtml}
                     puntos={puntosExclusiones}
                 />
+
             </section>
         </>
     );

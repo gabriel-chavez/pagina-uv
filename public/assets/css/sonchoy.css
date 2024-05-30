@@ -13851,6 +13851,7 @@ Project Style1
 
 .insurance-details__text-box {
   margin-left: 93px;
+  line-height: 1.5;
 }
 
 .insurance-details__text-box>h3 {
@@ -16265,6 +16266,51 @@ Project Style1
 .color-fondo-uv{
   background-color: var(--uv-plomo);
 }
+/* Plan.module.css */
+.card-plan{
+
+}
+
+.card-plan .card {
+  width: 360px !important;
+  border-radius: 0.9rem;
+  border-color: #1a4280;
+}
+
+.card-plan .card-header {
+  font-size: 1.8rem;
+  background-color: #1a4280;
+  color: #fff;
+  border-top-left-radius: 0.8rem;
+  border-top-right-radius: 0.8rem;
+}
+
+.card-plan .card-body {
+  padding: 20px;
+}
+
+.card-plan .card-title {
+  font-size: 1.2rem;
+  margin-bottom: 1rem;
+  font-weight: bolder;
+}
+
+.card-plan .display-3 {
+  font-size: 3.5rem;
+  margin-bottom: 1.5rem;
+  font-weight: bolder;
+  color: #1a4280;
+}
+
+.card-plan .list-unstyled {
+  margin-bottom: 1.5rem;
+}
+
+.card-plan .btn-success {
+  font-size: 1.25rem;
+  padding: 0.5rem 1.5rem;
+}
+
 
 /*--------------------------------------------------------------
 # End

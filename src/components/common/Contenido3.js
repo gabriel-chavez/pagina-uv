@@ -23,7 +23,15 @@ const Contenido3 = ({ titulo, puntos, texto, fondo }) => {
                     {puntos.map((point, index) => (
                       <li key={index}>
                         <div className="icon font-weight-bold">
-                          {point.marcado ? <span className="bi bi-check-lg text-success"></span> : <span className="bi bi-x-lg text-danger"></span>}
+                          {point.marcado !== null && point.marcado !== undefined ? (
+                            point.marcado ? (
+                              <span className="bi bi-check-lg text-success"></span>
+                            ) : (
+                              <span className="bi bi-x-lg text-danger"></span>
+                            )
+                          ) : (
+                            <span className="bi bi-dot"></span>
+                          )}
                         </div>
                         <span className="m-1 ms-3">{point.texto}</span>
                       </li>
