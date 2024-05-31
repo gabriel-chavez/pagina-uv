@@ -2,7 +2,7 @@
 import Contenido3 from "@/components/common/Contenido3";
 import EncabezadoPagina from "@/components/common/EncabezadoPagina";
 import Plan from "@/components/common/Plan";
-export default function Home() {
+export default function Page() {
     const breadcrumbs = [
         { label: 'Inicio', url: '/' },
         { label: 'Seguros', url: '/Seguros' },
@@ -88,7 +88,7 @@ export default function Home() {
                 title="Seguro de vida"
                 breadcrumbs={breadcrumbs}
             />
-            <section class="mt-5">
+            <section className="mt-5">
                 <Contenido3
                     titulo={tituloBeneficiosHtml}
                     texto={textoBeneficiosHtml}
@@ -98,9 +98,9 @@ export default function Home() {
                     puntos={puntosCobertura}
                     fondo={true}
                 />
-                <div class="container-fluid">
-                    <div class="text-center m-4">
-                        <h3 class="color-tiulo-uv">Elige tu plan de <b>Seguro de Vida Individual</b> </h3>
+                <div className="container-fluid">
+                    <div className="text-center m-4">
+                        <h3 className="color-tiulo-uv">Elige tu plan de <b>Seguro de Vida Individual</b> </h3>
                     </div>
                     <div className="row ">
                         <div className="d-flex flex-wrap justify-content-center align-items-start">
@@ -116,16 +116,16 @@ export default function Home() {
                             ))}
                         </div>
                     </div>
-                    <div class="text-center m-5">
-                        <h4 class="color-tiulo-uv m-2">Precio único para todas las edades (Edad mínima 18 años y edad máxima 60 años)</h4>
-                        <h3 class="color-tiulo-uv m-2 fw-bold fst-italic">Cláusula Adicional de Aviso de Siniestro 10 días.</h3>
+                    <div className="text-center m-5">
+                        <h4 className="color-tiulo-uv m-2">Precio único para todas las edades (Edad mínima 18 años y edad máxima 60 años)</h4>
+                        <h3 className="color-tiulo-uv m-2 fw-bold fst-italic">Cláusula Adicional de Aviso de Siniestro 10 días.</h3>
                     </div>
-                    <div class="container ">
+                    <div className="container ">
                         <div className="row m-5">
-                            <div class="col-md-8">
+                            <div className="col-md-8">
                                 <h5 className="text-info">Puedes contactarte con nuestros ejecutivos o auxiliares comerciales para adrquirir el seguro que se acomode a tus necesidades</h5>
                             </div>
-                            <div class="col-md-4">
+                            <div className="col-md-4">
                                 <div className="d-grid gap-2">
                                     <button className="btn btn-info btn-block text-white btn-md p-3">Contactar un ejecutivo comercial</button>
                                 </div>

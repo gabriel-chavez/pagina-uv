@@ -14,8 +14,8 @@ const SliderSecundario = () => {
           loop: true,
           items: 1,
           navText: [
-            '<span class="icon-left-arrow"></span>',
-            '<span class="icon-right-arrow"></span>',
+            '<span className="icon-left-arrow"></span>',
+            '<span className="icon-right-arrow"></span>',
           ],
           margin: 0,
           dots: true,

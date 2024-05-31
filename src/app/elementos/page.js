@@ -8,7 +8,7 @@ import Tarejta4 from "@/components/common/Tarjeta4";
 import Tarjeta5 from "@/components/common/Tarjeta5";
 
 
-export default function Home() {
+export default function Page() {
     const breadcrumbs = [
         { label: 'Inicio', url: '/' },
         { label: 'Seguros', url: '/Seguros' },
@@ -66,11 +66,11 @@ export default function Home() {
                 title="Seguro de vida"
                 breadcrumbs={breadcrumbs}
             />
-            <section class="insurance-details">
-                <div class="container">
-                    <div class="row">
-                        <div class="col-xl-8 col-lg-7">
-                            <div class="insurance-details__left"></div>
+            <section className="insurance-details">
+                <div className="container">
+                    <div className="row">
+                        <div className="col-xl-8 col-lg-7">
+                            <div className="insurance-details__left"></div>
                             <Contenido1
                                 titulo1="Atendemos una amplia variedad de seguros"
                                 texto="Adoptamos el desarrollo integral y el apoyo a los empleados con el objetivo de ser el empleador de primera elección dentro de nuestros sectores. A través de una combinación única de disciplinas y experiencia en ingeniería, construcción y diseño."
@@ -93,8 +93,8 @@ export default function Home() {
                             />
                             <Acordeon1 acordeon={acordeon} />
                         </div>
-                        <div class="col-xl-4 col-lg-5">
-                            <div class="insurance-details__right">
+                        <div className="col-xl-4 col-lg-5">
+                            <div className="insurance-details__right">
                                 <Categorias categorias={categorias} />
                                 <Tarejta4
                                     backgroundImage='assets/images/backgrounds/insurance-details-need-help-bg.jpg'
@@ -103,7 +103,7 @@ export default function Home() {
                                     botonUrl='contact.html'
                                 />
                                 <Tarjeta5
-                                    iconClass="icon-telephone-1"
+                                    iconclassName="icon-telephone-1"
                                     titulo="Llame en cualquier momento"
                                     subtitulo="800-10-9119"
                                 />

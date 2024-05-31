@@ -42,11 +42,11 @@
   --insur-primary: #F7F7F7;
   --insur-base: rgb(0, 114, 180);
   --insur-font-two: "Poppins", sans-serif;
-  --insur-white:#ffffff;
+  --insur-white: #ffffff;
   /*Uv*/
-  --uv-base:#0960a9;
-  --uv-plomo:#f6f7fb;
-  
+  --uv-base: #0960a9;
+  --uv-plomo: #f6f7fb;
+
 }
 
 /*Boton*/
@@ -4513,6 +4513,7 @@ ul {
 }
 
 .services-one__img {
+  height: 250px;
   position: relative;
   display: block;
   overflow: hidden;
@@ -4566,6 +4567,9 @@ ul {
 
 .services-one__img img {
   width: 100%;
+  height: 100%;
+
+  object-fit: cover;
   transition: .5s ease;
   transform: scale(1.05);
 }
@@ -9601,6 +9605,7 @@ Project Style1
   position: relative;
   display: block;
   overflow: hidden;
+  height: 430px;
 }
 
 .services-four__img::before {
@@ -9646,6 +9651,8 @@ Project Style1
 
 .services-four__img img {
   width: 100%;
+  height: 100%;
+  object-fit: cover;
   transform: scale3d(1, 1, 1);
   transition: transform 1s ease-in-out;
 }
@@ -13839,11 +13846,10 @@ Project Style1
 .insurance-details__points li .icon span {
   position: relative;
   display: inline-block;
-  font-size: 20px;  
+  font-size: 20px;
 }
-.icon span 
 
-.insurance-details__points li>p {
+.icon span .insurance-details__points li>p {
   margin-left: 15px;
   font-weight: 600;
   color: var(--sonchoy-black);
@@ -16260,16 +16266,16 @@ Project Style1
 }
 
 
-.color-tiulo-uv{
+.color-tiulo-uv {
   color: var(--uv-base)
 }
-.color-fondo-uv{
+
+.color-fondo-uv {
   background-color: var(--uv-plomo);
 }
-/* Plan.module.css */
-.card-plan{
 
-}
+/* Plan.module.css */
+.card-plan {}
 
 .card-plan .card {
   width: 360px !important;
@@ -16309,6 +16315,12 @@ Project Style1
 .card-plan .btn-success {
   font-size: 1.25rem;
   padding: 0.5rem 1.5rem;
+}
+
+.tarjeta1-sombra {
+  -webkit-box-shadow: 0px 0px 14px -4px rgba(0, 0, 0, 0.42);
+  -moz-box-shadow: 0px 0px 14px -4px rgba(0, 0, 0, 0.42);
+  box-shadow: 0px 0px 14px -4px rgba(0, 0, 0, 0.42);
 }
 
 

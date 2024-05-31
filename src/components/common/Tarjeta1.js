@@ -4,9 +4,9 @@ import React from 'react';
 import Image from 'next/image';
 import Link from 'next/link';
 
-const Tarjeta1 = ({ titulo, link, imgSrc, iconClass }) => {
+const Tarjeta1 = ({ titulo, link, imgSrc, iconClass, textoBoton="LEER MÁS" }) => {
   return (
-    <div className="item">
+    <div className="item tarjeta1-sombra">
         
       <div className="services-one__single">
         <div className="services-one__title-box">
@@ -18,12 +18,11 @@ const Tarjeta1 = ({ titulo, link, imgSrc, iconClass }) => {
         </div>
         <div className="services-one__img-box">
           <div className="services-one__img">
-            <Image
+            <img
               src={imgSrc}
               alt={titulo}
               layout="responsive"
-              width={500}
-              height={300}
+         
             />
           </div>
           <div className="services-one__icon">
@@ -33,7 +32,7 @@ const Tarjeta1 = ({ titulo, link, imgSrc, iconClass }) => {
         <div className="services-one__read-more">
           <Link href={link}>
          
-            LEER MÁS <span className="icon-next"></span>
+            {textoBoton}<span className="icon-next"></span>
            
           </Link>
         </div>

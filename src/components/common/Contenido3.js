@@ -9,14 +9,14 @@ const Contenido3 = ({ titulo, puntos, texto, fondo }) => {
       <div className={containerClass}>
         <div className='container' >
           <div className="row pt-4 pb-4" >
-            <div class="col-md-4">
+            <div className="col-md-4">
               {titulo && (
                 <div >
                   <h3 className="color-tiulo-uv" dangerouslySetInnerHTML={{ __html: titulo }}></h3>
                 </div>
               )}
             </div>
-            <div class="col-md-8">
+            <div className="col-md-8">
               {puntos && puntos.length > 0 && (
                 <div className="insurance-details__text-box">
                   <ul className="insurance-details__points list-unstyled">

@@ -1,3 +1,4 @@
+import 'bootstrap/dist/css/bootstrap.css'
 import { Inter } from "next/font/google";
 import "./globals.css";
 
@@ -6,6 +7,7 @@ import Header from "../components/layout/Header";
 import Footer from "../components/layout/Footer";
 import MobileNav from "@/components/layout/MobileNav";
 import SearchPopup from "@/components/layout/SearchPopup";
+import BootstrapClient from '@/components/BootstrapClient';
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -34,18 +36,18 @@ export default function RootLayout({ children }) {
         <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&display=swap" rel="stylesheet" />
 
         {/* Vendor CSS */}
-        <link rel="stylesheet" href="/assets/vendors/bootstrap/css/bootstrap.min.css" />
+        {/* <link rel="stylesheet" href="/assets/vendors/bootstrap/css/bootstrap.min.css" /> */}
         <link rel="stylesheet" href="/assets/vendors/animate/animate.min.css" />
         <link rel="stylesheet" href="/assets/vendors/animate/custom-animate.css" />
         <link rel="stylesheet" href="/assets/vendors/fontawesome/css/all.min.css" />
-        <link rel="stylesheet" href="/assets/vendors/jarallax/jarallax.css" />
+        {/* <link rel="stylesheet" href="/assets/vendors/jarallax/jarallax.css" /> */}
         <link rel="stylesheet" href="/assets/vendors/jquery-magnific-popup/jquery.magnific-popup.css" />
         <link rel="stylesheet" href="/assets/vendors/odometer/odometer.min.css" />
         <link rel="stylesheet" href="/assets/vendors/swiper/swiper.min.css" />
         <link rel="stylesheet" href="/assets/vendors/sonchoy-icon/style.css" />
         <link rel="stylesheet" href="/assets/vendors/owl-carousel/owl.carousel.min.css" />
         <link rel="stylesheet" href="/assets/vendors/owl-carousel/owl.theme.default.min.css" />
-        <link rel="stylesheet" href="/assets/vendors/bootstrap-select/css/bootstrap-select.min.css" />
+        {/* <link rel="stylesheet" href="/assets/vendors/bootstrap-select/css/bootstrap-select.min.css" /> */}
         <link rel="stylesheet" href="/assets/vendors/jquery-ui/jquery-ui.css" />
         <link rel="stylesheet" href="/assets/vendors/nice-select/nice-select.css" />
 
@@ -55,11 +57,11 @@ export default function RootLayout({ children }) {
       </head>
 
       <body >
-        <div class="custom-cursor__cursor"></div>
-        <div class="custom-cursor__cursor-two"></div>
-        {/* <div class="preloader">
-        <div class="preloader__image"></div>
-      </div> */}
+        <div className="custom-cursor__cursor"></div>
+        <div className="custom-cursor__cursor-two"></div>
+        <div className="preloader">
+          <div className="preloader__image"></div>
+        </div>
         <div className="page-wrapper">
           <Header></Header>
           {children}
@@ -70,25 +72,25 @@ export default function RootLayout({ children }) {
           <MobileNav></MobileNav>
         </div>
         <SearchPopup />
-        <a href="#" data-target="html" class="scroll-to-target scroll-to-top"><i class="fas fa-arrow-up"></i></a>
-
-
+        <a href="#" data-target="html" className="scroll-to-target scroll-to-top"><i className="fas fa-arrow-up"></i></a>
+        
+        <BootstrapClient></BootstrapClient>
         {/* scripts  */}
         <script src="/assets/vendors/jquery/jquery-3.6.0.min.js" />
-        <script src="/assets/vendors/bootstrap/js/bootstrap.bundle.min.js" />
-        <script src="/assets/vendors/jarallax/jarallax.min.js" />
+        {/* <script src="/assets/vendors/bootstrap/js/bootstrap.bundle.min.js" /> */}
+        {/* <script src="/assets/vendors/jarallax/jarallax.min.js" /> */}
         <script src="/assets/vendors/jquery-ajaxchimp/jquery.ajaxchimp.min.js" />
         <script src="/assets/vendors/jquery-appear/jquery.appear.min.js" />
         <script src="/assets/vendors/jquery-circle-progress/jquery.circle-progress.min.js" />
         <script src="/assets/vendors/jquery-magnific-popup/jquery.magnific-popup.min.js" />
         <script src="/assets/vendors/jquery-validate/jquery.validate.min.js" />
         <script src="/assets/vendors/odometer/odometer.min.js" />
-        <script src="/assets/vendors/swiper/swiper.min.js" />
+        {/* <script src="/assets/vendors/swiper/swiper.min.js" /> */}
         <script src="/assets/vendors/wnumb/wNumb.min.js" />
         <script src="/assets/vendors/wow/wow.js" />
         <script src="/assets/vendors/isotope/isotope.js" />
         {/* <script src="/assets/vendors/owl-carousel/owl.carousel.min.js" />  */}
-        <script src="/assets/vendors/bootstrap-select/js/bootstrap-select.min.js" />
+        {/* <script src="/assets/vendors/bootstrap-select/js/bootstrap-select.min.js" /> */}
         <script src="/assets/vendors/jquery-ui/jquery-ui.js" />
         <script src="/assets/vendors/jquery.circle-type/jquery.circleType.js" />
         <script src="/assets/vendors/jquery.circle-type/jquery.lettering.min.js" />

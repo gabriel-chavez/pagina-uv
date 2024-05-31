@@ -12,13 +12,7 @@ import SearchPopup from "@/components/layout/SearchPopup";
 
 export default function Home() {
   return (
-    <>
-      
-
-
-      
-      
-      
+    <>    
         <Slider></Slider>
         <SeccionServicios></SeccionServicios>
         <SliderSecundario></SliderSecundario>

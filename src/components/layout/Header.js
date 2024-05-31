@@ -30,11 +30,11 @@ export default function Header() {
                       </Link>
                     </li>
                     <li className="dropdown">
-                      <a href="#">Seguros obligatorios</a>
+                      <Link href="#">Seguros obligatorios</Link>
                      
                     </li>
                     <li className="dropdown">
-                      <a href="#">Sobre la empresa</a>
+                      <Link href="#">Sobre la empresa</Link>
                      
                     </li>
                     
@@ -55,11 +55,11 @@ export default function Header() {
           </div>
         </nav>
       </header>
-      <div className="stricky-header stricked-menu main-menu">
+      {/* <div className="stricky-header stricked-menu main-menu">
         <div className="sticky-header__content"></div>
-        {/* <!-- /.sticky-header__content --> */}
-      </div>
-      {/* <!-- /.stricky-header --> */}
+        
+      </div> */}
+    
     </>
   );
 }

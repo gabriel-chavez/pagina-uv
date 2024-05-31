@@ -1,7 +1,9 @@
 import Contenido3 from "@/components/common/Contenido3";
 import EncabezadoPagina from "@/components/common/EncabezadoPagina";
+import CompraSoat from "../../components/layout/SeccionCompraSoat";
+import ServiciosSoat from "../../components/layout/SeccionServiciosSoat";
 
-export default function Home() {
+export default function Page() {
     const breadcrumbs = [
         { label: 'Inicio', url: '/' },        
         { label: 'Soat' }
@@ -49,7 +51,7 @@ export default function Home() {
                 title="S  O  A  T"
                 breadcrumbs={breadcrumbs}
             />
-            <section class="mt-5">
+            <section className="mt-5">
                 <Contenido3
                     titulo='¿Que es el <b>SOAT?</b>'
                     texto='El artículo 37 de la Ley N° 1883 de Seguros, señala que el SOAT es el “Seguro Obligatorio de 
@@ -75,6 +77,8 @@ export default function Home() {
                     puntos={requisitosSoat}
                     fondo={true}
                 />
+                <CompraSoat></CompraSoat>
+                <ServiciosSoat></ServiciosSoat>
 
 
 
