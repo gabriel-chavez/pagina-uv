@@ -23,7 +23,7 @@ export default function Page() {
     const textoHtml = `Lorem ipsum dolor sit amet, consectetur adipiscing <br />elit. Maecenas varius
                               tortor nibh, sit amet tempor<br /> finibus et. Aenean eu enim justo. Vestibulum`;
     const tituloHtml = `<span>¿Que es el <b>Seguro de Vida Individual?</b></span>`;
-    const textoHtml2=  `Es un plan de protección creado para usted y su familia, consistente en otorgar un apoyo 
+    const textoHtml2 = `Es un plan de protección creado para usted y su familia, consistente en otorgar un apoyo 
     económico a la familia del asegurado ante el fallecimiento de este por cualquier causa, 
     (salvo exclusiones específicas).
      Por ejemplo con el Plan A de nuestro Seguro de Vida Individual, en caso de invalidez total 
@@ -31,24 +31,24 @@ export default function Page() {
     empresa pagará Bs.15.000 a los beneficiarios, además de Bs.1.500 para gastos de sepelio`
     const acordeon = [
         {
-            title: 'Descripción del acordeón número 1',
-            content: 'Es posible que su solicitante tenga una experiencia limitada en el servicio de asistencia técnica. En ese caso, busque solicitantes que estén motivados para crecer y que tengan algún nibh finibus et transferible. Aenean eu enim justo. Vestibulum aliquam hendrerit moles accumsan',
-            active: false
+            titulo: 'Descripción del acordeón número 1',
+            contenido: 'Es posible que su solicitante tenga una experiencia limitada en el servicio de asistencia técnica. En ese caso, busque solicitantes que estén motivados para crecer y que tengan algún nibh finibus et transferible. Aenean eu enim justo. Vestibulum aliquam hendrerit moles accumsan',
+
         },
         {
-            title: 'Información sobre el acordeón número 2',
-            content: 'Es posible que su solicitante tenga una experiencia limitada en el servicio de asistencia técnica. En ese caso, busque solicitantes que estén motivados para crecer y que tengan algún nibh finibus et transferible. Aenean eu enim justo. Vestibulum aliquam hendrerit moles accumsan',
-            active: true
+            titulo: 'Información sobre el acordeón número 2',
+            contenido: 'Es posible que su solicitante tenga una experiencia limitada en el servicio de asistencia técnica. En ese caso, busque solicitantes que estén motivados para crecer y que tengan algún nibh finibus et transferible. Aenean eu enim justo. Vestibulum aliquam hendrerit moles accumsan',
+
         },
         {
-            title: 'Especificaciones del acordeón número 3',
-            content: 'Es posible que su solicitante tenga una experiencia limitada en el servicio de asistencia técnica. En ese caso, busque solicitantes que estén motivados para crecer y que tengan algún nibh finibus et transferible. Aenean eu enim justo. Vestibulum aliquam hendrerit moles accumsan',
-            active: false
+            titulo: 'Especificaciones del acordeón número 3',
+            contenido: 'Es posible que su solicitante tenga una experiencia limitada en el servicio de asistencia técnica. En ese caso, busque solicitantes que estén motivados para crecer y que tengan algún nibh finibus et transferible. Aenean eu enim justo. Vestibulum aliquam hendrerit moles accumsan',
+
         },
         {
-            title: 'Características del acordeón número 4',
-            content: 'Es posible que su solicitante tenga una experiencia limitada en el servicio de asistencia técnica. En ese caso, busque solicitantes que estén motivados para crecer y que tengan algún nibh finibus et transferible. Aenean eu enim justo. Vestibulum aliquam hendrerit moles accumsan',
-            active: false
+            titulo: 'Características del acordeón número 4',
+            contenido: 'Es posible que su solicitante tenga una experiencia limitada en el servicio de asistencia técnica. En ese caso, busque solicitantes que estén motivados para crecer y que tengan algún nibh finibus et transferible. Aenean eu enim justo. Vestibulum aliquam hendrerit moles accumsan',
+
         }
     ];
     const categorias = [
@@ -112,6 +112,7 @@ export default function Page() {
                     </div>
 
                 </div>
+               
             </section>
         </>
     );

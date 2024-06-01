@@ -4,7 +4,7 @@ const Footer = () => {
   return (
     <footer className="site-footer">
       <div className="site-footer__shape-1 float-bob-x">
-        <img src="assets/images/shapes/site-footer-shape-1.png" alt="" />
+        <img src="/assets/images/shapes/site-footer-shape-1.png" alt="" />
       </div>
       <div className="site-footer__top">
         <div className="container">
@@ -14,7 +14,7 @@ const Footer = () => {
                 <div className="footer-widget__column footer-widget__about">
                   <div className="footer-widget__logo">
                     <Link href="/">
-                      <img src="assets/images/resources/logo-univida-2.png" style={{ height: '70px' }} alt="" />
+                      <img src="/assets/images/resources/logo-univida-2.png" style={{ height: '70px' }} alt="" />
                     </Link>
                   </div>
                   <p className="footer-widget__about-text">Av. Camacho, Edificio la Urbana N° 1485. Piso 3, Ciudad de La Paz.</p>

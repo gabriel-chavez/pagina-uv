@@ -88,7 +88,7 @@ const CompraSoat = () => {
 
                             <Tarjeta1
                                 titulo="Puntos de venta "
-                                link="#"
+                                link="/soat/puntos-de-venta"
                                 imgSrc="/assets/images/soat/puntos.jpg"
                                 iconClass="bi bi-geo-alt"
                                 textoBoton='VER PUNTOS'

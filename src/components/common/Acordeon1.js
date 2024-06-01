@@ -1,4 +1,7 @@
 import React from 'react';
+import ReactMarkdown from 'react-markdown';
+import rehypeSanitize from 'rehype-sanitize';
+
 
 const Acordeon1 = ({ acordeon }) => {
   return (
@@ -7,11 +10,11 @@ const Acordeon1 = ({ acordeon }) => {
         {acordeon.map((accordion, index) => (
           <div className={`accrodion ${accordion.active ? 'active' : ''}`} key={index}>
             <div className="accrodion-title">
-              <h4>{accordion.title}</h4>
+              <h4>{accordion.titulo}</h4>
             </div>
             <div className="accrodion-content">
               <div className="inner">
-                <p>{accordion.content}</p>
+                <ReactMarkdown rehypePlugins={[rehypeSanitize]}>{accordion.contenido}</ReactMarkdown>
               </div>
             </div>
           </div>

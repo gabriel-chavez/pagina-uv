@@ -10,7 +10,7 @@ export default function Header() {
             <div className="main-menu__wrapper-inner">
               <div className="main-menu__left">
                 <div className="main-menu__logo">
-                  <Link href="/index">                                        
+                  <Link href="/">                                        
                       <img src="/assets/images/resources/logo-univida.png" alt="" style={{ height: '60px' }} />
                   </Link>
                 </div>

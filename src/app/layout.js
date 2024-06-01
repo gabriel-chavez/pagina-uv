@@ -59,9 +59,9 @@ export default function RootLayout({ children }) {
       <body >
         <div className="custom-cursor__cursor"></div>
         <div className="custom-cursor__cursor-two"></div>
-        <div className="preloader">
+        {/* <div className="preloader">
           <div className="preloader__image"></div>
-        </div>
+        </div> */}
         <div className="page-wrapper">
           <Header></Header>
           {children}
@@ -97,7 +97,7 @@ export default function RootLayout({ children }) {
         <script src="/assets/vendors/nice-select/jquery.nice-select.min.js" />
         <script src="/assets/vendors/marquee/marquee.min.js" />
         {/* Fin de los scripts */}
-        <script src="assets/js/sonchoy.js"></script>
+        {/* <script src="/assets/js/sonchoy.js"></script> */}
       </body>
     </html>
   );

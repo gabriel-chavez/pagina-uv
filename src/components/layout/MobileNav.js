@@ -8,7 +8,7 @@ const MobileNav = () => {
   
           <div className="logo-box">
             {/* index-2.html */}
-            <a href="#" aria-label="logo image"><img src="assets/images/resources/logo-univida-2.png" width="150" alt="" /></a>
+            <a href="#" aria-label="logo image"><img src="/assets/images/resources/logo-univida-2.png" width="150" alt="" /></a>
           </div>
           {/* /.logo-box */}
           <div className="mobile-nav__container"></div>
