@@ -1,12 +1,13 @@
 'use client'
+
 import EncabezadoPagina from "@/components/common/EncabezadoPagina";
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
+import { obtenerDepartamentos } from "@/services/soatService";
 const Mapa = dynamic(() => import('@/app/soat/puntos-de-venta/Mapa'), {
     loading: () => <p>A map is loading</p>,
     ssr: false,
-  });
-
+});
 
 export default function Page() {
     const breadcrumbs = [
@@ -17,18 +18,38 @@ export default function Page() {
     // Definimos el estado para almacenar el valor seleccionado
     const [selectedValue, setSelectedValue] = useState('');
 
-    // Función para manejar el cambio de selección
+    // Estado para almacenar los departamentos
+    const [departments, setDepartments] = useState([]);
+    // Estado para manejar errores
+    const [error, setError] = useState(null);
+    // useEffect para obtener los departamentos
+    const [selectedDepartment, setSelectedDepartment] = useState(null);
+    useEffect(() => {
+        const fetchDepartments = async () => {
+            try {
+                const departments = await obtenerDepartamentos();
+                setDepartments(departments.geonames);
+            } catch (error) {
+                setError(error.message);
+            }
+        };
+
+        fetchDepartments();
+    }, []);
+
     const handleChange = (event) => {
-        // Actualizamos el estado con el nuevo valor seleccionado
-        setSelectedValue(event.target.value);
+        
+        const departmentId = event.target.selectedOptions[0].value; // Obtener el ID del departamento seleccionado
+
+        console.log(departmentId)
+        console.log(departments)
+        const selectedDept = departments.find(dept => dept.geonameId == departmentId);        
+
+        console.log(selectedDept)
+        setSelectedDepartment(selectedDept);
+        console.log(selectedDepartment)
     };
-    // const Mapa= useMemo(() => dynamic(
-    //     () => import('@/app/soat/puntos-de-venta/Mapa'),
-    //     { 
-    //       loading: () => <p>A map is loading</p>,
-    //       ssr: false
-    //     }
-    //   ), [])
+
     return (
         <>
             <EncabezadoPagina
@@ -46,19 +67,19 @@ export default function Page() {
                     </h2> */}
                     <div className="row mt-5">
                         <div className="col-lg-6">
-                            <div className="input-group input-group-lg mb-3">
+                            <div className="input-group input-group-lg mb-3 input-group-uv">
                                 <label className="input-group-text" htmlFor="inputGroupSelect01">Departamento</label>
-                                <select className="form-select" id="inputGroupSelect01" value={selectedValue} onChange={handleChange}>
-                                    <option value="" disabled>Choose...</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                                <select className="form-select" id="inputGroupSelect01" value={selectedDepartment ? selectedDepartment.geonameId : ''} onChange={handleChange}>
+                                    <option value="" disabled>Seleccione un departamento...</option>
+                                    {departments.map(dept => (
+                                        <option key={dept.geonameId} value={dept.geonameId}>{dept.name}</option>
+                                    ))}
                                 </select>
 
                             </div>
                         </div>
                         <div className="col-lg-6">
-                            <div className="input-group input-group-lg mb-3">
+                            <div className="input-group input-group-lg mb-3 input-group-uv">
                                 <label className="input-group-text" htmlFor="inputGroupSelect01">Ciudad</label>
                                 <select className="form-select" id="inputGroupSelect02" value={selectedValue} onChange={handleChange}>
                                     <option value="" disabled>Choose...</option>
@@ -70,25 +91,25 @@ export default function Page() {
                             </div>
                         </div>
                     </div>
-                    <Mapa position={[51.505, -0.09]} zoom={13} />
+                    <Mapa position={selectedDepartment ? [selectedDepartment.lat, selectedDepartment.lng] : [-16.510778425071273, -68.12523923596127]} zoom={10} />
+
                     <div className="row mt-5">
                         <div className="col-md-12">
-                            <div className="input-group input-group-lg mb-3">
+                            <div className="input-group input-group-lg mb-3 input-group-uv">
                                 <label className="input-group-text" htmlFor="inputGroupSelect01">Comercios Afiliados</label>
 
 
-                                <select className="form-select" id="inputGroupSelect03" value={selectedValue} onChange={handleChange}>
+                                <select className="form-select" id="inputGroupSelect01" value={selectedDepartment ? selectedDepartment.geonameId : ''} onChange={handleChange}>
                                     <option value="" disabled>Choose...</option>
-                                    <option value="1">One</option>
-                                    <option value="2">Two</option>
-                                    <option value="3">Three</option>
+                                    {departments.map(dept => (
+                                        <option key={dept.geonameId} value={dept.geonameId}>{dept.name}</option>
+                                    ))}
                                 </select>
-
                             </div>
                         </div>
                     </div>
                 </div>
-
+               
             </section>
         </>
     );

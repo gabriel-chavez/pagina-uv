@@ -1,4 +1,10 @@
-#map {
-    width: 100%;
-    height: 400px;
+.input-group-uv .input-group-text {
+    color: white; /* Cambia el color del texto del label */
+    background-color: var(--sonchoy-base);; /* Cambia el fondo del label */
+    border: 1px solid var(--sonchoy-base);; /* Cambia el color del borde del label */
+}
+
+.input-group-uv .form-select {
+   
+    border: 1px solid var(--sonchoy-base);; /* Cambia el color del borde del select */
 }
