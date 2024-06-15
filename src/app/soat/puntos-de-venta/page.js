@@ -82,7 +82,7 @@ export default function Page() {
                             <div className="input-group input-group-lg mb-3 input-group-uv">
                                 <label className="input-group-text" htmlFor="inputGroupSelect01">Ciudad</label>
                                 <select className="form-select" id="inputGroupSelect02" value={selectedValue} onChange={handleChange}>
-                                    <option value="" disabled>Choose...</option>
+                                    <option value="" disabled>Seleccione una ciudad...</option>
                                     <option value="1">One</option>
                                     <option value="2">Two</option>
                                     <option value="3">Three</option>
@@ -100,7 +100,7 @@ export default function Page() {
 
 
                                 <select className="form-select" id="inputGroupSelect01" value={selectedDepartment ? selectedDepartment.geonameId : ''} onChange={handleChange}>
-                                    <option value="" disabled>Choose...</option>
+                                    <option value="" disabled>Seleccione una opción...</option>
                                     {departments.map(dept => (
                                         <option key={dept.geonameId} value={dept.geonameId}>{dept.name}</option>
                                     ))}
