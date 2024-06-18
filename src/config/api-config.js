@@ -6,19 +6,19 @@ const apiClient = axios.create({
   timeout: 10000, // tiempo de espera de 10 segundos
 });
 
-apiClient.interceptors.request.use(
-  config => {
-    // Puedes agregar configuraciones adicionales aquí, como headers
-    const token = localStorage.getItem('token');
-    if (token) {
-      config.headers.Authorization = `Bearer ${token}`;
-    }
-    return config;
-  },
-  error => {
-    return Promise.reject(error);
-  }
-);
+// apiClient.interceptors.request.use(
+//   config => {
+//     // Puedes agregar configuraciones adicionales aquí, como headers
+//     const token = localStorage.getItem('token');
+//     if (token) {
+//       config.headers.Authorization = `Bearer ${token}`;
+//     }
+//     return config;
+//   },
+//   error => {
+//     return Promise.reject(error);
+//   }
+// );
 
 apiClient.interceptors.response.use(
   response => response,
