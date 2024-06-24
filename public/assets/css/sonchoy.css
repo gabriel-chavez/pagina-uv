@@ -12995,7 +12995,7 @@ Project Style1
 }
 
 .thm-breadcrumb li:nth-child(2) {
-  color: var(--sonchoy-base);
+  /* color: var(--sonchoy-base); */
 }
 
 .thm-breadcrumb li a {
@@ -16323,7 +16323,22 @@ Project Style1
   box-shadow: 0px 0px 14px -4px rgba(0, 0, 0, 0.42);
 }
 
-
+.no-bullets ul {
+  list-style-type: none;
+  padding: 0;
+  margin-bottom: 1.5rem;
+}
+.seguros-detalle-adicional strong{
+  font-size: 1.75rem;
+  font-style: italic !important;
+  margin-top: 10px;
+}
+.seguros-detalle-adicional p {
+  line-height: 1.8
+}
+.parrafo-sin-margen>p{
+  margin:0px
+}
 /*--------------------------------------------------------------
 # End
 --------------------------------------------------------------*/

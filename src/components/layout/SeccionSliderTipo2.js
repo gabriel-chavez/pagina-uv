@@ -1,8 +1,8 @@
-// Services.js
 'use client'
 import { useEffect } from 'react';
 import Tarjeta6 from '../common/Tarjeta6'
-const ServiciosSoat = () => {
+import MarkdownRenderer from '@/utils/MarkdownRenderer';
+const SeccionSliderTipo2 = ({ seccion }) => {
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const $ = require('jquery');
@@ -42,41 +42,29 @@ const ServiciosSoat = () => {
     return (
         <>
             <section>
-                
+
                 <div className="container mt-5">
                     <div className="section-title text-left">
                         <div className="section-title__tagline-box">
-                            <p className="section-title__tagline">Servicios SOAT</p>
+                            <p className="section-title__tagline">{seccion.titulo}</p>
                         </div>
                         <h2 className="section-title__title">
-                            Explora nuestros servicios
-                            <br />
-                            relacionados con el SOAT
+                            <MarkdownRenderer content={seccion.subTitulo} />
                         </h2>
                     </div>
                     <div className="services-one__carousel owl-carousel owl-theme thm-owl__carousel">
-                        <Tarjeta6
-                            imagenUrl="/assets/images/soat/precios-soat.jpg"
-                            iconClass="bi bi-cash-coin"
-                            titulo="Precios SOAT"
-                            href="health-insurance.html"
-                            detalle="Verifica el precio del SOAT para tu motorizado"
-                        />
-
-                        <Tarjeta6
-                            imagenUrl="/assets/images/soat/datos-vehiculo.jpg"
-                            iconClass="bi bi-car-front"
-                            titulo="Datos Vehículo"
-                            href="health-insurance.html"
-                            detalle=" Modifica los datos de tu motorizado"
-                        />
-                        <Tarjeta6
-                            imagenUrl="/assets/images/soat/comprobante-soat.jpg"
-                            iconClass="bi bi-file-text"
-                            titulo="Comprobante SOAT"
-                            href="health-insurance.html"
-                            detalle=" Adquiere el comprobante SOAT"
-                        />
+                        {seccion.datos.map((fila, index) =>
+                            <Tarjeta6
+                                key={index}                                
+                                titulo={fila[0].datoTexto}
+                                detalle={fila[1].datoTexto}
+                                iconClass={fila[2].datoTexto}
+                                imagenUrl={fila[3].recurso.recursoEscritorio}               
+                                href={fila[4].datoUrl}       
+                                
+                               
+                            />
+                        )}
                     </div>
                 </div>
             </section>
@@ -84,4 +72,4 @@ const ServiciosSoat = () => {
     );
 };
 
-export default ServiciosSoat;
+export default SeccionSliderTipo2;

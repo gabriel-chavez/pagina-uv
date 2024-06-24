@@ -1,8 +1,9 @@
-import Contenido3 from "@/components/common/Contenido3";
+
 import Acordeon1 from "@/components/common/Acordeon1";
 import EncabezadoPagina from "@/components/common/EncabezadoPagina";
-import CompraSoat from "../../components/layout/SeccionCompraSoat";
-import ServiciosSoat from "../../components/layout/SeccionServiciosSoat";
+import SeccionSliderTipo1 from "../../components/layout/SeccionSliderTipo1";
+import ServiciosSoat from "../../components/layout/SeccionSliderTipo2";
+import SeccionContenidoTipo3 from "@/components/layout/SeccionContenidoTipo3";
 
 
 export default function Page() {
@@ -11,40 +12,35 @@ export default function Page() {
         { label: 'Soat' }
     ];
 
-    const requisitosSoat = [
-        { texto: 'Certifcado de extravío de la FELC' },
-        { texto: 'Depósito de Bs.20 (veinte bolivianos 00/100) a la cuenta 1-25041009 del Banco Unión S.A.' },
-        { texto: 'Comprobante factura SOAT.' },
-        { texto: 'Fotocopia de RUAT.' },
-        { texto: 'Fotocopia de la Cédula de Identidad.' },
+    const requisitosSoat = `
+- Certificado de extravío de la FELC
+- Depósito de Bs.20 (veinte bolivianos 00/100) a la cuenta 1-25041009 del Banco Unión S.A.
+- Comprobante factura SOAT
+- Fotocopia de RUAT
+- Fotocopia de la Cédula de Identidad
+    `
 
-    ];
+    const coberturaSoat = `
+- Si falleces por causa de un accidente automovilístico, tus beneficiarios reciben una indemnización de Bs. 22.000
+- Te indemnizamos en caso de invalidez total y permanente con un monto de Bs. 22.000
+- Te indemnizamos con gastos médicos con un monto de hasta Bs. 24.000
+    `;
+    const adquirirSoat = `
+- **RENOVACIÓN**    
 
-    const coberturaSoat = [
-        { texto: 'Si falleces por causa de un accidente automovilístico, tus benefciarios reciben una indemnización de Bs. 22.000', marcado: true },
-        { texto: 'Te indemnizamos en caso de invalidez total y permanente con un monto de Bs. 22.000.', marcado: true },
-        { texto: 'Te indemnizamos con gastos médicos con un monto de hasta Bs. 24.000.', marcado: true },
+    Aquellos propietarios cuyo vehículo(s) ya cuente con el SOAT de la gestión anterior y con la respectiva ROSETA, podrán adquirir su SOAT solamente dictando o digitando el número de placa de su vehículo, en cualquiera de los puntos de comercialización presenciales y digitales, habilitados y autorizados
 
-    ];
+- **COMPRA NUEVA**
 
-    const adquirirSoat = [
-        {
-            texto: `Aquellos propietarios cuyo vehículo(s) ya cuente con el SOAT de la gestión anterior y con la 
-            respectiva ROSETA, podrán adquirir su SOAT solamente dictando o digitando el número de 
-            placa de su vehículo, en cualquiera de los puntos de comercialización presenciales y 
-            digitales, habilitados y autorizados` , marcado: true
-        },
-        {
-            texto: `Para aquellos propietarios de vehículos que adquieran el SOAT por primera vez (Vehículos 
-            recién importados, vehículos que salgan de taller de carrozado, de reconstrucción por 
-            accidente o que por alguna otra razón no hayan tramitado el SOAT correspondiente en 
-            gestiones anteriores), deberán presentar cualquier documento que identifque al vehículo, 
-            por ejemplo: RUAT, FVR o Póliza de importación y deberán hacerlo solamente en 
-            sucursales y agencias de UNIVIDA S.A. para recabar la ROSETA correspondiente, además de 
-            actualizar los datos del vehículo`, marcado: true
-        },
+    Para aquellos propietarios de vehículos que adquieran el SOAT por primera vez (Vehículos 
+             recién importados, vehículos que salgan de taller de carrozado, de reconstrucción por 
+             accidente o que por alguna otra razón no hayan tramitado el SOAT correspondiente en 
+             gestiones anteriores), deberán presentar cualquier documento que identifque al vehículo, 
+             por ejemplo: RUAT, FVR o Póliza de importación y deberán hacerlo solamente en 
+             sucursales y agencias de UNIVIDA S.A. para recabar la ROSETA correspondiente, además de 
+             actualizar los datos del vehículo
+`
 
-    ];
     const acordeon = [
         {
             titulo: 'Paso 1 - Succeso del accidente de tránsito',
@@ -130,6 +126,61 @@ En caso de existir conflicto de intereses entre los derechohabientes se realiza 
         }
     ];
     
+    const soat = [
+        [
+            {
+               
+                "datoTexto": "¿Qué es el **SOAT**?",
+               
+            },
+            {
+               
+                "datoTexto": "El artículo 37 de la Ley N° 1883 de Seguros, señala que el SOAT es el “Seguro Obligatorio de Accidentes de Tránsito” que todo vehículo motorizado, público y/o privado, debe contar con carácter obligatorio, para poder transitar por vías públicas del territorio boliviano. Además, la norma señala que, el Seguro es incuestionable y de beneficio uniforme con coberturas por muerte, incapacidad total permanente y gastos médicos.",
+               
+                
+            }
+        ],
+        [
+            {
+               
+                "datoTexto": "¿Qué necesitas para adquirir el **SOAT?**",
+              
+            },
+            {
+               
+                "datoTexto": "- **RENOVACIÓN**    \n\n    Aquellos propietarios cuyo vehículo(s) ya cuente con el SOAT de la gestión anterior y con la respectiva ROSETA, podrán adquirir su SOAT solamente dictando o digitando el número de placa de su vehículo, en cualquiera de los puntos de comercialización presenciales y digitales, habilitados y autorizados\n\n- **COMPRA NUEVA**\n\n    Para aquellos propietarios de vehículos que adquieran el SOAT por primera vez (Vehículos \n             recién importados, vehículos que salgan de taller de carrozado, de reconstrucción por \n             accidente o que por alguna otra razón no hayan tramitado el SOAT correspondiente en \n             gestiones anteriores), deberán presentar cualquier documento que identifque al vehículo, \n             por ejemplo: RUAT, FVR o Póliza de importación y deberán hacerlo solamente en \n             sucursales y agencias de UNIVIDA S.A. para recabar la ROSETA correspondiente, además de \n             actualizar los datos del vehículo",
+               
+            }
+        ],
+        [
+            {
+               
+                "datoTexto": "¿Qué cubre **el SOAT?**",
+                
+            },
+            {
+                
+                "datoTexto": "- Si falleces por causa de un accidente automovilístico, tus beneficiarios reciben una indemnización de Bs. 22.000\n- Te indemnizamos en caso de invalidez total y permanente con un monto de Bs. 22.000\n- Te indemnizamos con gastos médicos con un monto de hasta Bs. 24.000",
+                
+            }
+        ],
+        [
+            {
+               
+                "datoTexto": "Requisitos para cambio de uso **PARTICULAR a PÚBLICO o PÚBLICO a PARTICULAR**",
+                
+            },
+            {
+               
+                "datoTexto": "- Certificado de extravío de la FELC\n- Depósito de Bs.20 (veinte bolivianos 00/100) a la cuenta 1-25041009 del Banco Unión S.A.\n- Comprobante factura SOAT\n- Fotocopia de RUAT\n- Fotocopia de la Cédula de Identidad",
+                
+            }
+        ]
+    ];
+    const contenido={
+        datos:soat
+    }
+
     return (
         <>
             <EncabezadoPagina
@@ -137,42 +188,16 @@ En caso de existir conflicto de intereses entre los derechohabientes se realiza 
                 title="S  O  A  T"
                 breadcrumbs={breadcrumbs}
             />
-            <section className="mt-2">
-                <Contenido3
-                    titulo='¿Que es el <b>SOAT?</b>'
-                    texto='El artículo 37 de la Ley N° 1883 de Seguros, señala que el SOAT es el “Seguro Obligatorio de 
-                    Accidentes de Tránsito” que todo vehículo motorizado, público y/o privado, debe contar 
-                    con carácter obligatorio, para poder transitar por vías públicas del territorio boliviano. 
-                    Además, la norma señala que, el Seguro es incuestionable y de benefcio uniforme con 
-                    coberturas por muerte, incapacidad total permanente y gastos médicos. '
-                />
-                <Contenido3
-                    titulo='¿Qué necesitas para adquirir el <b> SOAT?</b>'
-                    puntos={adquirirSoat}
-                    fondo={true}
-                />
-
-                <Contenido3
-                    titulo='¿Qué cubre<b> el SOAT?</b>'
-                    puntos={coberturaSoat}
-                    fondo={false}
-                />
-
-                <Contenido3
-                    titulo='Requisitos para cambio de uso<b> PARTICULAR a PÚBLICO o PÚBLICO a PARTICULAR </b>'
-                    puntos={requisitosSoat}
-                    fondo={true}
-                />
-            </section>
-            <CompraSoat></CompraSoat>
-            <ServiciosSoat></ServiciosSoat>
+            <SeccionContenidoTipo3 seccion={contenido}></SeccionContenidoTipo3>
+            {/* <SeccionSliderTipo1></SeccionSliderTipo1> */}
+            {/* <ServiciosSoat></ServiciosSoat> */}
             <section className="container mt-2">
                 <div className="section-title text-left">
                     <div className="section-title__tagline-box">
                         <p className="section-title__tagline">Accidentes de tránsito</p>
                     </div>
                     <h2 className="section-title__title">
-                        ¿Qué hacer en caso de 
+                        ¿Qué hacer en caso de
                         <br />
                         un accidente de tránsito?
                     </h2>

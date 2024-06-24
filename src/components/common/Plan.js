@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-
-const Plan = ({ nombrePlan, precioAnual, coberturas, textoBoton }) => {
+import MarkdownRenderer from '@/utils/MarkdownRenderer';
+const Plan = ({ nombrePlan, subTituloPlan, precio, monedaPrecio = "Bs.", cobertura, textoBoton }) => {
 
     return (
         <div className="card-plan m-1">
@@ -10,13 +10,18 @@ const Plan = ({ nombrePlan, precioAnual, coberturas, textoBoton }) => {
                     <div>{nombrePlan}</div>
                 </div>
                 <div className="card-body">
-                    <div className="card-title">PRECIO ANUAL (POR PERSONA)</div>
-                    <div className="display-3"><small>Bs.</small>{precioAnual}</div>
-                    <ul className="list-unstyled">
-                        {coberturas.map((item, index) => (
+                    <div className="card-title">{subTituloPlan}</div>
+                    <div className="display-3"><small>{monedaPrecio}</small>{precio}</div>                    
+                    <div className="text-center no-bullets">
+                        
+                        <MarkdownRenderer content={cobertura}></MarkdownRenderer>
+
+                    </div>
+                    {/* <ul className="list-unstyled">
+                        {cobertura.map((item, index) => (
                             <li key={index}>{item.cobertura} <b>Bs.{item.monto}</b></li>
                         ))}
-                    </ul>
+                    </ul> */}
                     <a href="#" className="btn btn-success">{textoBoton}</a>
                 </div>
             </div>

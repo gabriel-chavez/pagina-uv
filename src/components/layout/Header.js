@@ -20,12 +20,12 @@ export default function Header() {
                   </a>
                   <ul className="main-menu__list">
                     <li className="dropdown">
-                      <Link href="/index">
+                      <Link href="/">
                         Inicio
                       </Link>                      
                     </li>
                     <li>
-                      <Link href="/about">
+                      <Link href="/nuestros-seguros">
                      Nuestros seguros
                       </Link>
                     </li>

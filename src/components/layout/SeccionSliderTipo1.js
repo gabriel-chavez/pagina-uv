@@ -2,7 +2,9 @@
 'use client'
 import { useEffect } from 'react';
 import Tarjeta1 from '../common/Tarjeta1'
-const CompraSoat = () => {
+import MarkdownRenderer from '@/utils/MarkdownRenderer';
+
+const SeccionSliderTipo1 = ({ seccion }) => {
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const $ = require('jquery');
@@ -38,7 +40,7 @@ const CompraSoat = () => {
             });
         }
     }, []);
-
+    
     return (
         <>
 
@@ -58,56 +60,33 @@ const CompraSoat = () => {
                 <div className="container">
                     <div className="section-title text-left">
                         <div className="section-title__tagline-box">
-                            <p className="section-title__tagline">¿Cómo adquirir el SOAT?</p>
+                            <p className="section-title__tagline">{seccion.titulo}</p>
                         </div>
                         <h2 className="section-title__title">
-                            Opciones para obtener tu
-                            <br />
-                            SOAT de manera rápida y sencilla
+                            <MarkdownRenderer content={seccion.subTitulo}/>                            
                         </h2>
                     </div>
                     <div className="services-one__bottom">
                         <div className="services-one__carousel owl-carousel owl-theme thm-owl__carousel">
-
-                            <Tarjeta1
-                                titulo="Página web
-                                "
-                                link="#"
-                                imgSrc="/assets/images/soat/compra-web.jpg"
-                                iconClass="bi bi-globe"
-                                textoBoton='COMPRAR SOAT'
-                            />
-
-                            <Tarjeta1
-                                titulo="UNIVidaApp"
-                                link="#"
-                                imgSrc="/assets/images/soat/unividaapp.jpg"
-                                iconClass="bi bi-phone"
-                                textoBoton='DESCARGAR APP'
-                            />
-
-                            <Tarjeta1
-                                titulo="Puntos de venta "
-                                link="/soat/puntos-de-venta"
-                                imgSrc="/assets/images/soat/puntos.jpg"
-                                iconClass="bi bi-geo-alt"
-                                textoBoton='VER PUNTOS'
-                            />
-                            <Tarjeta1
-                                titulo="Redes sociales"
-                                link="#"
-                                imgSrc="/assets/images/soat/facebook-whatsapp.jpg"
-                                iconClass="bi bi-chat-left-dots"
-                                textoBoton='VER MÁS'
-                            />
-
+                            {seccion.datos.map((fila, index) => (
+                                <div key={index} className="fila-contenidos">
+                                    <Tarjeta1
+                                        key={index}
+                                        titulo={fila[0].datoTexto}
+                                        iconClass={fila[1].datoTexto}
+                                        imgSrc={fila[2].recurso.recursoEscritorio}
+                                        link={fila[3].datoUrl}
+                                        textoBoton={fila[3].datoTexto}
+                                    />
+                                </div>
+                            ))}
                         </div>
                     </div>
                 </div>
-                
+
             </section>
         </>
     );
 };
 
-export default CompraSoat;
+export default SeccionSliderTipo1;

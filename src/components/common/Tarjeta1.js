@@ -1,7 +1,6 @@
 // components/ServiceItem.js
 
 import React from 'react';
-import Image from 'next/image';
 import Link from 'next/link';
 
 const Tarjeta1 = ({ titulo, link, imgSrc, iconClass, textoBoton="LEER MÁS" }) => {
