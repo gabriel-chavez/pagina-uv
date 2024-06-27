@@ -9,7 +9,9 @@ export default async function Page({ params }) {
   try {
     // Obtener slug de la URL
     const slug = params.slug
-    console.log(slug)
+    // Obtener la página específica por una ruta
+    const data = await obtenerPaginaPorRuta("%2F"+slug);
+
     const breadcrumbs = construirBreadcrumbsDesdeSlug(slug)
 
 
@@ -17,8 +19,7 @@ export default async function Page({ params }) {
     // Obtener todas las rutas dinámicas disponibles
     //const rutasDinamicas = await obtenerRutasDinamicas(ruta);
 
-    // Obtener la página específica por una ruta
-    const data = await obtenerPaginaPorRuta(slug);
+   
     //console.log("Datos de la página", data.secciones[0].datos);
 
     return (
@@ -44,7 +45,7 @@ export default async function Page({ params }) {
     console.error("Error al obtener datos:", error);
     return (
       <>
-        <p>Ocurrió un error al cargar la página.</p>
+        <p>{error.message}</p>
       </>
     );
   }

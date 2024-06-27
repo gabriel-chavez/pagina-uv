@@ -26,17 +26,17 @@ apiClient.interceptors.response.use(
   error => {
       if (error.response) {
           // El servidor respondió con un código de estado fuera del rango 2xx
-          //console.log("respuestas:",error.response)
+         // console.log("respuestas:",error.response)
           switch (error.response.status) {
               case 400:
                   // Manejar error 400 (Bad Request)
-                  return Promise.reject({ status: 400, message: error.response.data.message });
+                  return Promise.reject({ status: 400, message: error.response.data.detail });
               case 401:
                   // Manejar error 401 (Unauthorized)
-                  return Promise.reject({ status: 401, message: error.response.data.message });
+                  return Promise.reject({ status: 401, message: error.response.data.detail });
               case 404:                
                   // Manejar error 404 (Not Found)
-                  return Promise.reject({ status: 404, message: error.response.data.message });
+                  return Promise.reject({ status: 404, message: error.response.data.detail });
               default:
                 
                   // Otros errores de respuesta no manejados específicamente

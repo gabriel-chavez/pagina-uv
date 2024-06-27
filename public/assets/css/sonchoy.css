@@ -950,7 +950,7 @@ ul {
   position: absolute;
   top: 100%;
   left: 0;
-  min-width: 250px;
+  min-width: 400px;
   -webkit-box-orient: vertical;
   -webkit-box-direction: normal;
   -ms-flex-direction: column;

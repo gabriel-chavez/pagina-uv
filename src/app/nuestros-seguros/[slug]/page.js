@@ -12,7 +12,7 @@ export default async function Page({ params }) {
         const slug = params.slug
 
         // Obtener la página específica por una ruta
-        const data = await obtenerSeguroPorRuta(slug);
+        const data = await obtenerSeguroPorRuta("%2F"+slug);
 
         const breadcrumbs = [
             { label: 'Inicio', url: '/' },

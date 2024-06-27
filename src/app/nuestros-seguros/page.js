@@ -11,7 +11,7 @@ export default async function Page() {
             { label: 'Nuestros seguros' },
         ];
         const data = await obtenerSeguros();
-        console.log(data)
+        //  console.log(data)
         return (
             <>
                 <EncabezadoPagina
@@ -26,7 +26,7 @@ export default async function Page() {
                                 <div className="col-xl-4 col-lg-4">
                                     <Tarjeta1
                                         titulo={seguro.nombreCorto}
-                                        link={"nuestros-seguros/" + seguro.ruta}
+                                        link={"nuestros-seguros/" + seguro.menuPrincipal.url}
                                         imgSrc={seguro.recurso.recursoEscritorio}
                                         iconClass={seguro.icono}
                                     />
@@ -65,7 +65,7 @@ export default async function Page() {
         console.error("Error al obtener datos:", error);
         return (
             <>
-                <p>Ocurrió un error al cargar la página.</p>
+                <p>{error.message}</p>
             </>
         );
     }
