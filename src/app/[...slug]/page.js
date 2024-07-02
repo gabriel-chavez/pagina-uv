@@ -9,9 +9,12 @@ export default async function Page({ params }) {
   try {
     // Obtener slug de la URL
     const slug = params.slug
+   
+    let rutaFormateada = '/' + slug.join('/');
+    const ruta=encodeURIComponent(rutaFormateada);    
     // Obtener la página específica por una ruta
-    const data = await obtenerPaginaPorRuta("%2F"+slug);
-
+    const data = await obtenerPaginaPorRuta(ruta);
+   
     const breadcrumbs = construirBreadcrumbsDesdeSlug(slug)
 
 

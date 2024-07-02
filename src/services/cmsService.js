@@ -2,7 +2,7 @@
 import apiClient from '../config/api-config';
 /*Paginas Dinamicas*/
 export const obtenerPaginaPorRuta = async (ruta) => {
-  try {
+  try {    
     const response = await apiClient.get(`/api/PaginasDinamicas/paginaPorRuta/${ruta}`);
     return response.data;
   } catch (error) {
@@ -41,7 +41,7 @@ export const obtenerSeguroPorRuta = async (ruta) => {
 export const obtenerMenuPrincipal = async () => {
   try {
     const response = await apiClient.get(`/api/MenuPrincipal`);
-    console.log(response)
+    //console.log(response)
     return response.data;
   } catch (error) {
     throw error;

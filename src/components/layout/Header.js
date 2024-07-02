@@ -7,7 +7,7 @@ function renderMenu(menu) {
       {menu.map(item => (
         !item.idPadre ? ( // Renderizar elementos principales del menú
           <li key={item.id} className={item.subMenus ? 'dropdown' : ''}>
-            <Link href={item.url}>
+            <Link href={item.urlCompleta}>
               {item.nombre}
             </Link>
             {item.subMenus && (
@@ -25,7 +25,7 @@ function renderMenu(menu) {
 function renderSubMenu(subMenus) {
   return subMenus.map(subItem => (
     <li key={subItem.id}>
-      <Link href={subItem.url}>
+      <Link href={subItem.urlCompleta}>
         {subItem.nombre}
       </Link>
       {subItem.subMenus && (
@@ -40,7 +40,7 @@ function renderSubMenu(subMenus) {
 
 export default async function Header() {
   const menu = await obtenerMenuPrincipal();
-  console.log(menu)
+
 
   return (
     <>
