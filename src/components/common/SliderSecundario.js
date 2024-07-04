@@ -59,7 +59,7 @@ const SliderSecundario = () => {
                   </div>
                 </div>
                 <div className="main-slider-two__btn-and-call">
-                  <a href="" className="main-slider-two__btn thm-btn">Más información</a>
+                  <a href="/seguros-obligatorios/soat" className="main-slider-two__btn thm-btn">Más información</a>
                   <div className="main-slider-two__call">
                     {/* <div className="icon">
                     <span className="icon-phone-1"></span>
@@ -107,7 +107,7 @@ const SliderSecundario = () => {
                 </div>
                 <div className="main-slider-two__btn-and-call">
                   {/* about.html */}
-                  <a href="" className="main-slider-two__btn thm-btn">Más información</a>
+                  <a href="/seguros-obligatorios/soatc" className="main-slider-two__btn thm-btn">Más información</a>
                   <div className="main-slider-two__call">
                     {/* <div className="icon">
             <span className="icon-phone-1"></span>

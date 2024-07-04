@@ -1,4 +1,4 @@
-// Services.js
+
 'use client'
 import { useEffect } from 'react';
 import Tarjeta1 from '../common/Tarjeta1'
@@ -12,6 +12,7 @@ const SeccionSliderTipo1 = ({ seccion }) => {
             $(document).ready(function () {
                 $('.services-one__carousel').owlCarousel({
                     loop: false,
+              
                     autoplay: false,
                     margin: 30,
                     nav: true,

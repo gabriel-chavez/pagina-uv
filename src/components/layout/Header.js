@@ -2,12 +2,13 @@ import Link from 'next/link';
 import { obtenerMenuPrincipal } from '@/services/cmsService';
 
 function renderMenu(menu) {
+  
   return (
     <ul className="main-menu__list">
       {menu.map(item => (
         !item.idPadre ? ( // Renderizar elementos principales del menú
           <li key={item.id} className={item.subMenus ? 'dropdown' : ''}>
-            <Link href={item.urlCompleta}>
+            <Link href={item.urlCompleta ? item.urlCompleta : "/"}>
               {item.nombre}
             </Link>
             {item.subMenus && (

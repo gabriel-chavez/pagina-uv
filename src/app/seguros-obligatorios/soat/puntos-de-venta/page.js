@@ -4,7 +4,7 @@ import EncabezadoPagina from "@/components/common/EncabezadoPagina";
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';
 import { obtenerDepartamentos } from "@/services/soatService";
-const Mapa = dynamic(() => import('@/app/soat/puntos-de-venta/Mapa'), {
+const Mapa = dynamic(() => import('@/app/seguros-obligatorios/soat/puntos-de-venta/Mapa'), {
     loading: () => <p>A map is loading</p>,
     ssr: false,
 });

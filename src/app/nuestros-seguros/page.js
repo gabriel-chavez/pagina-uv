@@ -11,7 +11,7 @@ export default async function Page() {
             { label: 'Nuestros seguros' },
         ];
         const data = await obtenerSeguros();
-        console.log(data)
+  
         return (
             <>
                 <EncabezadoPagina
@@ -25,6 +25,7 @@ export default async function Page() {
                             {data.map((seguro) => (
                                 <div className="col-xl-4 col-lg-4">
                                     <Tarjeta1
+                                        key={seguro.id}
                                         titulo={seguro.nombreCorto}
                                         link={seguro.menuPrincipal.urlCompleta}
                                         imgSrc={seguro.recurso.recursoEscritorio}
