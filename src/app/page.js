@@ -14,12 +14,12 @@ export default function Home() {
   return (
     <>    
         <Slider></Slider>
-        <SeccionServicios></SeccionServicios>
+         <SeccionServicios></SeccionServicios>
         <SliderSecundario></SliderSecundario>
         <SeccionLogros></SeccionLogros>
         <SeccionNoticias />
         <SeccionVarios></SeccionVarios>
-        <SeccionDescargaApp></SeccionDescargaApp>
+        <SeccionDescargaApp></SeccionDescargaApp> 
 
         
     </>

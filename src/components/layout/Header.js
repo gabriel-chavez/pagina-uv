@@ -11,7 +11,7 @@ function renderMenu(menu) {
             <Link href={item.urlCompleta ? item.urlCompleta : "/"}>
               {item.nombre}
             </Link>
-            {item.subMenus && (
+            {item.subMenus && item.subMenus.length>0  && (
               <ul className="submenu">
                 {renderSubMenu(item.subMenus)}
               </ul>
@@ -29,7 +29,7 @@ function renderSubMenu(subMenus) {
       <Link href={subItem.urlCompleta}>
         {subItem.nombre}
       </Link>
-      {subItem.subMenus && (
+      {subItem.subMenus && subItem.subMenus.length>0 && (
         <ul className="submenu">
           {renderSubMenu(subItem.subMenus)}
         </ul>

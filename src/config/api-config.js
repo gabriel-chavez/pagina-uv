@@ -40,7 +40,7 @@ apiClient.interceptors.response.use(
               default:
                 
                   // Otros errores de respuesta no manejados específicamente
-                  return Promise.reject({ status: error.response.status, message: 'Error en la solicitud.' });
+                  return Promise.reject({ status: error.response.status, message: 'Error en la solicitud: '+ error.response.data.detail });
           }
       } else if (error.request) {
           // La solicitud fue hecha pero no se recibió respuesta

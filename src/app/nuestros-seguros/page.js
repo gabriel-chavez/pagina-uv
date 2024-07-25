@@ -27,7 +27,7 @@ export default async function Page() {
                                     <Tarjeta1
                                         key={seguro.id}
                                         titulo={seguro.nombreCorto}
-                                        link={seguro.menuPrincipal.urlCompleta}
+                                        link={seguro.menuPrincipal[0].urlCompleta}
                                         imgSrc={seguro.recurso.recursoEscritorio}
                                         iconClass={seguro.icono}
                                     />
