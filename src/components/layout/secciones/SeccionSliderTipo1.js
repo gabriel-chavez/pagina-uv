@@ -1,7 +1,7 @@
 
 'use client'
 import { useEffect } from 'react';
-import Tarjeta1 from '../common/Tarjeta1'
+import Tarjeta1 from '@/components/common/Tarjeta1'
 import MarkdownRenderer from '@/utils/MarkdownRenderer';
 
 const SeccionSliderTipo1 = ({ seccion }) => {
@@ -76,7 +76,7 @@ const SeccionSliderTipo1 = ({ seccion }) => {
                                         titulo={fila[0].datoTexto}
                                         iconClass={fila[1].datoTexto}
                                         imgSrc={fila[2].recurso.recursoEscritorio}
-                                        link={fila[3].datoUrl}
+                                        link={fila[3]?.datoUrl || '#'} 
                                         textoBoton={fila[3].datoTexto}
                                     />
                                 </div>

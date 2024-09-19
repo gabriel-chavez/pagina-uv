@@ -1,4 +1,4 @@
-import Tarjeta2 from '../common/Tarjeta2'
+import Tarjeta2 from '@/components/common/Tarjeta2'
 
 const SeccionNoticias = () => {
   return (

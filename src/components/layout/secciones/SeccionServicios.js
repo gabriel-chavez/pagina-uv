@@ -12,7 +12,7 @@ export  default async function SeccionServicios() {
       { datoTexto: seguro.nombreCorto },
       { datoTexto: seguro.icono },
       { recurso: { recursoEscritorio: seguro.recurso.recursoEscritorio } },
-      { datoUrl: seguro.menuPrincipal[0].urlCompleta, datoTexto: "Ver más" }
+      { datoUrl: seguro.menuPrincipal.urlCompleta, datoTexto: "Ver más" }
     ])
   };
   

@@ -10,11 +10,11 @@ export default async function Page({ params }) {
     try {
         // Obtener slug de la URL
         const slug = params.slug
-        console.log(slug)
+        
         var ruta=encodeURIComponent("/nuestros-seguros/"+slug);
         // Obtener la página específica por una ruta
         const data = await obtenerSeguroPorRuta(ruta);
-
+console.log(data);
         const breadcrumbs = [
             { label: 'Inicio', url: '/' },
             { label: 'Nuestros Seguros', url: '/nuestros-seguros' },

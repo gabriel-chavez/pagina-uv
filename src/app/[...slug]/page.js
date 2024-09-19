@@ -1,7 +1,7 @@
 import { obtenerPaginaPorRuta, obtenerRutasDinamicas } from '@/services/cmsService';
 import EncabezadoPagina from "@/components/common/EncabezadoPagina";
 import { construirBreadcrumbsDesdeSlug } from '@/utils/construirBreadcrumbsDesdeSlug';
-import SeccionDinamica from '@/components/layout/SeccionDinamica';
+import SeccionDinamica from '@/components/layout/secciones/SeccionDinamica';
 
 export default async function Page({ params }) {
 

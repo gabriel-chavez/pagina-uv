@@ -31,7 +31,7 @@ export const obtenerSeguros = async () => {
 export const obtenerSeguroPorRuta = async (ruta) => {
   try {
     const response = await apiClient.get(`/api/Seguro/ObtenerPorRuta/${ruta}`);
-    console.log(response)
+    
     return response.data;
   } catch (error) {
     throw error;

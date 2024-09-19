@@ -1,6 +1,6 @@
 'use client'
 import { useEffect } from 'react';
-import Tarjeta6 from '../common/Tarjeta6'
+import Tarjeta6 from '@/components/common/Tarjeta6'
 import MarkdownRenderer from '@/utils/MarkdownRenderer';
 const SeccionSliderTipo2 = ({ seccion }) => {
     useEffect(() => {
