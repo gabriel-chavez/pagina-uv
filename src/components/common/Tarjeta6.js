@@ -1,8 +1,10 @@
 import Link from 'next/link';
 
 const Tarjeta6 = ({ imagenUrl, iconClass, titulo, href, detalle }) => {
+    const isExternal = href.startsWith('http') || href.startsWith('https');
+
     return (
-        <div className=" wow fadeInLeft" data-wow-delay="100ms">
+        <div className="wow fadeInLeft" data-wow-delay="100ms">
             <div className="services-four__single">
                 <div className="services-four__img-box">
                     <div className="services-four__img">
@@ -13,13 +15,13 @@ const Tarjeta6 = ({ imagenUrl, iconClass, titulo, href, detalle }) => {
                             <span className={iconClass}></span>
                         </div>
                         <h3 className="services-four__title">
-                            <Link href={href}>
+                            <Link href={href} target={isExternal ? "_blank" : undefined} rel={isExternal ? "noopener noreferrer" : undefined}>
                                 {titulo}
                             </Link>
                         </h3>
                     </div>
                     <div className="services-four__arrow">
-                        <Link href={href}>
+                        <Link href={href} target={isExternal ? "_blank" : undefined} rel={isExternal ? "noopener noreferrer" : undefined}>
                             <span className="icon-next"></span>
                         </Link>
                     </div>
@@ -28,7 +30,7 @@ const Tarjeta6 = ({ imagenUrl, iconClass, titulo, href, detalle }) => {
                             <span className={iconClass}></span>
                         </div>
                         <h3 className="services-four__hover-title">
-                            <Link href={href}>
+                            <Link href={href} target={isExternal ? "_blank" : undefined} rel={isExternal ? "noopener noreferrer" : undefined}>
                                 {titulo}
                             </Link>
                         </h3>

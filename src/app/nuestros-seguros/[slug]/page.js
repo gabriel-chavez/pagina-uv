@@ -10,11 +10,12 @@ export default async function Page({ params }) {
     try {
         // Obtener slug de la URL
         const slug = params.slug
-        
-        var ruta=encodeURIComponent("/nuestros-seguros/"+slug);
+
+        var ruta = encodeURIComponent("/nuestros-seguros/" + slug);
         // Obtener la página específica por una ruta
-        const data = await obtenerSeguroPorRuta(ruta);
-console.log(data);
+        const resultado = await obtenerSeguroPorRuta(ruta);
+        const data = resultado.datos
+        console.log(data);
         const breadcrumbs = [
             { label: 'Inicio', url: '/' },
             { label: 'Nuestros Seguros', url: '/nuestros-seguros' },
@@ -34,16 +35,16 @@ console.log(data);
                     />
                 )}
 
-                {data.seguroDetalles && data.seguroDetalles.length >= 4 && (
+                {data.seguroDetalles && data.seguroDetalles.length >= 2 && (
                     <>
                         <section className="mt-5">
                             <Contenido3
-                                titulo={data.seguroDetalles[0].titulo}
-                                texto={data.seguroDetalles[0].respuesta}
+                                titulo={data.seguroDetalles[0]?.titulo}
+                                texto={data.seguroDetalles[0]?.respuesta}
                             />
                             <Contenido3
-                                titulo={data.seguroDetalles[1].titulo}
-                                texto={data.seguroDetalles[1].respuesta}
+                                titulo={data.seguroDetalles[1]?.titulo}
+                                texto={data.seguroDetalles[1]?.respuesta}
                                 fondo={true}
                             />
                         </section>
@@ -87,17 +88,15 @@ console.log(data);
                                 </div>
                             </div>
                         </section>
-
                         <section className="mt-5">
-                            <Contenido3
-                                titulo={data.seguroDetalles[2].titulo}
-                                texto={data.seguroDetalles[2].respuesta}
-                                fondo={true}
-                            />
-                            <Contenido3
-                                titulo={data.seguroDetalles[3].titulo}
-                                texto={data.seguroDetalles[3].respuesta}
-                            />
+                            {data.seguroDetalles.slice(2, 4).map((detalle, index) => (
+                                <Contenido3
+                                    key={index}
+                                    titulo={detalle.titulo}
+                                    texto={detalle.respuesta}
+                                    fondo={index === 0} // Aplica `fondo={true}` solo en el primer elemento del bucle
+                                />
+                            ))}
                         </section>
                     </>
                 )}

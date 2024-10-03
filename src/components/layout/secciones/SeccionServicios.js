@@ -3,8 +3,8 @@ import SeccionSliderTipo1 from './SeccionSliderTipo1';
 import { obtenerSeguros } from '@/services/cmsService';
 
 export  default async function SeccionServicios() {
-  const seguros = await obtenerSeguros();
-  
+  const resultado = await obtenerSeguros();
+  const seguros=resultado.datos 
   const seccion = {
     titulo: "NUESTROS SEGUROS",
     subTitulo: "Grandes soluciones\nen Seguros",

@@ -1,0 +1,12 @@
+.responsiveImg {
+  width: 100% !important; /* Ancho por defecto para móviles y tablets */
+  height: auto !important;
+  text-align: center;
+}
+
+@media (min-width: 1024px) {
+  .responsiveImg {
+    width: var(--porcentaje-tamanio, 100%) !important; /* Aplicar el porcentaje en pantallas de escritorio */
+    height: auto !important;
+  }
+}

@@ -2,7 +2,7 @@ import Link from 'next/link';
 import { obtenerMenuPrincipal } from '@/services/cmsService';
 
 function renderMenu(menu) {
-  
+  console.log(menu)
   return (
     <ul className="main-menu__list">
       {menu.map(item => (
@@ -40,8 +40,8 @@ function renderSubMenu(subMenus) {
 
 
 export default async function Header() {
-  const menu = await obtenerMenuPrincipal();
-
+  const resultado = await obtenerMenuPrincipal();
+  const menu=resultado.datos
 
   return (
     <>

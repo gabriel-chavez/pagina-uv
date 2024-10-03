@@ -13,8 +13,8 @@ export default async function Page({ params }) {
     let rutaFormateada = '/' + slug.join('/');
     const ruta=encodeURIComponent(rutaFormateada);    
     // Obtener la página específica por una ruta
-    const data = await obtenerPaginaPorRuta(ruta);
-   
+    const resultado = await obtenerPaginaPorRuta(ruta);
+    const data=resultado.datos
     const breadcrumbs = construirBreadcrumbsDesdeSlug(slug)
 
 

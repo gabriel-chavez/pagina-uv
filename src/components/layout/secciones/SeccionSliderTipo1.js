@@ -76,7 +76,7 @@ const SeccionSliderTipo1 = ({ seccion }) => {
                                         titulo={fila[0].datoTexto}
                                         iconClass={fila[1].datoTexto}
                                         imgSrc={fila[2].recurso.recursoEscritorio}
-                                        link={fila[3]?.datoUrl || '#'} 
+                                        link={fila[3]?.datoUrl || fila[3]?.recurso?.recursoEscritorio || '#'}
                                         textoBoton={fila[3].datoTexto}
                                     />
                                 </div>

@@ -5462,13 +5462,23 @@ ul {
 
 .testimonial-one__text-box {
   position: relative;
-  display: block;
+  display: flex;
+  /* Usamos flexbox para centrar */
+  align-items: center;
+  /* Centrado vertical */
+  justify-content: center;
+  /* Centrado horizontal, si también quieres esto */
   background-color: rgb(255, 255, 255);
-  box-shadow: 0px 0px 60px 0px rgba(18, 20, 31, 0.06);
+  box-shadow: 0px 0px 60px 0px rgba(18, 20, 31, 0.10);
   padding: 49px 30px 76px;
   margin-top: -32px;
   z-index: 1;
+  min-height: 240px;
+  /* Aseguramos que haya suficiente espacio vertical */
+  text-align: center;
+  /* Si quieres centrar el texto horizontalmente */
 }
+
 
 .testimonial-one__text-box::before {
   content: "";
@@ -5513,6 +5523,8 @@ ul {
   width: 100%;
   margin: 0 auto;
   border-radius: 50%;
+  background: rgb(2, 149, 185);
+  background: linear-gradient(180deg, rgba(2, 149, 185, 1) 34%, rgba(8, 67, 130, 1) 100%, rgba(6, 48, 97, 1) 100%);
 }
 
 .testimonial-one__client-img::before {
@@ -9615,9 +9627,9 @@ Project Style1
   left: 0;
   right: 0;
   bottom: 0;
-  background-image: -moz-linear-gradient(90deg, rgb(0, 32, 74) 0%, rgba(0, 32, 74, 0) 100%);
-  background-image: -webkit-linear-gradient(90deg, rgb(0, 32, 74) 0%, rgba(0, 32, 74, 0) 100%);
-  background-image: -ms-linear-gradient(90deg, rgb(0, 32, 74) 0%, rgba(0, 32, 74, 0) 100%);
+  background-image: -moz-linear-gradient(90deg, rgb(0, 32, 74) 0%, rgba(0, 32, 74, 0) 40%);
+  background-image: -webkit-linear-gradient(90deg, rgb(0, 32, 74) 0%, rgba(0, 32, 74, 0) 40%);
+  background-image: -ms-linear-gradient(90deg, rgb(0, 32, 74) 0%, rgba(0, 32, 74, 0) 40%);
   box-shadow: 0px 0px 40px 0px rgba(18, 20, 31, 0.12);
   z-index: 1;
 }
@@ -16328,17 +16340,21 @@ Project Style1
   padding: 0;
   margin-bottom: 1.5rem;
 }
-.seguros-detalle-adicional strong{
+
+.seguros-detalle-adicional strong {
   font-size: 1.75rem;
   font-style: italic !important;
   margin-top: 10px;
 }
+
 .seguros-detalle-adicional p {
   line-height: 1.8
 }
-.parrafo-sin-margen>p{
-  margin:0px
+
+.parrafo-sin-margen>p {
+  margin: 0px
 }
+
 /*--------------------------------------------------------------
 # End
 --------------------------------------------------------------*/

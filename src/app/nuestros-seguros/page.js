@@ -10,8 +10,8 @@ export default async function Page() {
             { label: 'Inicio', url: '/' },
             { label: 'Nuestros seguros' },
         ];
-        const data = await obtenerSeguros();
-  
+        const resultado = await obtenerSeguros();
+        const data =resultado.datos
         return (
             <>
                 <EncabezadoPagina
@@ -27,7 +27,7 @@ export default async function Page() {
                                     <Tarjeta1
                                         key={seguro.id}
                                         titulo={seguro.nombreCorto}
-                                        link={seguro.menuPrincipal[0].urlCompleta}
+                                        link={seguro.menuPrincipal?.[0]?.urlCompleta || '#'}
                                         imgSrc={seguro.recurso.recursoEscritorio}
                                         iconClass={seguro.icono}
                                     />
