@@ -1,0 +1,251 @@
+/* Contenedor principal */
+.container {
+  margin: 0 auto;
+  padding: 0px;
+  font-family: Arial, sans-serif;
+}
+
+.container h2 {
+  text-align: left;
+  color: #1a4d89;
+  margin-bottom: 20px;
+}
+.container button {
+  border:0px !important
+}
+
+/* Botón "Adicionar Nuevo" */
+.addButton {
+  background-color: white;
+  border: 2px solid #1a4d89;
+  color: #1a4d89;
+  padding: 10px 20px;
+  margin-bottom: 20px;
+  cursor: pointer;
+  border-radius: 25px;
+  font-size: 14px;
+  font-weight: bold;
+  display: inline-block;
+  transition: background-color 0.3s, color 0.3s;
+}
+
+.addButton:hover {
+  background-color: #1a4d89;
+  color: white;
+}
+
+/* Estilo de la tabla */
+.academicTable {
+  width: 100%;
+  border-collapse: collapse; /* Elimina las líneas entre las celdas */
+  margin-bottom: 20px;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1); /* Sombra ligera */
+}
+
+.academicTable th {
+  background-color: #f2f2f2;
+  color: #1a4d89;
+  font-weight: bold;
+  text-align: center;
+  padding: 12px 8px;
+  border-bottom: 2px solid #ddd; /* Línea bajo el encabezado */
+}
+
+.academicTable td {
+  text-align: center;
+  vertical-align: middle;
+  padding: 12px 8px;
+  border: none; /* Elimina las líneas entre celdas */
+}
+
+/* Filas intercaladas */
+.academicTable tr:nth-child(even) td {
+  background-color: #f9f9f9; /* Color plomo suave */
+}
+
+/* Botones de acción (Editar/Eliminar) */
+.editButton, .deleteButton {
+  background-color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 16px;
+}
+
+.editButton:hover {
+  color: #23a455; /* Verde */
+}
+
+.deleteButton:hover {
+  color: #ff4b4b; /* Rojo */
+}
+
+/* Botón "Guardar" */
+.saveButton {
+  background-color: #23a455;
+  color: white;
+  padding: 12px 20px;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  width: 100%;
+  font-size: 16px;
+  margin-top: 20px;
+}
+
+.saveButton:hover {
+  background-color: #1d8c49;
+}
+
+/* Responsividad */
+@media (max-width: 768px) {
+  .academicTable, .academicTable th, .academicTable td {
+    display: block;
+    width: 100%;
+  }
+
+  .academicTable th {
+    text-align: left;
+  }
+
+  .academicTable tr {
+    margin-bottom: 10px;
+    border: 1px solid #ddd;
+  }
+
+  .addButton, .saveButton {
+    width: 100%;
+  }
+
+  .actionButtons {
+    flex-direction: column;
+  }
+}
+/* Formulario Perfil */
+.form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+.form input, .form button, .form select, .form optgroup, .form textarea{
+  line-height: unset !important;
+  padding: 3px !important;
+  border-top: 0px !important;
+  border-left: 0px !important;
+  border-right: 0px !important;
+}
+.form-control{
+  border-top: 0px !important;
+  border-left: 0px !important;
+  border-right: 0px !important;
+}
+
+.fieldGroup {
+    flex: 1 1 45%;
+    display: flex;
+    flex-direction: column;
+}
+
+.fieldGroup label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.fieldGroup input,
+.fieldGroup select {
+    padding: 10px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+.fieldGroup input[type="file"] {
+    padding: 5px;
+}
+
+.submitButton {
+    background: dodgerblue;
+    color: white;
+    padding: 15px;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    width: 100%;
+    margin-top: 20px;
+}
+
+.submitButton:hover {
+    background: darkblue;
+}
+.fieldGroup input,
+.fieldGroup select {
+    padding: 3px;
+    border: 1px solid #007BFF; /* Cambia el color del borde a un azul deseado */
+    border-radius: 5px;
+    width: 100%;
+    box-sizing: border-box;
+    transition: border-color 0.3s ease; /* Añade una transición para el cambio de color */
+}
+
+.fieldGroup input:focus,
+.fieldGroup select:focus {
+    border-color: #0056b3; /* Color más oscuro al enfocar */
+}
+
+.fieldGroup.telefono {
+  display: flex; /* Habilita el flexbox */
+  align-items: center; /* Alinea los elementos verticalmente */
+  gap: 10px; /* Espacio entre los inputs */
+}
+
+.fieldGroup.telefono input {
+  flex: 1; /* Permite que los inputs ocupen el mismo espacio */
+  min-width: 150px; /* Establece un ancho mínimo para los inputs */
+}
+
+.experienceContainer {
+  border: 1px solid #ccc;
+  padding: 15px;
+  border-radius: 5px;
+  margin-top: 10px;
+}
+
+.experienceHeader, .experienceDetails {
+  display: flex;
+  justify-content: space-between;
+  padding: 5px 0;
+}
+
+.experienceHeader {
+  border-bottom: 1px solid #eee;
+  padding-bottom: 10px;
+  margin-bottom: 10px;
+}
+
+.actions {
+  display: flex;
+  gap: 5px;
+}
+
+.experienceContent {
+  display: flex;
+  justify-content: space-between;
+}
+
+.leftColumn {
+  flex: 2;
+  padding-right: 20px;
+}
+
+.rightColumn {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  gap: 0px;
+}
+
+.experienceDetails div, .rightColumn div {
+  padding: 5px 0;
+}
+
