@@ -1113,14 +1113,14 @@
         stricky.removeClass("stricky-fixed");
       }
     }
-    // if ($(".scroll-to-top").length) {
-    //   var strickyScrollPos = 100;
-    //   if ($(window).scrollTop() > strickyScrollPos) {
-    //     $(".scroll-to-top").fadeIn(500);
-    //   } else if ($(this).scrollTop() <= strickyScrollPos) {
-    //     $(".scroll-to-top").fadeOut(500);
-    //   }
-    // }
+    if ($(".scroll-to-top").length) {
+      var strickyScrollPos = 100;
+      if ($(window).scrollTop() > strickyScrollPos) {
+        $(".scroll-to-top").fadeIn(500);
+      } else if ($(this).scrollTop() <= strickyScrollPos) {
+        $(".scroll-to-top").fadeOut(500);
+      }
+    }
     if ($(".scroll-to-top").length || $(".redes-sociales").length) {
       var strickyScrollPos = 100;
       if ($(window).scrollTop() > strickyScrollPos) {
