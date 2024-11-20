@@ -54,6 +54,7 @@ export default function RootLayoutxxx({ children }) {
         {/* template styles */}
         <link rel="stylesheet" href="/assets/css/sonchoy.css" />
         <link rel="stylesheet" href="/assets/css/sonchoy-responsive.css" />
+        <link rel="stylesheet" href="/assets/css/sonchoy-convocatoria.css" />
       </head>
 
       <body >

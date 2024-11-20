@@ -1,0 +1,478 @@
+.insurance-details__convocatoria_detalle{
+    list-style-type: none; 
+    padding: 0; 
+    margin: 0; 
+}
+.insurance-details__convocatoria_detalle li{
+    border: 1px solid #fff;/*#007ec647;*/
+    border-radius: 5px;
+    margin-bottom: 15px;
+    padding: 5px;
+    background: #fff;
+    transition: border 1s ease, background 1s ease;
+}
+.insurance-details__convocatoria_detalle em{
+    margin-right: 5px;
+}
+.insurance-details__convocatoria_detalle li:hover{
+    border: 1px solid #007dc696;
+    background: #e0f2fdad;;
+}
+
+.insurance-details__convocatoria_info{
+    background: #f5f5f8;
+    padding: 20px;
+}
+.insurance-details__convocatoria_info_title{
+    margin-bottom: 0px !important;
+}
+
+/* CSS Tabs */
+html {
+
+    box-sizing: border-box;
+    --bgColorMenu : #fff;
+    --duration: .7s;    
+
+}
+
+html *,
+html *::before,
+html *::after {
+
+    box-sizing: inherit;
+
+}
+
+.menu{
+
+    margin: 0;
+    display: flex;
+    /* Works well with 100% width  */
+    width: 32.05em;
+    font-size: 1.5em;
+    padding: 0 2.85em;
+    position: relative;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--bgColorMenu);
+    
+}
+
+.menu__item{
+    
+    all: unset;
+    flex-grow: 1;
+    z-index: 100;
+    display: flex;
+    cursor: pointer;
+    position: relative;
+    border-radius: 50%;
+    align-items: center;
+    will-change: transform;
+    justify-content: center;
+    padding: 0.55em 0 0.85em;
+    transition: transform var(--timeOut , var(--duration));
+    
+}
+
+.menu__item::before{
+    
+    content: "";
+    z-index: -1;
+    width: 4.2em;
+    height: 4.2em;
+    border-radius: 50%;
+    position: absolute;
+    transform: scale(0);
+    transition: background-color var(--duration), transform var(--duration);
+    
+}
+
+
+.menu__item.active {
+
+    transform: translate3d(0, -.8em , 0);
+
+}
+
+.menu__item.active::before{
+    
+    transform: scale(1);
+    background-color: var(--bgColorItem);
+
+}
+
+.icon{
+    
+    width: 2.6em;
+    height: 2.6em;
+    stroke: white;
+    fill: transparent;
+    stroke-width: 1pt;
+    stroke-miterlimit: 10;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    stroke-dasharray: 400;
+    
+}
+
+.menu__item.active .icon {
+
+    animation: strok 1.5s reverse;
+    
+}
+
+@keyframes strok {
+
+    100% {
+
+        stroke-dashoffset: 400;
+
+    }
+
+}
+
+.menu__border{
+
+    left: 0;
+    bottom: 99%;
+    width: 10.9em;
+    height: 2.4em;
+    position: absolute;
+    clip-path: url(#menu);
+    will-change: transform;
+    background-color: var(--bgColorMenu);
+    transition: transform var(--timeOut , var(--duration));
+    
+}
+
+.svg-container {
+
+    width: 0;
+    height: 0;
+}
+
+
+@media screen and (max-width: 50em) {
+    .menu{
+        font-size: .8em;
+    }
+}
+
+/* Estilos Perfil */
+
+div.Tabs, .Tabs h1, .Tabs h2, .Tabs h3, .Tabs p, .Tabs pre {
+	margin: 0;
+	color: #333;
+}
+.Tabs {
+	background: #efefef
+}
+a {
+	color: #1889e6;
+}
+
+/**/
+/* main styles */
+/**/
+.pcss3t {
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: none;
+	font-size: 0;
+	text-align: center;
+}
+.pcss3t > input {
+	position: absolute;
+	left: -9999px;
+}
+.pcss3t > label {
+	position: relative;
+	display: inline-block;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: none;
+	cursor: pointer;
+	transition: all 0.1s;
+	-o-transition: all 0.1s;	
+	-ms-transition: all 0.1s;	
+	-moz-transition: all 0.1s;	
+	-webkit-transition: all 0.1s;
+}
+.pcss3t > label i {
+	display: block;
+	float: left;
+	margin: 16px 8px 0 -2px;
+	padding: 0;
+	border: 0;
+	outline: none;
+	font-family: FontAwesome;
+	font-style: normal;
+	font-size: 17px;
+}
+.pcss3t > input:checked + label {
+	cursor: default;
+}
+.pcss3t > ul {
+	list-style: none;
+	position: relative;
+	display: block;
+	overflow: hidden;
+	margin: 0;
+	padding: 0;
+	border: 0;
+	outline: none;
+	font-size: 13px;
+}
+.pcss3t > ul > li {
+	position: absolute;
+	width: 100%;
+	overflow: auto;
+	padding: 30px 40px 40px;
+	box-sizing: border-box;
+	-moz-box-sizing: border-box;
+	opacity: 0;
+	transition: all 0.5s;
+	-o-transition: all 0.5s;	
+	-ms-transition: all 0.5s;	
+	-moz-transition: all 0.5s;	
+	-webkit-transition: all 0.5s;
+}
+.pcss3t > .tab-content-first:checked ~ ul .tab-content-first,
+.pcss3t > .tab-content-2:checked ~ ul .tab-content-2,
+.pcss3t > .tab-content-3:checked ~ ul .tab-content-3,
+.pcss3t > .tab-content-4:checked ~ ul .tab-content-4,
+.pcss3t > .tab-content-5:checked ~ ul .tab-content-5,
+.pcss3t > .tab-content-6:checked ~ ul .tab-content-6,
+.pcss3t > .tab-content-7:checked ~ ul .tab-content-7,
+.pcss3t > .tab-content-8:checked ~ ul .tab-content-8,
+.pcss3t > .tab-content-9:checked ~ ul .tab-content-9,
+.pcss3t > .tab-content-last:checked ~ ul .tab-content-last {
+	z-index: 1;
+	top: 0;
+	left: 0;
+	opacity: 1;
+	-webkit-transform: scale(1,1);
+	-webkit-transform: rotate(0deg);
+}
+
+/**/
+/* animation effects */
+/**/
+.pcss3t-effect-scale > ul > li {
+	-webkit-transform: scale(0.1,0.1);
+}
+.pcss3t-effect-rotate  > ul > li {
+	-webkit-transform: rotate(180deg);
+}
+.pcss3t-effect-slide-top > ul > li {
+	top: -40px;
+}
+.pcss3t-effect-slide-right > ul > li {
+	left: 80px;
+}
+.pcss3t-effect-slide-bottom > ul > li {
+	top: 40px;
+}
+.pcss3t-effect-slide-left > ul > li {
+	left: -80px;
+}
+
+
+
+
+/*----------------------------------------------------------------------------*/
+/*                               RESPONSIVENESS                               */
+/*----------------------------------------------------------------------------*/
+
+/**/
+/* pad */
+/**/
+@media screen and (max-width: 980px) {
+	
+}
+
+
+/**/
+/* phone */
+/**/
+@media screen and (max-width: 767px) {
+	.pcss3t > label {
+		display: block;
+	}
+	.pcss3t > .right {
+		float: none;
+	}
+}
+
+
+
+/*----------------------------------------------------------------------------*/
+/*                                   THEMES                                   */
+/*----------------------------------------------------------------------------*/
+
+/**/
+/* default */
+/**/
+.pcss3t > label {	
+	padding: 0 20px;
+	background: #e5e5e5;
+	font-size: 13px;
+	line-height: 49px;
+}
+.pcss3t > label:hover {
+	background: #f2f2f2;
+}
+.pcss3t > input:checked + label {
+	background: #fff;
+}
+.pcss3t > ul {
+	background: #fff;
+	text-align: left;
+}
+.pcss3t-steps > label:hover {
+	background: #e5e5e5;	
+}
+
+
+/**/
+/* theme 1 */
+/**/
+
+.pcss3t-theme-1 > label {
+	margin: 0 5px 5px 0;
+	border-radius: 5px;
+	background: #fff;
+	box-shadow: 0 2px rgba(0,0,0,0.2);
+	color: #808080;
+	opacity: 0.8;
+}
+.pcss3t-theme-1 > label:hover {
+	background: #fff;
+	opacity: 1;
+}
+.pcss3t-theme-1 > input:checked + label {
+	margin-bottom: 0;
+	margin-top: 3px;
+	padding-bottom: 5px;
+	border-bottom-right-radius: 0;
+	border-bottom-left-radius: 0;
+	color: #2b82d9;
+	opacity: 1;
+}
+.pcss3t-theme-1 > ul {
+	border-radius: 5px;
+	box-shadow: 0 3px rgba(0,0,0,0.2);
+}
+.pcss3t-theme-1 > .tab-content-first:checked ~ ul {
+	border-top-left-radius: 0;
+}
+@media screen and (max-width: 767px) {
+	.pcss3t-theme-1 > label {
+		margin-right: 0;
+	}
+	.pcss3t-theme-1 > input:checked + label {
+		margin-bottom: 5px;
+		padding-bottom: 0;
+		border-radius: 5px;
+	}
+	.pcss3t-theme-1 > .tab-content-first:checked ~ ul {
+		border-top-left-radius: 5px;
+	}
+}
+
+/*----------------------------------------------------------------------------*/
+/*                               CUSTOMIZATION                                */
+/*----------------------------------------------------------------------------*/
+
+/**/
+/* height */
+/**/
+.pcss3t > ul,
+.pcss3t > ul > li {
+	height: 670px;
+  overflow: auto;
+}
+
+/* Estilos Formulario */
+@import url("https://fonts.googleapis.com/css2?family=Sansita+Swashed:wght@600&display=swap");
+.center {
+  position: relative;
+  padding: 50px 50px;
+  background: #fff;
+  border-radius: 10px;
+}
+.center h1 {
+  font-size: 2em;
+  border-left: 5px solid dodgerblue;
+  padding: 10px;
+  color: #000;
+  letter-spacing: 5px;
+  margin-bottom: 60px;
+  font-weight: bold;
+  padding-left: 10px;
+}
+.center .inputbox {
+  position: relative;
+  width: 300px;
+  height: 50px;
+  margin-bottom: 50px;
+}
+.center .inputbox input {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  border: 2px solid #000;
+  outline: none;
+  background: none;
+  padding: 10px;
+  border-radius: 10px;
+  font-size: 1.2em;
+}
+.center .inputbox:last-child {
+  margin-bottom: 0;
+}
+.center .inputbox span {
+  position: absolute;
+  top: 14px;
+  left: 20px;
+  font-size: 1em;
+  transition: 0.6s;
+  font-family: sans-serif;
+}
+.center .inputbox input:focus ~ span,
+.center .inputbox input:valid ~ span {
+  transform: translateX(-13px) translateY(-35px);
+  font-size: 1em;
+}
+.center .inputbox [type="button"] {
+  width: 50%;
+  background: dodgerblue;
+  color: #fff;
+  border: #fff;
+}
+.center .inputbox:hover [type="button"] {
+  background: linear-gradient(45deg, greenyellow, dodgerblue);
+}
+/* Estilo personalizado para que el borde solo aparezca en la parte inferior */
+.form-control, .form-select {
+    border: none !important; /* Elimina todos los bordes */
+    border-bottom: 2px solid #007bff !important; /* Agrega un borde solo en la parte inferior */
+    border-radius: 0 !important; /* Elimina el radio de borde para un estilo plano */
+    box-shadow: none !important; /* Elimina cualquier sombra de borde */
+  }
+  
+  /* Estilo para el campo cuando está enfocado */
+  .form-control:focus, .form-select:focus {
+    border-bottom-color: #0056b3 !important; /* Cambia el color del borde inferior cuando el campo está enfocado */
+    outline: none !important; /* Elimina el borde de enfoque predeterminado */
+    box-shadow: none !important; /* Elimina la sombra de enfoque */
+  }
+
+  .modal-dialog-wide {
+    max-width: 80%; /* Ajusta el ancho según necesites, por ejemplo, 80% del ancho de la pantalla */
+  }
