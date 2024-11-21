@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
+import Swal from 'sweetalert2';
 import Estilos from '@/estilos/InfoAcademica.module.css';
 
-const PerfilIdiomasLista = ({ idiomasLista, onEditClick }) => {
+import { obtenerPerfilIdiomas } from '@/services/convocatoriaService'; 
+import { eliminarPerfilIdioma } from '@/services/convocatoriaService';
+
+const PerfilIdiomasLista = ({ idiomasLista, onEditClick, idPerfil}) => {
+    const [idiomas, setIdiomas] = useState(idiomasLista); 
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [selectedIdioma, setSelectedIdioma] = useState(null);
 
@@ -10,10 +15,30 @@ const PerfilIdiomasLista = ({ idiomasLista, onEditClick }) => {
         setShowConfirmModal(true);
     };
 
-    const handleConfirmDelete = () => {
-        console.log(`Idioma ${selectedIdioma?.idioma} eliminado`);
-        setShowConfirmModal(false);
-        setSelectedIdioma(null);
+    const handleConfirmDelete = async () => {
+        try {
+            const result = await eliminarPerfilIdioma(selectedIdioma?.id);
+
+            Swal.fire({
+                title: '¡Éxito!',
+                text: result.mensaje || 'Idioma eliminado correctamente',
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+            }).then(async () => {
+                setShowConfirmModal(false);
+                setSelectedIdioma(null);
+
+                const perfilIdiomas = await obtenerPerfilIdiomas(idPerfil);
+                setIdiomas(perfilIdiomas); 
+            });
+        } catch (error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al eliminar el idioma.',
+                icon: 'error',
+                confirmButtonText: 'Intentar nuevamente',
+            });
+        }
     };
 
     return (
@@ -29,23 +54,27 @@ const PerfilIdiomasLista = ({ idiomasLista, onEditClick }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {idiomasLista.map((idioma) => (
-                        <tr key={idioma.id}>
-                            <td>{idioma.idioma}</td>
-                            <td>{idioma.nivelLectura}</td>
-                            <td>{idioma.nivelEscritura}</td>
-                            <td>{idioma.nivelComprension}</td>
-                            <td>
-                                <button onClick={() => onEditClick(idioma.id)}>
-                                    <span className="fa fa-edit"></span>
-                                </button>
-                                &nbsp;
-                                <button onClick={() => handleDeleteClick(idioma)}>
-                                    <span className="fa fa-trash"></span>
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
+                    {idiomas && idiomas.length > 0 ? (
+                        idiomas.map((idioma) => (
+                            <tr key={idioma.id}>
+                                <td>{idioma.parIdioma.descripcion}</td>
+                                <td>{idioma.parNivelConocimientoLectura.descripcion}</td>
+                                <td>{idioma.parNivelConocimientoEscritura.descripcion}</td>
+                                <td>{idioma.parNivelConocimientoConversacion.descripcion}</td>
+                                <td>
+                                    <button onClick={() => onEditClick(idioma.id)}>
+                                        <span className="fa fa-edit"></span>
+                                    </button>
+                                    &nbsp;
+                                    <button onClick={() => handleDeleteClick(idioma)}>
+                                        <span className="fa fa-trash"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr><td colSpan="7">No hay formaciones disponibles.</td></tr>
+                    )}
                 </tbody>
             </table>
 

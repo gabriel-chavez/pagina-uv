@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-
+import Swal from 'sweetalert2';
 import Estilos from '@/estilos/InfoAcademica.module.css';
 
-const PerfilExperienciaLaboralLista = ({ experienciaLaboralLista, onEditClick }) => {
+import { obtenerPerfilExperienciaLaboral } from '@/services/convocatoriaService'; 
+import { eliminarPerfilExperienciaLaboral } from '@/services/convocatoriaService';
+
+const PerfilExperienciaLaboralLista = ({ experienciaLaboralLista, onEditClick, idPerfil }) => {
+    const [experienciaLaboral, setExperienciaLaboral] = useState(experienciaLaboralLista); 
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [selectedExpLaboral, setSelectedExpLaboral] = useState(null);
 
@@ -11,32 +15,62 @@ const PerfilExperienciaLaboralLista = ({ experienciaLaboralLista, onEditClick })
         setShowConfirmModal(true);
     };
 
-    const handleConfirmDelete = () => {
-        console.log(`Experiencia Laboral ${selectedExpLaboral?.experienciaLaboral} eliminada`);
-        setShowConfirmModal(false);
-        setSelectedExpLaboral(null);
+    const handleConfirmDelete = async () => {
+        try {
+            const result = await eliminarPerfilExperienciaLaboral(selectedExpLaboral?.id);
+
+            Swal.fire({
+                title: '¡Éxito!',
+                text: result.mensaje || 'Experiencia laboral eliminada correctamente',
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+            }).then(async () => {
+                setShowConfirmModal(false);
+                setExperienciaLaboral(null);
+
+                const perfilExpLaboral = await obtenerPerfilExperienciaLaboral(idPerfil);
+                setExperienciaLaboral(perfilExpLaboral);
+            });
+        } catch (error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al eliminar la experiencia laboral.',
+                icon: 'error',
+                confirmButtonText: 'Intentar nuevamente',
+            });
+        }
     };
+
+    const formatFecha = (fecha) => {
+        const date = new Date(fecha);
+        return date.toLocaleDateString('es-ES', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+        });
+      };
     
     return (
         <>
-        {experienciaLaboralLista.map((experienciaLaboral) => (
-                <div className={Estilos.experienceContainer}>
+        {experienciaLaboral && experienciaLaboral.length > 0 ? (
+            experienciaLaboral.map((expLaboral) => (
+                <div className={Estilos.experienceContainer} key={expLaboral.id}>
                     <div className={Estilos.experienceHeader}>
                         <div>
-                            <strong>Empresa:</strong> {experienciaLaboral.empresa}
+                            <strong>Empresa:</strong> {expLaboral.empresa}
                         </div>
                         <div>
-                            <strong>Cargo:</strong> {experienciaLaboral.cargo}
+                            <strong>Cargo:</strong> {expLaboral.cargo}
                         </div>
                         <div>
-                            <strong>Sector:</strong> {experienciaLaboral.sector}
+                            <strong>Sector:</strong> {expLaboral.sector}
                         </div>
                         <div className={Estilos.actions}>
-                            <button onClick={() => onEditClick(experienciaLaboral.id)}>
+                            <button onClick={() => onEditClick(expLaboral.id)}>
                                 <span className="fa fa-edit"></span>
                             </button>
                             &nbsp;
-                            <button onClick={() => handleDeleteClick(experienciaLaboral)}>
+                            <button onClick={() => handleDeleteClick(expLaboral)}>
                                 <span className="fa fa-trash"></span>
                             </button>
                         </div>
@@ -44,41 +78,44 @@ const PerfilExperienciaLaboralLista = ({ experienciaLaboralLista, onEditClick })
 
                     <div className={Estilos.experienceDetails}>
                         <div>
-                            <strong>Nro. Dependientes:</strong> {experienciaLaboral.dependientes}
+                            <strong>Nro. Dependientes:</strong> {expLaboral.nroDependientes}
                         </div>
                         <div>
-                            <strong>Nombre del superior:</strong> {experienciaLaboral.nombreSuperior}
+                            <strong>Nombre del superior:</strong> {expLaboral.nombreSuperior}
                         </div>
                         <div>
-                            <strong>Cargo del superior:</strong> {experienciaLaboral.cargoSuperior}
+                            <strong>Cargo del superior:</strong> {expLaboral.cargoSuperior}
                         </div>
                         <div>
-                            <strong>Teléfono empresa:</strong> {experienciaLaboral.telefonoEmpresa}
+                            <strong>Teléfono empresa:</strong> {expLaboral.telefonoEmpresa}
                         </div>
                     </div>
 
                     <div className={Estilos.experienceContent}>
                         <div className={Estilos.leftColumn}>
                             <strong>Principales funciones:</strong>
-                            <p>{experienciaLaboral.funciones}</p>
+                            <div dangerouslySetInnerHTML={{ __html: expLaboral.funciones }} />
                         </div>
                         <div className={Estilos.rightColumn}>
                             <div>
-                                <strong>Fecha Inicio:</strong> {experienciaLaboral.fechaInicio}
+                                <strong>Fecha Inicio:</strong> {formatFecha(expLaboral.fechaInicio)}
                             </div>
                             <div>
-                                <strong>Fecha Término:</strong> {experienciaLaboral.fechaTermino}
+                                <strong>Fecha Término:</strong> {formatFecha(expLaboral.fechaConclusion)}
                             </div>
                             <div>
-                                <strong>Total experiencia:</strong> {experienciaLaboral.experiencia}
+                                <strong>Total experiencia:</strong> 
                             </div>
                             <div>
-                                <strong>Motivo de Desvinculación:</strong> {experienciaLaboral.motivoDesvinculacion}
+                                <strong>Motivo de Desvinculación:</strong> {expLaboral.motivoDesvinculacion}
                             </div>
                         </div>
                     </div>
                 </div>
-            ))}
+                ))
+            ) : (
+                <tr><td colSpan="7">No hay formaciones disponibles.</td></tr>
+            )}
             {/* Modal de confirmación de eliminación */}
             {showConfirmModal && (
                 <div style={{

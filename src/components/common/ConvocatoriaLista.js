@@ -2,6 +2,15 @@ import React from 'react';
 import Link from 'next/link';
 
 const ConvocatoriaLista = ({ convocatorias }) => {
+  const formatFecha = (fecha) => {
+    const date = new Date(fecha);
+    return date.toLocaleDateString('es-ES', {
+      day: '2-digit',
+      month: '2-digit',
+      year: 'numeric',
+    });
+  };
+  
   return (
     <div className="insurance-details__convocatoria_lista">        
       <h3 className="insurance-details__convocatoria_titulo">Convocatorias</h3>
@@ -16,21 +25,21 @@ const ConvocatoriaLista = ({ convocatorias }) => {
                 <div className='col-md-11'>
                   <div className='row'>
                     <div className='insurance-details__convocatoria_lista_titulo col-md-12'>
-                      <h4>{convocatoria.cargo}</h4>
+                      <h4>{convocatoria.nombre}</h4>
                     </div>
                   </div>
                   <div className='row'>
                     <div className='col-md-3'>
                       <em className='fa fa-building' /> 
-                      {convocatoria.oficina}
+                      {convocatoria.nombre}
                     </div>
                     <div className='col-md-6'>
                       <em className='fa fa-file'/>
-                      {convocatoria.referencia}
+                      {convocatoria.codigo}
                     </div>
                     <div className='col-md-3'>
                       <em className='fa fa-calendar'/>
-                      {convocatoria.plazo}
+                      {formatFecha(convocatoria.fechaFin)}
                     </div>
                   </div>
                   <div className='row d-none d-md-block'>

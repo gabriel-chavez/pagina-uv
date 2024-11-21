@@ -2,42 +2,107 @@
 
 import EncabezadoConvocatoria from "@/components/common/EncabezadoConvocatoria";
 import Estilos from '@/estilos/InfoAcademica.module.css';
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import Swal from 'sweetalert2';
 
 import PerfilFormacionAcademicaLista from "@/components/common/PerfilFormacionAcademicaLista";
-import PerfilCursosLista from "@/components/common/PerfilCursosLista";
-import PerfilIdiomasLista from "@/components/common/PerfilIdiomasLista";
-import PerfilSistemasLista from "@/components/common/PerfilSistemasLista";
-import PerfilExperienciaLaboralLista from "@/components/common/PerfilExperienciaLaboralLista";
-import PerfilReferenciaPersonalLista from "@/components/common/PerfilReferenciaPersonalLista";
-import PerfilReferenciaLaboralLista from "@/components/common/PerfilReferenciaLaboralLista";
+import PerfilFormacionAcademicaModal from "@/components/common/PerfilFormacionAcademicaModal";
 
-export default function Page() {
+import PerfilCursosLista from "@/components/common/PerfilCursosLista";
+import PerfilCursosModal from "@/components/common/PerfilCursosModal";
+
+import PerfilIdiomasLista from "@/components/common/PerfilIdiomasLista";
+import PerfilIdiomasModal from "@/components/common/PerfilIdiomasModal";
+
+import PerfilSistemasLista from "@/components/common/PerfilSistemasLista";
+import PerfilSistemasModal from "@/components/common/PerfilSistemasModal";
+
+import PerfilExperienciaLaboralLista from "@/components/common/PerfilExperienciaLaboralLista";
+import PerfilExperienciaLaboralModal from "@/components/common/PerfilExperienciaLaboralModal";
+
+import PerfilReferenciaPersonalLista from "@/components/common/PerfilReferenciaPersonalLista";
+import PerfilReferenciaPersonalModal from "@/components/common/PerfilReferenciaPersonalModal";
+
+import PerfilReferenciaLaboralLista from "@/components/common/PerfilReferenciaLaboralLista";
+import PerfilReferenciaLaboralModal from "@/components/common/PerfilReferenciaLaboralModal";
+
+import { obtenerPerfil } from '@/services/convocatoriaService';
+import { agregarPerfil } from '@/services/convocatoriaService';
+import { actualizarPerfil } from '@/services/convocatoriaService';
+
+import { obtenerPerfilFormacionAcademica } from '@/services/convocatoriaService';
+import { agregarPerfilFormacionAcademica } from '@/services/convocatoriaService';
+import { actualizarPerfilFormacionAcademica } from '@/services/convocatoriaService';
+
+import { obtenerPerfilCursos } from '@/services/convocatoriaService';
+import { agregarPerfilCurso } from '@/services/convocatoriaService';
+import { actualizarPerfilCurso } from '@/services/convocatoriaService';
+
+import { obtenerPerfilIdiomas } from '@/services/convocatoriaService';
+import { agregarPerfilIdioma } from '@/services/convocatoriaService';
+import { actualizarPerfilIdioma } from '@/services/convocatoriaService';
+
+import { obtenerPerfilSistemas } from '@/services/convocatoriaService';
+import { agregarPerfilSistema } from '@/services/convocatoriaService';
+import { actualizarPerfilSistema } from '@/services/convocatoriaService';
+
+import { obtenerPerfilExperienciaLaboral } from '@/services/convocatoriaService';
+import { agregarPerfilExperienciaLaboral } from '@/services/convocatoriaService';
+import { actualizarPerfilExperienciaLaboral } from '@/services/convocatoriaService';
+
+import { obtenerPerfilReferenciaPersonal } from '@/services/convocatoriaService';
+import { agregarPerfilReferenciaPersonal } from '@/services/convocatoriaService';
+import { actualizarPerfilReferenciaPersonal } from '@/services/convocatoriaService';
+
+import { obtenerPerfilReferenciaLaboral } from '@/services/convocatoriaService';
+import { agregarPerfilReferenciaLaboral } from '@/services/convocatoriaService';
+import { actualizarPerfilReferenciaLaboral } from '@/services/convocatoriaService';
+
+/* Parametricas */
+import { obtenerParNivelFormacion } from '@/services/convocatoriaService';
+import { obtenerParIdioma } from '@/services/convocatoriaService';
+import { obtenerParNivelConocimiento } from '@/services/convocatoriaService';
+import { obtenerParPrograma } from '@/services/convocatoriaService';
+import { obtenerParTipoCapacitacion } from '@/services/convocatoriaService';
+import { obtenerParParentesco } from '@/services/convocatoriaService';
+
+const Perfil = ({ params }) => {
+    const [datosPersonales, setDatosPersonales] = useState(null);
+    const [formacionLista, setFormacionAcademica] = useState(null);
+    const [cursosLista, setCursos] = useState([]);
+    const [idiomasLista, setIdiomas] = useState(null);
+    const [sistemasLista, setSistemas] = useState(null);
+    const [experienciaLaboralLista, setExperienciaLaboral] = useState(null);
+    const [referenciaPersonalLista, setReferenciaPersonal] = useState(null);
+    const [referenciaLaboralLista, setReferenciaLaboral] = useState(null);
+
+    const [ParNivelFormacion, setParNivelFormacion] = useState([]);
+    const [ParIdioma, setIdioma] = useState([]);
+    const [ParNivelConocimiento, setParNivelConocimiento] = useState([]);
+    const [ParPrograma, setParPrograma] = useState([]);
+    const [ParTipoCapacitacion, setParTipoCapacitacion] = useState([]);
+    const [ParParentesco, setParParentesco] = useState([]);
+
+    const [loading, setLoading] = useState(true);
     const [selectedImage, setSelectedImage] = useState(null);
 
-    const handleImageChange = (event) => {
-        const file = event.target.files[0];
-        if (file) {
-            const reader = new FileReader();
-            reader.onloadend = () => {
-                setSelectedImage(reader.result);
-            };
-            reader.readAsDataURL(file);
-        } else {
-            setSelectedImage(null);
-        }
-    };
-
+    /* Modales */
     const [showInfoAcademicaModal, setShowInfoAcademicaModal] = useState(false);
     const [selectedInfoAcademica, setSelectedInfoAcademica] = useState(null);
     const handleInfoAcademicaModalOpen = (id) => {
-        const infoAcademicaSeleccionado = formacionLista.find((idioma) => idioma.id === id);
-        setSelectedInfoAcademica(infoAcademicaSeleccionado);
+        const infoAcademicaSeleccionado = formacionLista.find((InfoAcademica) => InfoAcademica.id === id);
+        setSelectedInfoAcademica(infoAcademicaSeleccionado || null);
         setShowInfoAcademicaModal(true);
     };
-    const handleInfoAcademicaModalClose = () => {
+    const handleInfoAcademicaModalClose = async () => {
         setSelectedInfoAcademica(null);
         setShowInfoAcademicaModal(false);
+        try {
+            const perfilFormacion = await obtenerPerfilFormacionAcademica(idPerfil);
+            setFormacionAcademica(perfilFormacion);
+        } catch (error) {
+            console.error('Error al obtener la lista de formación académica actualizada:', error);
+        }
     };
 
     const [showCursosModal, setShowCursosModal] = useState(false);
@@ -56,24 +121,38 @@ export default function Page() {
     const [selectedIdioma, setSelectedIdioma] = useState(null);
     const handleIdiomasModalOpen = (id) => {
         const idiomaSeleccionado = idiomasLista.find((idioma) => idioma.id === id);
-        setSelectedIdioma(idiomaSeleccionado);
+        setSelectedIdioma(idiomaSeleccionado || null);
         setShowIdiomasModal(true);
     };
-    const handleIdiomasModalClose = () => {
+    const handleIdiomasModalClose = async () => {
         setSelectedIdioma(null);
         setShowIdiomasModal(false);
+        try {
+            const perfilIdiomas = await obtenerPerfilIdiomas(idPerfil);
+            setIdiomas(perfilIdiomas);
+            console.log('Lista actualizada:', perfilIdiomas);
+        } catch (error) {
+            console.error('Error al obtener los idiomas actualizados:', error);
+        }
     };
 
     const [showSistemasModal, setShowSistemasModal] = useState(false);
     const [selectedSistema, setSelectedSistema] = useState(null);
     const handleSistemasModalOpen = (id) => {
         const sistemaSeleccionado = sistemasLista.find((sistema) => sistema.id === id);
-        setSelectedSistema(sistemaSeleccionado);
+        setSelectedSistema(sistemaSeleccionado || null);
         setShowSistemasModal(true);
     };
-    const handleSistemasModalClose = () => {
+    const handleSistemasModalClose = async () => {
         setSelectedSistema(null);
         setShowSistemasModal(false);
+        try {
+            const perfilSistemas = await obtenerPerfilSistemas(idPerfil);
+            setSistemas(perfilSistemas);
+            console.log('Lista actualizada:', perfilSistemas);
+        } catch (error) {
+            console.error('Error al obtener los sistemas actualizados:', error);
+        }
     };
 
     const [showExpLaboralModal, setShowExpLaboralModal] = useState(false);
@@ -112,36 +191,525 @@ export default function Page() {
         setShowRefLaboralModal(false);
     };
 
-    const formacionLista = [
-        { id: 1, nivelFormacion: 'Licenciatura', centroEducativo: 'Universidad Mayor de San Andrés', tituloObtenido: 'Administrador de Empresas', fechaTitulo: '30/06/2024', ciudad: 'La Paz', pais: 'Bolivia' },
-        { id: 2, nivelFormacion: 'Maestría', centroEducativo: 'Universidad Mayor de San Andrés', tituloObtenido: 'Administrador de Empresas con mención en...', fechaTitulo: '30/06/2024', ciudad: 'La Paz', pais: 'Bolivia' },
-    ];
+    const idPerfil = 1
+    const loadData = async () => {
+        try {
+            const perfil = await obtenerPerfil(idPerfil);  // actualizar el id por el ID de la persona autenticada
+            setDatosPersonales(perfil);
 
-    const cursosLista = [
-        { id: 1, tipo: 'Curso', nombreCurso: 'Experto en lo avanzado en el curso', centroEducativo: 'Universidad Privada de Bolivia', pais: 'Bolivia', duracion: '2 meses', modalidad: 'Virtual', fechaInicio: '13/05/2024', fechaFin: '05/07/2024' },
-        { id: 2, tipo: 'Seminario', nombreCurso: 'Nombre del seminario', centroEducativo: 'Universidad Privada del Valle', pais: 'Bolivia', duracion: '1 día', modalidad: 'Presencial', fechaInicio: '20/05/2013', fechaFin: '20/05/2013' },
-    ];
+            const perfilFormacion = await obtenerPerfilFormacionAcademica(idPerfil);
+            setFormacionAcademica(perfilFormacion);
 
-    const idiomasLista = [
-        { id: 1, idioma: 'Aymará', nivelLectura: 'Intermedio', nivelEscritura: 'Intermedio', nivelComprension: 'Intermedio' }
-    ];
+            const perfilCursos = await obtenerPerfilCursos(idPerfil);
+            setCursos(perfilCursos);
 
-    const sistemasLista = [
-        { id: 1, sistema: 'MS Word', nivelConocimiento: 'Avanzado' },
-        { id: 2, sistema: 'MS Excel', nivelConocimiento: 'Medio' }
-    ];
+            const perfilIdiomas = await obtenerPerfilIdiomas(idPerfil);
+            setIdiomas(perfilIdiomas);
 
-    const experienciaLaboralLista = [
-        { id: 1, empresa: 'Ministerio de economía', cargo: 'Profesional I', sector: 'Público', dependientes: '1', nombreSuperior: 'Juan Pérez', cargoSuperior: 'Jefe de Unidad', telefonoEmpresa: '22207654', funciones: 'Funciones desempeñadas en el cargo descrito', fechaInicio: '01/01/2023', fechaTermino: '31/01/2023', experiencia: '1 mes', motivoDesvinculacion: 'renuncia' }
-    ];
+            const perfilSistemas = await obtenerPerfilSistemas(idPerfil);
+            setSistemas(perfilSistemas);
 
-    const referenciaPersonalLista = [
-        { id: 1, nombre: 'Pedro Pérez', empresa: 'Empresa amiga', cargo: 'Propietario', parentesco: 'Amistad', telefono: '22222222', celular: '77755555', correoElectronico: 'bmeza@gmail.com' }
-    ];
+            const perfilExpLaboral = await obtenerPerfilExperienciaLaboral(idPerfil);
+            setExperienciaLaboral(perfilExpLaboral);
 
-    const referenciaLaboralLista = [
-        { id: 1, nombre: 'Jorge Pérez', empresa: 'Ministerio de Economía', cargo: 'Jefe de Unidad', relacionLaboral: 'Inmediato superior', telefono: '22222222', celular: '77755555', correoElectronico: 'jperez@mineconomia.gov.bo' }
-    ];
+            const perfilRefPersonal = await obtenerPerfilReferenciaPersonal(idPerfil);
+            setReferenciaPersonal(perfilRefPersonal);
+
+            const perfilRefLaboral = await obtenerPerfilReferenciaLaboral(idPerfil);
+            setReferenciaLaboral(perfilRefLaboral);
+
+            /* paramétricas */
+            const parNivelFormacion = await obtenerParNivelFormacion();
+            setParNivelFormacion(parNivelFormacion);
+
+            const parIdioma = await obtenerParIdioma();
+            setIdioma(parIdioma);
+
+            const parNivelConocimiento = await obtenerParNivelConocimiento();
+            setParNivelConocimiento(parNivelConocimiento);
+
+            const parPrograma = await obtenerParPrograma();
+            setParPrograma(parPrograma);
+
+            const parTipoCapacitacion = await obtenerParTipoCapacitacion();
+            setParTipoCapacitacion(parTipoCapacitacion);
+
+            const parParentesco = await obtenerParParentesco();
+            setParParentesco(parParentesco);
+
+        } catch (error) {
+            console.error("Error obteniendo los datos:", error);
+        } finally {
+            setLoading(false);
+        }
+    };
+
+    useEffect(() => {
+        loadData();
+    }, []);
+
+    if (loading) {
+        return <div>Cargando...</div>;
+    }
+
+    const handleImageChange = (event) => {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            reader.onloadend = () => {
+                setSelectedImage(reader.result);
+            };
+            reader.readAsDataURL(file);
+        } else {
+            setSelectedImage(null);
+        }
+    };
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+        setDatosPersonales({
+            ...datosPersonales,
+            [name]: value,
+        });
+    };
+
+    const handleGuardarPerfil = async (event) => {
+        event.preventDefault(); // Evitar recarga de la página
+        
+        const nombre = document.getElementById('nombre').value;
+        const apellidoPaterno = document.getElementById('apellidopadre').value;
+        const apellidoMaterno = document.getElementById('apellidoMadre').value;
+        const fechaNacimiento = document.getElementById('fechaNacimiento').value;
+        const lugarNacimiento = document.getElementById('lugarNacimiento').value;
+        const paisNacimiento = document.getElementById('paisNacimiento').value;
+        const lugarResidencia = document.getElementById('lugarResidencia').value;
+        const paisResidencia = document.getElementById('paisResidencia').value;
+        const direccion = document.getElementById('direccion').value;
+        const zona = document.getElementById('zona').value;
+        const telefono = document.getElementById('telefono').value;
+        const telefonoMovil = document.getElementById('telefonoMovil').value;
+        const email = document.getElementById('email').value;
+        const tipoDocumento = document.getElementById('tipoDocumento').value;
+        const numeroDocumento = document.getElementById('numeroDocumento').value;
+        const expedidoEn = document.getElementById('expedidoEn').value;
+        const fotografia = '';
+    
+        const datos = {
+            nombres: nombre,
+            apellidoPaterno: apellidoPaterno,
+            apellidoMaterno: apellidoMaterno,
+            fechaNacimiento: fechaNacimiento,
+            ciudadNacimiento: lugarNacimiento,
+            paisNacimiento: paisNacimiento,
+            ciudadResidencia: lugarResidencia,
+            paisResidencia: paisResidencia,
+            direccion: direccion,
+            zona: zona,
+            telefono: telefono,
+            telefonoMovil: telefonoMovil,
+            email: email,
+            documentoExpedido: expedidoEn,
+            numeroDocumento: numeroDocumento,
+            fotografia: fotografia,
+        };
+    
+        try {
+            let result = await actualizarPerfil(idPerfil, datos);
+    
+            Swal.fire({
+                title: '¡Éxito!',
+                text: result.mensaje,
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+            }).then(async () => {
+                const perfil = await obtenerPerfil(idPerfil); 
+                setDatosPersonales(perfil);
+            });
+        } catch (error) {
+            console.error('Error al guardar los datos personales', error);
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al guardar los datos personales.',
+                icon: 'error',
+                confirmButtonText: 'Intentar nuevamente',
+            });
+        }
+    };    
+    const handleGuardarFormacionAcademica = async () => {
+        const NivelFormacionId = document.getElementById('NivelFormacionId').value;
+        const centroEstudios = document.getElementById('centroEstudios').value;
+        const tituloObtenido = document.getElementById('tituloObtenido').value;
+        const fechaTitulo = document.getElementById('fechaTitulo').value;
+        const ciudad = document.getElementById('ciudad').value;
+        const pais = document.getElementById('pais').value;
+
+        const datos = {
+            postulanteId: idPerfil,
+            parNivelFormacionId: NivelFormacionId,
+            centroEstudios: centroEstudios,
+            tituloObtenido: tituloObtenido,
+            fechaTitulo: fechaTitulo,
+            ciudad: ciudad,
+            pais: pais,
+        };
+
+        try {
+            let result;
+            if (selectedInfoAcademica?.id) {
+                result = await actualizarPerfilFormacionAcademica(selectedInfoAcademica.id, datos);
+            } else {
+                result = await agregarPerfilFormacionAcademica(datos);
+            }
+
+            Swal.fire({
+                title: '¡Éxito!',
+                text: result.mensaje,
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+            }).then(async () => {
+                handleInfoAcademicaModalClose();
+                
+                const perfilFormacion = await obtenerPerfilFormacionAcademica(idPerfil);
+                setFormacionAcademica(perfilFormacion);
+            });
+        } catch (error) {
+            console.error('Error al guardar la formación académica:', error);
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al guardar la formación académica.',
+                icon: 'error',
+                confirmButtonText: 'Intentar nuevamente',
+            }).then(async () => {
+                handleInfoAcademicaModalClose();
+
+                const perfilFormacion = await obtenerPerfilFormacionAcademica(idPerfil);
+                setFormacionAcademica(perfilFormacion);
+            });
+        }
+    };
+    const handleGuardarCurso = async () => {
+        const tipoCapacitacion = document.getElementById('tipoCapacitacion').value;
+        const nombre = document.getElementById('nombre').value;
+        const centroEstudio = document.getElementById('centroEstudio').value;
+        const pais = document.getElementById('pais').value;
+        const duracion = document.getElementById('duracion').value;
+        const modalidad = document.getElementById('modalidad').value;
+        const fechaInicio = document.getElementById('fechaInicio').value;
+        const fechaFin = document.getElementById('fechaFin').value;
+
+        const datos = {
+            postulanteId: idPerfil,
+            parTipoCapacitacionId: tipoCapacitacion,
+            nombre: nombre,
+            centroEstudios: centroEstudio,
+            pais: pais,
+            horasAcademicas: duracion,
+            modalidad: modalidad,
+            fechaInicio: fechaInicio,
+            fechaFin: fechaFin,
+        };
+
+        try {
+            let result;
+            if (selectedCurso?.id) {
+                result = await actualizarPerfilCurso(selectedCurso.id, datos);
+            } else {
+                result = await agregarPerfilCurso(datos);
+            }
+
+            Swal.fire({
+                title: '¡Éxito!',
+                text: result.mensaje,
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+            }).then(async () => {
+                handleCursosModalClose();
+
+                const perfilCursos = await obtenerPerfilCursos(idPerfil);
+                setIdiomas(perfilCursos);
+            });
+        } catch (error) {
+            console.error('Error al guardar curso:', error);
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al guardar el curso.',
+                icon: 'error',
+                confirmButtonText: 'Intentar nuevamente',
+            }).then(async () => {
+                handleCursosModalClose();
+
+                const perfilCursos = await obtenerPerfilCursos(idPerfil);
+                setCursos(perfilCursos);
+            });
+        }
+    };
+    const handleGuardarIdioma = async () => {
+        const idioma = document.getElementById('idioma').value;
+        const nivelLectura = document.getElementById('nivelLectura').value;
+        const nivelEscritura = document.getElementById('nivelEscritura').value;
+        const nivelComprension = document.getElementById('nivelComprension').value;
+
+        const datos = {
+            postulanteId: idPerfil,
+            parIdiomaId: idioma,
+            parNivelConocimientoLecturaId: nivelLectura,
+            parNivelConocimientoEscrituraId: nivelEscritura,
+            parNivelConocimientoConversacionId: nivelComprension,
+        };
+
+        try {
+            let result;
+            if (selectedIdioma?.id) {
+                result = await actualizarPerfilIdioma(selectedIdioma.id, datos);
+            } else {
+                result = await agregarPerfilIdioma(datos);
+            }
+
+            Swal.fire({
+                title: '¡Éxito!',
+                text: result.mensaje,
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+            }).then(async () => {
+                handleIdiomasModalClose();
+
+                const perfilIdiomas = await obtenerPerfilIdiomas(idPerfil);
+                console.log(perfilIdiomas); // Verifica si los datos están actualizados
+                setIdiomas(perfilIdiomas);
+            });
+        } catch (error) {
+            console.error('Error al guardar idioma:', error);
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al guardar el idioma.',
+                icon: 'error',
+                confirmButtonText: 'Intentar nuevamente',
+            }).then(async () => {
+                handleIdiomasModalClose();
+
+                const perfilIdiomas = await obtenerPerfilIdiomas(idPerfil);
+                setIdiomas(perfilIdiomas);
+            });
+        }
+    };
+    const handleGuardarSistema = async () => {
+        const programa = document.getElementById('programa').value;
+        const nivelConocimiento = document.getElementById('nivelConocimiento').value;
+
+        const datos = {
+            postulanteId: idPerfil,
+            parProgramaId: programa,
+            parNivelConocimientoId: nivelConocimiento,
+        };
+
+        try {
+            let result;
+            if (selectedSistema?.id) {
+                result = await actualizarPerfilSistema(selectedSistema.id, datos);
+            } else {
+                result = await agregarPerfilSistema(datos);
+            }
+
+            Swal.fire({
+                title: '¡Éxito!',
+                text: result.mensaje,
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+            }).then(async () => {
+                handleSistemasModalClose();
+
+                const perfilSistemas = await obtenerPerfilSistemas(idPerfil);
+                setSistemas(perfilSistemas);
+            });
+        } catch (error) {
+            console.error('Error al guardar sistema:', error);
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al guardar el sistema.',
+                icon: 'error',
+                confirmButtonText: 'Intentar nuevamente',
+            }).then(async () => {
+                handleIdiomasModalClose();
+
+                const perfilSistemas = await obtenerPerfilSistemas(idPerfil);
+                setIdiomas(perfilSistemas);
+            });
+        }
+    };
+    const handleGuardarExpLaboral = async () => {
+        const empresa = document.getElementById('empresa').value;
+        const cargo = document.getElementById('cargo').value;
+        const sector = document.getElementById('sector').value;
+        const nroDependientes = document.getElementById('nroDependientes').value;
+        const nombreSuperior = document.getElementById('nombreSuperior').value;
+        const cargoSuperior = document.getElementById('cargoSuperior').value;
+        const telefono = document.getElementById('telefono').value;
+        const principalesFunciones = document.getElementById('principalesFunciones').value;
+        const fechaInicio = document.getElementById('fechaInicio').value;
+        const fechaFin = document.getElementById('fechaFin').value;
+        const totalExperiencia = document.getElementById('totalExperiencia').value;
+        const motivoDesvinculación = document.getElementById('motivoDesvinculación').value;
+        const actualmenteTrabajando = document.getElementById('currentlyWorking').value;
+
+        const datos = {
+            postulanteId: idPerfil,
+            empresa: empresa,
+            cargo: cargo,
+            sector: sector,
+            nroDependientes: nroDependientes,
+            nombreSuperior: nombreSuperior,
+            cargoSuperior: cargoSuperior,
+            telefonoEmpresa: telefono,
+            funciones: principalesFunciones,
+            fechaInicio: fechaInicio,
+            fechaConclusion: fechaFin,
+            parProgramaId: totalExperiencia,
+            motivoDesvinculacion: motivoDesvinculación,
+            actualmenteTrabajando: actualmenteTrabajando,
+        };
+
+        try {
+            let result;
+            if (selectedExpLaboral?.id) {
+                result = await actualizarPerfilExperienciaLaboral(selectedExpLaboral.id, datos);
+            } else {
+                result = await agregarPerfilExperienciaLaboral(datos);
+            }
+
+            Swal.fire({
+                title: '¡Éxito!',
+                text: result.mensaje,
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+            }).then(async () => {
+                handleExpLaboralModalClose();
+
+                const perfilExpLaboral = await obtenerPerfilExperienciaLaboral(idPerfil);
+                setExperienciaLaboral(perfilExpLaboral);
+            });
+        } catch (error) {
+            console.error('Error al guardar experiencia laboral:', error);
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al guardar la experiencia laboral.',
+                icon: 'error',
+                confirmButtonText: 'Intentar nuevamente',
+            }).then(async () => {
+                handleExpLaboralModalClose();
+
+                const perfilExpLaboral = await obtenerPerfilExperienciaLaboral(idPerfil);
+                setExperienciaLaboral(perfilExpLaboral);
+            });
+        }
+    };
+    const handleGuardarRefPersonal = async () => {
+        const nombre = document.getElementById('nombre').value;
+        const empresa = document.getElementById('empresa').value;
+        const cargo = document.getElementById('cargo').value;
+        const parentesco = document.getElementById('parentesco').value;
+        const telefono = document.getElementById('telefono').value;
+        const telefonoMovil = document.getElementById('telefonoMovil').value;
+        const email = document.getElementById('email').value;
+
+        const datos = {
+            postulanteId: idPerfil,
+            nombre: nombre,
+            cargo: cargo,
+            empresa: empresa,
+            telefono: telefono,
+            telefonoMovil: telefonoMovil,
+            parParentescoId: parentesco,
+            email: email,
+        };
+
+        try {
+            let result;
+            if (selectedRefPersonal?.id) {
+                result = await actualizarPerfilReferenciaPersonal(selectedRefPersonal.id, datos);
+            } else {
+                result = await agregarPerfilReferenciaPersonal(datos);
+            }
+
+            Swal.fire({
+                title: '¡Éxito!',
+                text: result.mensaje,
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+            }).then(async () => {
+                handleRefPersonalModalClose();
+
+                const perfilRefPersonal = await obtenerPerfilReferenciaPersonal(idPerfil);
+                setReferenciaPersonal(perfilRefPersonal);
+            });
+        } catch (error) {
+            console.error('Error al guardar la referencia personal:', error);
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al guardar la referencia personal.',
+                icon: 'error',
+                confirmButtonText: 'Intentar nuevamente',
+            }).then(async () => {
+                handleRefPersonalModalClose();
+
+                const perfilRefPersonal = await obtenerPerfilReferenciaPersonal(idPerfil);
+                setReferenciaPersonal(perfilRefPersonal);
+            });
+        }
+    };
+    const handleGuardarRefLaboral = async () => {
+        const nombre = document.getElementById('nombre').value;
+        const empresa = document.getElementById('empresa').value;
+        const cargo = document.getElementById('cargo').value;
+        const relacion = document.getElementById('relacion').value;
+        const telefono = document.getElementById('telefono').value;
+        const telefonoMovil = document.getElementById('telefonoMovil').value;
+        const email = document.getElementById('email').value;
+
+        const datos = {
+            postulanteId: idPerfil,
+            nombre: nombre,
+            cargo: cargo,
+            empresa: empresa,
+            telefono: telefono,
+            telefonoMovil: telefonoMovil,
+            relacion: relacion,
+            email: email,
+        };
+
+        try {
+            let result;
+            if (selectedRefLaboral?.id) {
+                result = await actualizarPerfilReferenciaLaboral(selectedRefLaboral.id, datos);
+            } else {
+                result = await agregarPerfilReferenciaLaboral(datos);
+            }
+
+            Swal.fire({
+                title: '¡Éxito!',
+                text: result.mensaje,
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+            }).then(async () => {
+                handleRefLaboralModalClose();
+
+                const perfilRefLaboral = await obtenerPerfilReferenciaLaboral(idPerfil);
+                setReferenciaLaboral(perfilRefLaboral);
+            });
+        } catch (error) {
+            console.error('Error al guardar la referencia laboral:', error);
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al guardar la referencia laboral.',
+                icon: 'error',
+                confirmButtonText: 'Intentar nuevamente',
+            }).then(async () => {
+                handleRefLaboralModalClose();
+
+                const perfilRefLaboral = await obtenerPerfilReferenciaLaboral(idPerfil);
+                setReferenciaLaboral(perfilRefLaboral);
+            });
+        }
+    };
 
     return (
         <div>
@@ -184,79 +752,79 @@ export default function Page() {
                                         <li className="tab-content tab-content-first typography">
                                             <div className="container">
                                                 <h2>Datos Generales del Postulante</h2>
-                                                <form className="row g-3">
+                                                <form className="row g-3" onSubmit={handleGuardarPerfil}>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Nombres *</label>
-                                                        <input type="text" className="form-control" name="nombres" required />
+                                                        <input type="text" id="nombre" className="form-control" name="nombres" value={datosPersonales ? datosPersonales.nombres : ''} onChange={handleChange} required />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Apellido del padre *</label>
-                                                        <input type="text" className="form-control" name="apellidoPadre" required />
+                                                        <input type="text" id="apellidoPadre" className="form-control" name="apellidoPadre" value={datosPersonales ? datosPersonales.apellidoPaterno : ''} onChange={handleChange} required />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Apellido de la madre *</label>
-                                                        <input type="text" className="form-control" name="apellidoMadre" required />
+                                                        <input type="text" id="apellidoMadre" className="form-control" name="apellidoMadre" value={datosPersonales ? datosPersonales.apellidoMaterno : ''} onChange={handleChange} required />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Fecha de Nacimiento *</label>
-                                                        <input type="date" className="form-control" name="fechaNacimiento" required />
+                                                        <input type="date" id="fechaNacimiento" className="form-control" name="fechaNacimiento" value={datosPersonales ? datosPersonales.fechaNacimiento : ''} onChange={handleChange} required />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Lugar de Nacimiento *</label>
-                                                        <input type="text" className="form-control" name="ciudadNacimiento" placeholder="Ciudad" required />
+                                                        <input type="text" id="lugarNacimiento" className="form-control" name="ciudadNacimiento" placeholder="Ciudad" value={datosPersonales ? datosPersonales.ciudadNacimiento : ''} onChange={handleChange} required />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">País de Nacimiento *</label>
-                                                        <select className="form-select" name="paisNacimiento" required>
+                                                        <select id="paisNacimiento" onChange={handleChange} className="form-select" name="paisNacimiento" required>
                                                             <option value="Bolivia">Bolivia</option>
                                                             <option value="Otro">Otro</option>
                                                         </select>
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Lugar de Residencia</label>
-                                                        <input type="text" className="form-control" name="ciudadResidencia" placeholder="Ciudad" />
+                                                        <input type="text" id="lugarResidencia" className="form-control" name="ciudadResidencia" value={datosPersonales ? datosPersonales.ciudadResidencia : ''} onChange={handleChange} placeholder="Lugar residencia" />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">País de Residencia</label>
-                                                        <select className="form-select" name="paisResidencia">
+                                                        <select id="paisResidencia" onChange={handleChange} className="form-select" name="paisResidencia">
                                                             <option value="Bolivia">Bolivia</option>
                                                             <option value="Otro">Otro</option>
                                                         </select>
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Dirección</label>
-                                                        <input type="text" className="form-control" name="direccion" />
+                                                        <input type="text" id="direccion" className="form-control" name="direccion" value={datosPersonales ? datosPersonales.direccion : ''} onChange={handleChange} />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Zona</label>
-                                                        <input type="text" className="form-control" name="zona" />
+                                                        <input type="text" id="zona" className="form-control" name="zona" value={datosPersonales ? datosPersonales.zona : ''} onChange={handleChange} />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Teléfono *</label>
-                                                        <input type="text" className="form-control" name="telefono" placeholder="Teléfono Fijo" required />
+                                                        <input type="text" id="telefono" className="form-control" name="telefono" placeholder="Teléfono Fijo" value={datosPersonales ? datosPersonales.telefono : ''} onChange={handleChange} required />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Teléfono Móvil</label>
-                                                        <input type="text" className="form-control" name="telefonoMovil" placeholder="Teléfono Móvil" />
+                                                        <input type="text" id="telefonoMovil" className="form-control" name="telefonoMovil" placeholder="Teléfono Móvil" value={datosPersonales ? datosPersonales.telefonoMovil : ''} onChange={handleChange} />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Email *</label>
-                                                        <input type="email" className="form-control" name="email" required />
+                                                        <input type="email" id="email" className="form-control" name="email" value={datosPersonales ? datosPersonales.email : ''} onChange={handleChange} required />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Tipo de Documento *</label>
-                                                        <select className="form-select" name="documentoIdentidad" required>
+                                                        <select id="tipoDocumento" className="form-select" name="documentoIdentidad" onChange={handleChange} required>
                                                             <option value="CI">Cédula de Identidad</option>
                                                             <option value="Pasaporte">Pasaporte</option>
                                                         </select>
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Número de Documento *</label>
-                                                        <input type="text" className="form-control" name="numeroDocumento" required />
+                                                        <input type="text" id="numeroDocumento" className="form-control" name="numeroDocumento" value={datosPersonales ? datosPersonales.numeroDocumento : ''} onChange={handleChange} required />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Expedido en</label>
-                                                        <input type="text" className="form-control" name="expedidoEn" placeholder="Expedido en" />
+                                                        <input type="text" id="expedidoEn" className="form-control" name="expedidoEn" placeholder="Expedido en" value={datosPersonales ? datosPersonales.documentoExpedido : ''} onChange={handleChange} />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Fotografía del Postulante</label>
@@ -281,8 +849,15 @@ export default function Page() {
                                                             </div>
                                                         )}
                                                     </div>
+                                                    
                                                     <div className="col-12">
-                                                        <button type="submit" className="btn btn-primary">Guardar</button>
+                                                        <button 
+                                                            type="submit" 
+                                                            className="btn btn-primary" 
+                                                            onClick={handleGuardarPerfil}
+                                                        >
+                                                            Guardar
+                                                        </button>
                                                     </div>
                                                 </form>
                                             </div>
@@ -293,66 +868,19 @@ export default function Page() {
                                                 <h2>INFORMACIÓN SOBRE FORMACIÓN ACADÉMICA</h2>
                                                 <button className={Estilos.addButton} onClick={handleInfoAcademicaModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                <PerfilFormacionAcademicaLista formacionLista={formacionLista} onEditClick={handleInfoAcademicaModalOpen} />
-
-                                                {showInfoAcademicaModal && (
-                                                    <div className="modal fade show d-block" style={{
-                                                        backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                                                    }} tabIndex="-1" role="dialog">
-                                                        <div className="modal-dialog" role="document">
-                                                            <div className="modal-content">
-                                                                <div className="modal-header">
-                                                                    <h5 className="modal-title">Agregar Formación Académica</h5>
-                                                                    <button type="button" className="btn-close" onClick={handleInfoAcademicaModalClose}></button>
-                                                                </div>
-                                                                <div className="modal-body">
-                                                                    <form>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Nivel de Formación</label>
-                                                                            <select className="form-control" defaultValue={selectedInfoAcademica?.nivelFormacion || ''} required>
-                                                                                <option value="">Selecciona una opción</option>
-                                                                                <option value="Licenciatura">Licenciatura</option>
-                                                                                <option value="Maestría">Maestría</option>
-                                                                                <option value="Doctorado">Doctorado</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Centro Educativo</label>
-                                                                            <input type="text" className="form-control" defaultValue={selectedInfoAcademica?.centroEducativo || ''} required />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Título obtenido</label>
-                                                                            <input type="text" className="form-control" defaultValue={selectedInfoAcademica?.tituloObtenido || ''} required />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Fecha Título</label>
-                                                                            <input type="date" className="form-control" defaultValue={selectedInfoAcademica?.fechaTitulo || ''} required />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Ciudad</label>
-                                                                            <input type="text" className="form-control" defaultValue={selectedInfoAcademica?.ciudad || ''} required />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">País</label>
-                                                                            <select className="form-control" defaultValue={selectedInfoAcademica?.pais || ''} required>
-                                                                                <option value="Bolivia">Bolivia</option>
-                                                                                <option value="Otro">Otro</option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </form>
-                                                                </div>
-                                                                <div className="modal-footer">
-                                                                    <button type="button" className="btn btn-secondary" onClick={handleInfoAcademicaModalClose}>
-                                                                        Cancelar
-                                                                    </button>
-                                                                    <button type="button" className="btn btn-primary">
-                                                                        Guardar
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                )}
+                                                <PerfilFormacionAcademicaLista 
+                                                    formacionLista={formacionLista} 
+                                                    onEditClick={handleInfoAcademicaModalOpen} 
+                                                    idPerfil={idPerfil} 
+                                                />
+                                                <PerfilFormacionAcademicaModal
+                                                    show={showInfoAcademicaModal}
+                                                    onClose={handleInfoAcademicaModalClose}
+                                                    onSave={handleGuardarFormacionAcademica}
+                                                    selectedInfoAcademica={selectedInfoAcademica}
+                                                    ParNivelFormacion={ParNivelFormacion}
+                                                />
+                                                
                                             </div>
                                         </li>
 
@@ -361,77 +889,19 @@ export default function Page() {
                                                 <h2>CURSOS/TALLERES</h2>
                                                 <button className={Estilos.addButton} onClick={handleCursosModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                <PerfilCursosLista cursosLista={cursosLista} onEditClick={handleCursosModalOpen} />
+                                                <PerfilCursosLista 
+                                                    cursosLista={cursosLista} 
+                                                    onEditClick={handleCursosModalOpen} 
+                                                    idPerfil={idPerfil} 
+                                                />
+                                                <PerfilCursosModal
+                                                    show={showCursosModal}
+                                                    onClose={handleCursosModalClose}
+                                                    onSave={handleGuardarCurso}
+                                                    selectedCurso={selectedCurso}
+                                                    parTipoCapacitacion={ParTipoCapacitacion}
+                                                />
 
-                                                {/* Modal para formulario */}
-                                                {showCursosModal && (
-                                                    <div className="modal fade show d-block" style={{
-                                                        backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                                                    }} tabIndex="-1" role="dialog">
-                                                        <div className="modal-dialog" role="document">
-                                                            <div className="modal-content">
-                                                                <div className="modal-header">
-                                                                    <h5 className="modal-title">Agregar Curso/Taller</h5>
-                                                                    <button type="button" className="btn-close" onClick={handleCursosModalClose}></button>
-                                                                </div>
-                                                                <div className="modal-body">
-                                                                    <form>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Tipo</label>
-                                                                            <select className="form-control" defaultValue={selectedCurso?.tipo || ''} required>
-                                                                                <option value="">Selecciona una opción</option>
-                                                                                <option value="Curso">Curso</option>
-                                                                                <option value="Taller">Taller</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Nombre del Curso/Taller</label>
-                                                                            <input type="text" className="form-control" defaultValue={selectedCurso?.nombreCurso || ''} required />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Centro de Estudio</label>
-                                                                            <input type="text" className="form-control" defaultValue={selectedCurso?.centroEducativo || ''} required />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">País</label>
-                                                                            <select className="form-control" defaultValue={selectedCurso?.pais || ''} required>
-                                                                                <option value="Bolivia">Bolivia</option>
-                                                                                <option value="Otro">Otro</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Duración</label>
-                                                                            <input type="text" className="form-control" defaultValue={selectedCurso?.duracion || ''} required />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Modalidad</label>
-                                                                            <select className="form-control" defaultValue={selectedCurso?.modalidad || ''} required>
-                                                                                <option value="Presencial">Presencial</option>
-                                                                                <option value="En línea">En línea</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Fecha Inicio</label>
-                                                                            <input type="date" className="form-control" defaultValue={selectedCurso?.fechaInicio || ''} required />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Fecha Fin</label>
-                                                                            <input type="date" className="form-control" defaultValue={selectedCurso?.fechaFin || ''} required />
-                                                                        </div>
-                                                                    </form>
-                                                                </div>
-                                                                <div className="modal-footer">
-                                                                    <button type="button" className="btn btn-secondary" onClick={handleCursosModalClose}>
-                                                                        Cancelar
-                                                                    </button>
-                                                                    <button type="button" className="btn btn-primary">
-                                                                        Guardar
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                )}
                                             </div>
                                         </li>
 
@@ -440,129 +910,42 @@ export default function Page() {
                                                 <h2>IDIOMAS</h2>
                                                 <button className={Estilos.addButton} onClick={handleIdiomasModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                <PerfilIdiomasLista idiomasLista={idiomasLista} onEditClick={handleIdiomasModalOpen} />
+                                                <PerfilIdiomasLista 
+                                                    idiomasLista={idiomasLista} 
+                                                    onEditClick={handleIdiomasModalOpen} 
+                                                    idPerfil={idPerfil} 
+                                                />
+                                                <PerfilIdiomasModal
+                                                    show={showIdiomasModal}
+                                                    onClose={handleIdiomasModalClose}
+                                                    onSave={handleGuardarIdioma}
+                                                    selectedIdioma={selectedIdioma}
+                                                    ParIdioma={ParIdioma}
+                                                    ParNivelConocimiento={ParNivelConocimiento}
+                                                />
 
-                                                {/* Modal para formulario */}
-                                                {showIdiomasModal && (
-                                                    <div className="modal fade show d-block" style={{
-                                                        backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                                                    }} tabIndex="-1" role="dialog">
-                                                        <div className="modal-dialog" role="document">
-                                                            <div className="modal-content">
-                                                                <div className="modal-header">
-                                                                    <h5 className="modal-title">Agregar Idioma</h5>
-                                                                    <button type="button" className="btn-close" onClick={handleIdiomasModalClose}></button>
-                                                                </div>
-                                                                <div className="modal-body">
-                                                                    <form>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Idioma</label>
-                                                                            <input type="text"
-                                                                                className="form-control"
-                                                                                defaultValue={selectedIdioma?.idioma || ''}
-                                                                                required
-                                                                            />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Nivel Lectura</label>
-                                                                            <select className="form-control" defaultValue={selectedIdioma?.nivelLectura || ''} required>
-                                                                                <option value="">Selecciona una opción</option>
-                                                                                <option value="Básico">Básico</option>
-                                                                                <option value="Intermedio">Intermedio</option>
-                                                                                <option value="Avanzado">Avanzado</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Nivel Escritura</label>
-                                                                            <select className="form-control" defaultValue={selectedIdioma?.nivelEscritura || ''} required>
-                                                                                <option value="">Selecciona una opción</option>
-                                                                                <option value="Básico">Básico</option>
-                                                                                <option value="Intermedio">Intermedio</option>
-                                                                                <option value="Avanzado">Avanzado</option>
-                                                                            </select>
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Nivel Comprensión</label>
-                                                                            <select className="form-control" defaultValue={selectedIdioma?.nivelComprension || ''} required>
-                                                                                <option value="">Selecciona una opción</option>
-                                                                                <option value="Básico">Básico</option>
-                                                                                <option value="Intermedio">Intermedio</option>
-                                                                                <option value="Avanzado">Avanzado</option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </form>
-                                                                </div>
-                                                                <div className="modal-footer">
-                                                                    <button type="button" className="btn btn-secondary" onClick={handleIdiomasModalClose}>
-                                                                        Cancelar
-                                                                    </button>
-                                                                    <button type="button" className="btn btn-primary">
-                                                                        Guardar
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                )}
                                             </div>
                                         </li>
 
                                         <li className="tab-content tab-content-5 typography">
                                             <div className={Estilos.container}>
                                                 <h2>SISTEMAS</h2>
-                                                <button className={Estilos.addButton} onClick={() => handleSistemasModalOpen(null)}>+ ADICIONAR NUEVO</button>
+                                                <button className={Estilos.addButton} onClick={handleSistemasModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                <PerfilSistemasLista sistemasLista={sistemasLista} onEditClick={handleSistemasModalOpen} />
+                                                <PerfilSistemasLista 
+                                                    sistemasLista={sistemasLista} 
+                                                    onEditClick={handleSistemasModalOpen}
+                                                    idPerfil={idPerfil}  
+                                                />
+                                                <PerfilSistemasModal
+                                                    show={showSistemasModal}
+                                                    onClose={handleSistemasModalClose}
+                                                    onSave={handleGuardarSistema}
+                                                    selectedSistema={selectedSistema}
+                                                    ParPrograma={ParPrograma}
+                                                    ParNivelConocimiento={ParNivelConocimiento}
+                                                />
 
-                                                {/* Modal para formulario */}
-                                                {showSistemasModal && (
-                                                    <div className="modal fade show d-block" style={{
-                                                        backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                                                    }} tabIndex="-1" role="dialog">
-                                                        <div className="modal-dialog" role="document">
-                                                            <div className="modal-content">
-                                                                <div className="modal-header">
-                                                                    <h5 className="modal-title">Agregar Sistema</h5>
-                                                                    <button type="button" className="btn-close" onClick={handleSistemasModalClose}></button>
-                                                                </div>
-                                                                <div className="modal-body">
-                                                                    <form>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Programa/Sistema/Paquete</label>
-                                                                            <input
-                                                                                type="text"
-                                                                                className="form-control"
-                                                                                defaultValue={selectedSistema?.sistema || ''}
-                                                                                required
-                                                                            />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Nivel Conocimiento</label>
-                                                                            <select
-                                                                                className="form-control"
-                                                                                defaultValue={selectedSistema?.nivelConocimiento || ''}
-                                                                                required
-                                                                            >
-                                                                                <option value="">Selecciona una opción</option>
-                                                                                <option value="Básico">Básico</option>
-                                                                                <option value="Medio">Medio</option>
-                                                                                <option value="Avanzado">Avanzado</option>
-                                                                            </select>
-                                                                        </div>
-                                                                    </form>
-                                                                </div>
-                                                                <div className="modal-footer">
-                                                                    <button type="button" className="btn btn-secondary" onClick={handleSistemasModalClose}>
-                                                                        Cancelar
-                                                                    </button>
-                                                                    <button type="button" className="btn btn-primary">
-                                                                        Guardar
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                )}
                                             </div>
                                         </li>
 
@@ -571,142 +954,17 @@ export default function Page() {
                                                 <h2>EXPERIENCIA LABORAL</h2>
                                                 <button className={Estilos.addButton} onClick={() => handleExpLaboralModalOpen(null)}>+ ADICIONAR EXPERIENCIA LABORAL</button>
 
-                                                <PerfilExperienciaLaboralLista experienciaLaboralLista={experienciaLaboralLista} onEditClick={handleExpLaboralModalOpen} />
-
-                                                {/* Modal para Experiencia personal */}
-                                                {showExpLaboralModal && (
-                                                    <div className="modal fade show d-block" style={{
-                                                        backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                                                    }} tabIndex="-1" role="dialog">
-                                                        <div className="modal-dialog" role="document">
-                                                            <div className="modal-content">
-                                                                <div className="modal-header">
-                                                                    <h5 className="modal-title">Agregar Experiencia Laboral</h5>
-                                                                    <button type="button" className="btn-close" onClick={handleExpLaboralModalClose}></button>
-                                                                </div>
-                                                                <div className="modal-body">
-                                                                    <form>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Empresa</label>
-                                                                            <input
-                                                                                type="text"
-                                                                                className="form-control"
-                                                                                defaultValue={selectedExpLaboral?.empresa || ''}
-                                                                                required
-                                                                            />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Cargo</label>
-                                                                            <input
-                                                                                type="text"
-                                                                                className="form-control"
-                                                                                defaultValue={selectedExpLaboral?.cargo || ''}
-                                                                                required
-                                                                            />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Sector</label>
-                                                                            <input
-                                                                                type="text"
-                                                                                className="form-control"
-                                                                                defaultValue={selectedExpLaboral?.sector || ''}
-                                                                                required
-                                                                            />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Nro. Dependientes</label>
-                                                                            <input
-                                                                                type="number"
-                                                                                className="form-control"
-                                                                                defaultValue={selectedExpLaboral?.dependientes || ''}
-                                                                                required
-                                                                            />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Nombre del superior</label>
-                                                                            <input
-                                                                                type="text"
-                                                                                className="form-control"
-                                                                                defaultValue={selectedExpLaboral?.nombreSuperior || ''}
-                                                                                required
-                                                                            />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Cargo del superior</label>
-                                                                            <input
-                                                                                type="text"
-                                                                                className="form-control"
-                                                                                defaultValue={selectedExpLaboral?.cargoSuperior || ''}
-                                                                                required
-                                                                            />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Teléfono empresa</label>
-                                                                            <input
-                                                                                type="tel"
-                                                                                className="form-control"
-                                                                                defaultValue={selectedExpLaboral?.telefonoEmpresa || ''}
-                                                                                required
-                                                                            />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Principales funciones</label>
-                                                                            <textarea
-                                                                                className="form-control"
-                                                                                rows="3"
-                                                                                defaultValue={selectedExpLaboral?.funciones || ''}
-                                                                                required
-                                                                            ></textarea>
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Fecha Inicio</label>
-                                                                            <input
-                                                                                type="date"
-                                                                                className="form-control"
-                                                                                defaultValue={selectedExpLaboral?.fechaInicio || ''}
-                                                                                required
-                                                                            />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Fecha Término</label>
-                                                                            <input
-                                                                                type="date"
-                                                                                className="form-control"
-                                                                                defaultValue={selectedExpLaboral?.fechaTermino || ''}
-                                                                            />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Total experiencia</label>
-                                                                            <input
-                                                                                type="text"
-                                                                                className="form-control"
-                                                                                defaultValue={selectedExpLaboral?.experiencia || ''}
-                                                                                required
-                                                                            />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Motivo de Desvinculación</label>
-                                                                            <input
-                                                                                type="text"
-                                                                                className="form-control"
-                                                                                defaultValue={selectedExpLaboral?.motivoDesvinculacion || ''}
-                                                                                required
-                                                                            />
-                                                                        </div>
-                                                                    </form>
-                                                                </div>
-                                                                <div className="modal-footer">
-                                                                    <button type="button" className="btn btn-secondary" onClick={handleExpLaboralModalClose}>
-                                                                        Cancelar
-                                                                    </button>
-                                                                    <button type="button" className="btn btn-primary">
-                                                                        Guardar
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                )}
+                                                <PerfilExperienciaLaboralLista 
+                                                    experienciaLaboralLista={experienciaLaboralLista} 
+                                                    onEditClick={handleExpLaboralModalOpen} 
+                                                    idPerfil={idPerfil}  
+                                                />
+                                                <PerfilExperienciaLaboralModal
+                                                    show={showExpLaboralModal}
+                                                    onClose={handleExpLaboralModalClose}
+                                                    onSave={handleGuardarExpLaboral}
+                                                    selectedExpLaboral={selectedExpLaboral}
+                                                />
 
                                             </div>
                                         </li>
@@ -716,63 +974,19 @@ export default function Page() {
                                                 <h2>REFERENCIAS PERSONALES</h2>
                                                 <button className={Estilos.addButton} onClick={handleRefPersonalModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                <PerfilReferenciaPersonalLista referenciaPersonalLista={referenciaPersonalLista} onEditClick={handleRefPersonalModalOpen} />
-
-                                                {/* Modal para formulario */}
-                                                {showRefPersonalModal && (
-                                                    <div className="modal fade show d-block" style={{
-                                                        backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                                                    }} tabIndex="-1" role="dialog">
-                                                        <div className="modal-dialog" role="document">
-                                                            <div className="modal-content">
-                                                                <div className="modal-header">
-                                                                    <h5 className="modal-title">Agregar Referencia Personal</h5>
-                                                                    <button type="button" className="btn-close" onClick={handleRefPersonalModalClose}></button>
-                                                                </div>
-                                                                <div className="modal-body">
-                                                                    <form>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Nombre</label>
-                                                                            <input type="text" className="form-control" defaultValue={selectedRefPersonal?.nombre || ''} required />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Empresa</label>
-                                                                            <input type="text" className="form-control" defaultValue={selectedRefPersonal?.empresa || ''} required />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Cargo</label>
-                                                                            <input type="text" className="form-control" defaultValue={selectedRefPersonal?.cargo || ''} required />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Parentesco</label>
-                                                                            <input type="text" className="form-control" defaultValue={selectedRefPersonal?.parentesco || ''} required />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Teléfono</label>
-                                                                            <input type="tel" className="form-control" defaultValue={selectedRefPersonal?.telefono || ''} required />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Celular</label>
-                                                                            <input type="tel" className="form-control" defaultValue={selectedRefPersonal?.celular || ''} required />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Correo electrónico</label>
-                                                                            <input type="email" className="form-control" defaultValue={selectedRefPersonal?.correoElectronico || ''} required />
-                                                                        </div>
-                                                                    </form>
-                                                                </div>
-                                                                <div className="modal-footer">
-                                                                    <button type="button" className="btn btn-secondary" onClick={handleRefPersonalModalClose}>
-                                                                        Cancelar
-                                                                    </button>
-                                                                    <button type="button" className="btn btn-primary">
-                                                                        Guardar
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                )}
+                                                <PerfilReferenciaPersonalLista 
+                                                    referenciaPersonalLista={referenciaPersonalLista} 
+                                                    onEditClick={handleRefPersonalModalOpen}
+                                                    idPerfil={idPerfil}  
+                                                />
+                                                <PerfilReferenciaPersonalModal
+                                                    show={showRefPersonalModal}
+                                                    onClose={handleRefPersonalModalClose}
+                                                    onSave={handleGuardarRefPersonal}
+                                                    selectedRefPersonal={selectedRefPersonal}
+                                                    parParentesco={ParParentesco}
+                                                />
+                                                
                                             </div>
                                         </li>
 
@@ -781,63 +995,18 @@ export default function Page() {
                                                 <h2>REFERENCIAS LABORALES</h2>
                                                 <button className={Estilos.addButton} onClick={handleRefLaboralModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                <PerfilReferenciaLaboralLista referenciaLaboralLista={referenciaLaboralLista} onEditClick={handleRefLaboralModalOpen} />
+                                                <PerfilReferenciaLaboralLista 
+                                                    referenciaLaboralLista={referenciaLaboralLista} 
+                                                    onEditClick={handleRefLaboralModalOpen} 
+                                                    idPerfil={idPerfil}  
+                                                />
+                                                <PerfilReferenciaLaboralModal
+                                                    show={showRefLaboralModal}
+                                                    onClose={handleRefLaboralModalClose}
+                                                    onSave={handleGuardarRefLaboral}
+                                                    selectedRefLaboral={selectedRefLaboral}
+                                                />
 
-                                                {/* Modal para formulario */}
-                                                {showRefLaboralModal && (
-                                                    <div className="modal fade show d-block" style={{
-                                                        backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                                                    }} tabIndex="-1" role="dialog">
-                                                        <div className="modal-dialog" role="document">
-                                                            <div className="modal-content">
-                                                                <div className="modal-header">
-                                                                    <h5 className="modal-title">Agregar Referencia Laboral</h5>
-                                                                    <button type="button" className="btn-close" onClick={handleRefLaboralModalClose}></button>
-                                                                </div>
-                                                                <div className="modal-body">
-                                                                    <form>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Nombre</label>
-                                                                            <input type="text" className="form-control" defaultValue={selectedRefLaboral?.nombre || ''} required />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Empresa</label>
-                                                                            <input type="text" className="form-control" defaultValue={selectedRefLaboral?.empresa || ''} required />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Cargo</label>
-                                                                            <input type="text" className="form-control" defaultValue={selectedRefLaboral?.cargo || ''} required />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Relación Laboral</label>
-                                                                            <input type="text" className="form-control" defaultValue={selectedRefLaboral?.relacionLaboral || ''} required />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Teléfono</label>
-                                                                            <input type="tel" className="form-control" defaultValue={selectedRefLaboral?.telefono || ''} required />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Celular</label>
-                                                                            <input type="tel" className="form-control" defaultValue={selectedRefLaboral?.celular || ''} required />
-                                                                        </div>
-                                                                        <div className="mb-3">
-                                                                            <label className="form-label">Correo electrónico</label>
-                                                                            <input type="email" className="form-control" defaultValue={selectedRefLaboral?.correoElectronico || ''} required />
-                                                                        </div>
-                                                                    </form>
-                                                                </div>
-                                                                <div className="modal-footer">
-                                                                    <button type="button" className="btn btn-secondary" onClick={handleRefLaboralModalClose}>
-                                                                        Cancelar
-                                                                    </button>
-                                                                    <button type="button" className="btn btn-primary">
-                                                                        Guardar
-                                                                    </button>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                )}
                                             </div>
                                         </li>
                                     </ul>
@@ -849,4 +1018,6 @@ export default function Page() {
             </section>
         </div>
     );
-}
+};
+
+export default Perfil;

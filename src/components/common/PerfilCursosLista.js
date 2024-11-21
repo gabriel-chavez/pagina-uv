@@ -1,7 +1,12 @@
 import React, { useState } from 'react';
+import Swal from 'sweetalert2';
 import Estilos from '@/estilos/InfoAcademica.module.css';
 
-const PerfilCursosLista = ({ cursosLista, onEditClick }) => {
+import { obtenerPerfilCursos } from '@/services/convocatoriaService'; 
+import { eliminarPerfilCurso } from '@/services/convocatoriaService';
+
+const PerfilCursosLista = ({ cursosLista, onEditClick, idPerfil }) => {
+    const [cursos, setCursos] = useState(cursosLista); 
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [selectedCurso, setSelectedCurso] = useState(null);
 
@@ -10,11 +15,40 @@ const PerfilCursosLista = ({ cursosLista, onEditClick }) => {
         setShowConfirmModal(true);
     };
 
-    const handleConfirmDelete = () => {
-        console.log(`Curso ${selectedCurso?.curso} eliminado`);
-        setShowConfirmModal(false);
-        setSelectedCurso(null);
+    const handleConfirmDelete = async () => {
+        try {
+            const result = await eliminarPerfilCurso(selectedCurso?.id);
+
+            Swal.fire({
+                title: '¡Éxito!',
+                text: result.mensaje || 'Curso eliminado correctamente',
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+            }).then(async () => {
+                setShowConfirmModal(false);
+                setSelectedCurso(null);
+
+                const perfilCursos = await obtenerPerfilCursos(idPerfil);
+                setCursos(perfilCursos); 
+            });
+        } catch (error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al eliminar el curso.',
+                icon: 'error',
+                confirmButtonText: 'Intentar nuevamente',
+            });
+        }
     };
+
+    const formatFecha = (fecha) => {
+        const date = new Date(fecha);
+        return date.toLocaleDateString('es-ES', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+        });
+      };
     
     return (
         <div>
@@ -33,16 +67,17 @@ const PerfilCursosLista = ({ cursosLista, onEditClick }) => {
                 </tr>
             </thead>
             <tbody>
-                {cursosLista.map((curso) => (
-                    <tr>
-                        <td>{curso.tipo}</td>
-                        <td>{curso.nombreCurso}</td>
-                        <td>{curso.centroEducativo}</td>
+                {cursos && cursos.length > 0 ? (
+                    cursos.map((curso) => (
+                    <tr key={curso.id}>
+                        <td>{curso.parTipoCapacitacion.descripcion}</td>
+                        <td>{curso.nombre}</td>
+                        <td>{curso.centroEstudios}</td>
                         <td>{curso.pais}</td>
-                        <td>{curso.duracion}</td>
+                        <td>{curso.horasAcademicas}</td>
                         <td>{curso.modalidad}</td>
-                        <td>{curso.fechaInicio}</td>
-                        <td>{curso.fechaFin}</td>
+                        <td>{formatFecha(curso.fechaInicio)}</td>
+                        <td>{formatFecha(curso.fechaFin)}</td>
                         <td>
                             <button onClick={() => onEditClick(curso.id)}>
                                 <span className="fa fa-edit"></span>
@@ -53,7 +88,10 @@ const PerfilCursosLista = ({ cursosLista, onEditClick }) => {
                             </button>
                         </td>
                     </tr>
-                ))}
+                    ))
+                ) : (
+                    <tr><td colSpan="9">No hay formaciones disponibles.</td></tr>
+                )}
             </tbody>
         </table>
         {/* Modal de confirmación de eliminación */}

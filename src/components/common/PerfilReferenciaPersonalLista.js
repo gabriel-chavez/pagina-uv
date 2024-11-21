@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-
+import Swal from 'sweetalert2';
 import Estilos from '@/estilos/InfoAcademica.module.css';
 
-const PerfilReferenciaPersonalLista = ({ referenciaPersonalLista, onEditClick }) => {
+import { obtenerPerfilReferenciaPersonal } from '@/services/convocatoriaService';
+import { eliminarPerfilReferenciaPersonal } from '@/services/convocatoriaService';
+
+const PerfilReferenciaPersonalLista = ({ referenciaPersonalLista, onEditClick, idPerfil }) => {
+    const [referenciaPersonal, setReferenciaPersonal] = useState(referenciaPersonalLista);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [selectedRefPersonal, setSelectedRefPersonal] = useState(null);
 
@@ -11,10 +15,30 @@ const PerfilReferenciaPersonalLista = ({ referenciaPersonalLista, onEditClick })
         setShowConfirmModal(true);
     };
 
-    const handleConfirmDelete = () => {
-        console.log(`Referencia Personal ${selectedIdioma?.idioma} eliminada`);
-        setShowConfirmModal(false);
-        setSelectedRefPersonal(null);
+    const handleConfirmDelete = async () => {
+        try {
+            const result = await eliminarPerfilReferenciaPersonal(selectedRefPersonal?.id);
+
+            Swal.fire({
+                title: '¡Éxito!',
+                text: result.mensaje || 'Referencia Personal eliminado correctamente',
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+            }).then(async () => {
+                setShowConfirmModal(false);
+                setSelectedRefPersonal(null);
+
+                const perfilRefPersonal = await obtenerPerfilReferenciaPersonal(idPerfil);
+                setReferenciaPersonal(perfilRefPersonal);
+            });
+        } catch (error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al eliminar la referencia persona.',
+                icon: 'error',
+                confirmButtonText: 'Intentar nuevamente',
+            });
+        }
     };
 
     return (
@@ -33,26 +57,30 @@ const PerfilReferenciaPersonalLista = ({ referenciaPersonalLista, onEditClick })
                     </tr>
                 </thead>
                 <tbody>
-                    {referenciaPersonalLista.map((referenciaPersonal) => (
-                        <tr>
-                            <td>{referenciaPersonal.nombre}</td>
-                            <td>{referenciaPersonal.empresa}</td>
-                            <td>{referenciaPersonal.cargo}</td>
-                            <td>{referenciaPersonal.parentesco}</td>
-                            <td>{referenciaPersonal.telefono}</td>
-                            <td>{referenciaPersonal.celular}</td>
-                            <td>{referenciaPersonal.correoElectronico}</td>
-                            <td>
-                                <button onClick={() => onEditClick(referenciaPersonal.id)}>
-                                    <span className="fa fa-edit"></span>
-                                </button>
-                                &nbsp;
-                                <button onClick={() => handleDeleteClick(referenciaPersonal)}>
-                                    <span className="fa fa-trash"></span>
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
+                    {referenciaPersonal && referenciaPersonal.length > 0 ? (
+                        referenciaPersonal.map((referenciaPersonal) => (
+                            <tr key={referenciaPersonal.id}>
+                                <td>{referenciaPersonal.nombre}</td>
+                                <td>{referenciaPersonal.empresa}</td>
+                                <td>{referenciaPersonal.cargo}</td>
+                                <td>{referenciaPersonal.parParentescoId}</td>
+                                <td>{referenciaPersonal.telefono}</td>
+                                <td>{referenciaPersonal.telefonoMovil}</td>
+                                <td>{referenciaPersonal.email}</td>
+                                <td>
+                                    <button onClick={() => onEditClick(referenciaPersonal.id)}>
+                                        <span className="fa fa-edit"></span>
+                                    </button>
+                                    &nbsp;
+                                    <button onClick={() => handleDeleteClick(referenciaPersonal)}>
+                                        <span className="fa fa-trash"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr><td colSpan="8">No hay formaciones disponibles.</td></tr>
+                    )}
                 </tbody>
             </table>
             {/* Modal de confirmación de eliminación */}

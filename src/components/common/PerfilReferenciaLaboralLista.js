@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-
+import Swal from 'sweetalert2';
 import Estilos from '@/estilos/InfoAcademica.module.css';
 
-const PerfilReferenciaLaboralLista = ({ referenciaLaboralLista, onEditClick }) => {
+import { obtenerPerfilReferenciaLaboral } from '@/services/convocatoriaService';
+import { eliminarPerfilReferenciaLaboral } from '@/services/convocatoriaService';
+
+const PerfilReferenciaLaboralLista = ({ referenciaLaboralLista, onEditClick, idPerfil }) => {
+    const [referenciaLaboral, setReferenciaLaboral] = useState(referenciaLaboralLista);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [selectedRefLaboral, setSelectedRefLaboral] = useState(null);
 
@@ -11,12 +15,32 @@ const PerfilReferenciaLaboralLista = ({ referenciaLaboralLista, onEditClick }) =
         setShowConfirmModal(true);
     };
 
-    const handleConfirmDelete = () => {
-        console.log(`Referencia laboral ${selectedRefLaboral?.empresa} eliminada`);
-        setShowConfirmModal(false);
-        setSelectedRefLaboral(null);
+    const handleConfirmDelete = async () => {
+        try {
+            const result = await eliminarPerfilReferenciaLaboral(selectedRefLaboral?.id);
+
+            Swal.fire({
+                title: '¡Éxito!',
+                text: result.mensaje || 'Referencia Laboral eliminada correctamente',
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+            }).then(async () => {
+                setShowConfirmModal(false);
+                setSelectedRefLaboral(null);
+
+                const perfilRefLaboral = await obtenerPerfilReferenciaLaboral(idPerfil);
+                setReferenciaLaboral(perfilRefLaboral);
+            });
+        } catch (error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al eliminar la referencia laboral.',
+                icon: 'error',
+                confirmButtonText: 'Intentar nuevamente',
+            });
+        }
     };
-    
+
     return (
         <div>
             <table className={Estilos.academicTable}>
@@ -33,26 +57,30 @@ const PerfilReferenciaLaboralLista = ({ referenciaLaboralLista, onEditClick }) =
                     </tr>
                 </thead>
                 <tbody>
-                    {referenciaLaboralLista.map((referenciaLaboral) => (
-                        <tr>
-                            <td>{referenciaLaboral.nombre}</td>
-                            <td>{referenciaLaboral.empresa}</td>
-                            <td>{referenciaLaboral.cargo}</td>
-                            <td>{referenciaLaboral.relacionLaboral}</td>
-                            <td>{referenciaLaboral.telefono}</td>
-                            <td>{referenciaLaboral.celular}</td>
-                            <td>{referenciaLaboral.correoElectronico}</td>
-                            <td>
-                                <button onClick={() => onEditClick(referenciaLaboral.id)}>
-                                    <span className="fa fa-edit"></span>
-                                </button>
-                                &nbsp;
-                                <button onClick={() => handleDeleteClick(referenciaLaboral)}>
-                                    <span className="fa fa-trash"></span>
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
+                    {referenciaLaboralLista && referenciaLaboralLista.length > 0 ? (
+                        referenciaLaboralLista.map((referenciaLaboral) => (
+                            <tr key={referenciaLaboral.id}>
+                                <td>{referenciaLaboral.nombre}</td>
+                                <td>{referenciaLaboral.empresa}</td>
+                                <td>{referenciaLaboral.cargo}</td>
+                                <td>{referenciaLaboral.relacion}</td>
+                                <td>{referenciaLaboral.telefono}</td>
+                                <td>{referenciaLaboral.telefonoMovil}</td>
+                                <td>{referenciaLaboral.email}</td>
+                                <td>
+                                    <button onClick={() => onEditClick(referenciaLaboral.id)}>
+                                        <span className="fa fa-edit"></span>
+                                    </button>
+                                    &nbsp;
+                                    <button onClick={() => handleDeleteClick(referenciaLaboral)}>
+                                        <span className="fa fa-trash"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr><td colSpan="8">No hay formaciones disponibles.</td></tr>
+                    )}
                 </tbody>
             </table>
             {/* Modal de confirmación de eliminación */}

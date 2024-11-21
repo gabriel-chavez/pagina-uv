@@ -1,8 +1,12 @@
 import React, { useState } from 'react';
-
+import Swal from 'sweetalert2';
 import Estilos from '@/estilos/InfoAcademica.module.css';
 
-const PerfilFormacionAcademicaLista = ({ formacionLista, onEditClick }) => {
+import { obtenerPerfilFormacionAcademica } from '@/services/convocatoriaService';
+import { eliminarPerfilFormacionAcademica } from '@/services/convocatoriaService';
+
+const PerfilFormacionAcademicaLista = ({ formacionLista, onEditClick, idPerfil}) => {
+    const [formacion, setFormacionAcademica] = useState(formacionLista); 
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [selectedFormacionAcademica, setSelectedFormacionAcademica] = useState(null);
 
@@ -11,11 +15,40 @@ const PerfilFormacionAcademicaLista = ({ formacionLista, onEditClick }) => {
         setShowConfirmModal(true);
     };
 
-    const handleConfirmDelete = () => {
-        console.log(`Formación académica ${selectedFormacionAcademica?.formacion} eliminada`);
-        setShowConfirmModal(false);
-        setSelectedFormacionAcademica(null);
+    const handleConfirmDelete = async () => {
+        try {
+            const result = await eliminarPerfilFormacionAcademica(selectedFormacionAcademica?.id);
+
+            Swal.fire({
+                title: '¡Éxito!',
+                text: result.mensaje || 'Formación Académica eliminado correctamente',
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+            }).then(async () => {
+                setShowConfirmModal(false);
+                setSelectedFormacionAcademica(null);
+
+                const perfilFormacion = await obtenerPerfilFormacionAcademica(idPerfil);
+                setFormacionAcademica(perfilFormacion);
+            });
+        } catch (error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al eliminar la Formación Académica.',
+                icon: 'error',
+                confirmButtonText: 'Intentar nuevamente',
+            });
+        }
     };
+
+    const formatFecha = (fecha) => {
+        const date = new Date(fecha);
+        return date.toLocaleDateString('es-ES', {
+          day: '2-digit',
+          month: '2-digit',
+          year: 'numeric',
+        });
+      };
   
     return (
     <div>
@@ -32,26 +65,31 @@ const PerfilFormacionAcademicaLista = ({ formacionLista, onEditClick }) => {
               </tr>
           </thead>
           <tbody>
-          {formacionLista.map((formacion) => (
-              <tr>
-                  <td>{formacion.nivelFormacion}</td>
-                  <td>{formacion.centroEducativo}</td>
-                  <td>{formacion.tituloObtenido}</td>
-                  <td>{formacion.fechaTitulo}</td>
-                  <td>{formacion.ciudad}</td>
-                  <td>{formacion.pais}</td>
-                  <td>
-                      <button onClick={() => onEditClick(formacion.id)}>
-                          <span className="fa fa-edit"></span>
-                      </button>
-                      &nbsp;
-                      <button onClick={() => handleDeleteClick(formacion)}>
-                          <span className="fa fa-trash"></span>
-                      </button>
-                  </td>
-              </tr>
-            ))}
-          </tbody>
+            {formacionLista && formacionLista.length > 0 ? (
+                formacionLista.map((formacion) => (
+                    <tr key={formacion.id}>
+                        <td>{formacion.parNivelFormacionId}</td>
+                        <td>{formacion.centroEstudios}</td>
+                        <td>{formacion.tituloObtenido}</td>
+                        <td>{formatFecha(formacion.fechaTitulo)}</td>
+                        <td>{formacion.ciudad}</td>
+                        <td>{formacion.pais}</td>
+                        <td>
+                            <button onClick={() => onEditClick(formacion.id)}>
+                                <span className="fa fa-edit"></span>
+                            </button>
+                            &nbsp;
+                            <button onClick={() => handleDeleteClick(formacion)}>
+                                <span className="fa fa-trash"></span>
+                            </button>
+                        </td>
+                    </tr>
+                ))
+            ) : (
+                <tr><td colSpan="7">No hay formaciones disponibles.</td></tr>
+            )}
+            </tbody>
+
       </table>
       {/* Modal de confirmación de eliminación */}
       {showConfirmModal && (

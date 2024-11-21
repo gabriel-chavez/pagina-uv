@@ -1,7 +1,13 @@
 import React, { useState } from 'react';
+import Swal from 'sweetalert2';
 import Estilos from '@/estilos/InfoAcademica.module.css';
 
-const PerfilSistemasLista = ({ sistemasLista, onEditClick }) => {
+import { obtenerPerfilSistemas } from '@/services/convocatoriaService';
+import { eliminarPerfilSistema } from '@/services/convocatoriaService';
+
+const PerfilSistemasLista = ({ sistemasLista, onEditClick, idPerfil }) => {
+    // Cambié el nombre de la variable de estado para evitar conflicto
+    const [sistemas, setSistemas] = useState(sistemasLista); 
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [selectedSistema, setSelectedSistema] = useState(null);
 
@@ -10,12 +16,34 @@ const PerfilSistemasLista = ({ sistemasLista, onEditClick }) => {
         setShowConfirmModal(true);
     };
 
-    const handleConfirmDelete = () => {
-        console.log(`Sistema ${selectedCurso?.curso} eliminado`);
-        setShowConfirmModal(false);
-        setSelectedSistema(null);
+    const handleConfirmDelete = async () => {
+        try {
+            console.log("prueba");
+            console.log(selectedSistema.id);
+            const result = await eliminarPerfilSistema(selectedSistema?.id);
+
+            Swal.fire({
+                title: '¡Éxito!',
+                text: result.mensaje || 'Sistema eliminado correctamente',
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+            }).then(async () => {
+                setShowConfirmModal(false);
+                setSelectedSistema(null);
+
+                const perfilSistemas = await obtenerPerfilSistemas(idPerfil);
+                setSistemas(perfilSistemas); // Actualiza el estado con los sistemas actualizados
+            });
+        } catch (error) {
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al eliminar el sistema.',
+                icon: 'error',
+                confirmButtonText: 'Intentar nuevamente',
+            });
+        }
     };
-    
+
     return (
         <div>
             <table className={Estilos.academicTable}>
@@ -27,23 +55,28 @@ const PerfilSistemasLista = ({ sistemasLista, onEditClick }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {sistemasLista.map((sistema) => (
-                        <tr key={sistema.id}>
-                            <td>{sistema.sistema}</td>
-                            <td>{sistema.nivelConocimiento}</td>
-                            <td>
-                                <button onClick={() => onEditClick(sistema.id)}>
-                                    <span className="fa fa-edit"></span>
-                                </button>
-                                &nbsp;
-                                <button onClick={() => handleDeleteClick(sistema)}>
-                                    <span className="fa fa-trash"></span>
-                                </button>
-                            </td>
-                        </tr>
-                    ))}
+                    {sistemas && sistemas.length > 0 ? (
+                        sistemas.map((sistema) => (
+                            <tr key={sistema.id}>
+                                <td>{sistema.parPrograma.descripcion}</td>
+                                <td>{sistema.parNivelConocimiento.descripcion}</td>
+                                <td>
+                                    <button onClick={() => onEditClick(sistema.id)}>
+                                        <span className="fa fa-edit"></span>
+                                    </button>
+                                    &nbsp;
+                                    <button onClick={() => handleDeleteClick(sistema)}>
+                                        <span className="fa fa-trash"></span>
+                                    </button>
+                                </td>
+                            </tr>
+                        ))
+                    ) : (
+                        <tr><td colSpan="7">No hay sistemas disponibles.</td></tr>
+                    )}
                 </tbody>
             </table>
+
             {/* Modal de confirmación de eliminación */}
             {showConfirmModal && (
                 <div style={{
