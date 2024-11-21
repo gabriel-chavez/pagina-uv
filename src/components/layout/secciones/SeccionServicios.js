@@ -12,10 +12,11 @@ export  default async function SeccionServicios() {
       { datoTexto: seguro.nombreCorto },
       { datoTexto: seguro.icono },
       { recurso: { recursoEscritorio: seguro.recurso.recursoEscritorio } },
-      { datoUrl: seguro.menuPrincipal.urlCompleta, datoTexto: "Ver más" }
+      { datoUrl: seguro.menuPrincipal.urlCompleta},
+      { datoTexto: "Ver más" }
     ])
   };
-  
+  console.log(seccion.datos)
   return (
     <>
       <SeccionSliderTipo1 seccion={seccion}></SeccionSliderTipo1>      

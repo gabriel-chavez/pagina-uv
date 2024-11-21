@@ -2927,8 +2927,7 @@ ul {
   padding-bottom: 185px;
   z-index: 10;
 }
-
-.main-slider-three__img {
+.main-slider-three__imgxx{
   position: absolute;
   top: 55px;
   right: 225px;
@@ -2937,8 +2936,18 @@ ul {
   z-index: 1;
 }
 
+.main-slider-three__img {
+  position: absolute;
+  top: 0;
+  right: 0;
+  transform: translateX(500px);
+  opacity: 0;
+  z-index: 1;
+}
+
 .main-slider-three__img img {
-  width: auto !important;
+  /* width: auto !important; */
+  width: 110% !important;
 }
 
 .active .main-slider-three__img {
