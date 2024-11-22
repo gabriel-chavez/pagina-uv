@@ -25,7 +25,11 @@
     "react-owl-carousel": "^2.3.3",
     "rehype-sanitize": "^6.0.0",
     "remark-breaks": "^4.0.0",
+<<<<<<< HEAD
     "sweetalert2": "^11.14.5"
+=======
+    "swiper": "^11.1.15"
+>>>>>>> b6960355b4445844cf434e39c06d00498fc3d975
   },
   "devDependencies": {
     "@babel/preset-react": "^7.24.6",

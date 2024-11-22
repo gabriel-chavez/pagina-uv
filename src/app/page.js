@@ -10,6 +10,7 @@ import SeccionVarios from "@/components/layout/secciones/SeccionVarios";
 import SeccionDescargaApp from "@/components/layout/secciones/SeccionDescargaApp";
 import MobileNav from "@/components/layout/MobileNav";
 import SearchPopup from "@/components/layout/SearchPopup";
+import FormularioEjemplo from "@/components/common/FormularioEjemplo";
 
 export default function Home() {
   return (
@@ -21,7 +22,7 @@ export default function Home() {
       <SeccionNoticias />
       <SeccionVarios></SeccionVarios>
       <SeccionDescargaApp></SeccionDescargaApp>
-
+      <FormularioEjemplo></FormularioEjemplo>
 
     </>
   );
