@@ -26,7 +26,7 @@ apiClient.interceptors.response.use(
   error => {
       if (error.response) {
           // El servidor respondió con un código de estado fuera del rango 2xx
-         // console.log("respuestas:",error.response)
+         // console.log("respuestas:",error)
           switch (error.response.status) {
               case 400:
                   // Manejar error 400 (Bad Request)

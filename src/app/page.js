@@ -11,18 +11,19 @@ import SeccionDescargaApp from "@/components/layout/secciones/SeccionDescargaApp
 import MobileNav from "@/components/layout/MobileNav";
 import SearchPopup from "@/components/layout/SearchPopup";
 import FormularioEjemplo from "@/components/common/FormularioEjemplo";
+import SeccionSliderPrincipal from "@/components/layout/secciones/SeccionSliderPrincipal";
 
 export default function Home() {
   return (
     <>
-      <Slider></Slider>
+      <SeccionSliderPrincipal></SeccionSliderPrincipal>
       <SeccionServicios></SeccionServicios>
       <SliderSecundario></SliderSecundario>
       <SeccionLogros></SeccionLogros>
       <SeccionNoticias />
       <SeccionVarios></SeccionVarios>
       <SeccionDescargaApp></SeccionDescargaApp>
-      <FormularioEjemplo></FormularioEjemplo>
+      {/* <FormularioEjemplo></FormularioEjemplo> */}
 
     </>
   );

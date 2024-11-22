@@ -47,3 +47,20 @@ export const obtenerMenuPrincipal = async () => {
     throw error;
   }
 };
+/*Banner Pagina principal */
+export const obtenerBannerPaginaPrincipal = async (catTipoBannerPaginaPrincipalId) => {
+  try {
+    const response = await apiClient.get(`/api/BannerPaginaPrincipalMaestro/habilitados/${catTipoBannerPaginaPrincipalId}`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};
+export const listarBannerPaginaPrincipal = async () => {
+  try {
+    const response = await apiClient.get(`/api/BannerPaginaPrincipalMaestro/habilitados`);
+    return response.data;
+  } catch (error) {
+    throw error;
+  }
+};

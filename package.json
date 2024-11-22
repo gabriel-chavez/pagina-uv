@@ -25,6 +25,7 @@
     "react-owl-carousel": "^2.3.3",
     "rehype-sanitize": "^6.0.0",
     "remark-breaks": "^4.0.0",
+    "sweetalert2": "^11.14.5",
     "swiper": "^11.1.15"
   },
   "devDependencies": {
