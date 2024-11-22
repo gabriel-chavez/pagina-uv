@@ -2,7 +2,7 @@ import apiClient from '../config/api-config';
 /* Convocatorias */
 export const obtenerConvocatorias = async () => {
   try {
-    const response = await apiClient.get(`/api/Convocatoria`);
+    const response = await apiClient.get(`/api/Convocatoria/vigentes`);
     return response.data;
   } catch (error) {
     throw error;
@@ -80,7 +80,22 @@ export const actualizarPerfil = async (id, perfil) => {
     }
   }
 };
+export const guardarImagen = async (archivo) => {
+  const formData = new FormData();
+  formData.append('file', archivo); 
 
+  try {
+      const response = await apiClient.post('/api/Postulante/guardar-imagen', formData, {
+          headers: {
+              'Content-Type': 'multipart/form-data',
+          },
+      });
+      return response.data;
+  } catch (error) {
+      console.error('Error en guardarImagen:', error.message);
+      throw error; // Relanza el error para manejarlo en otro lugar
+  }
+};
 
 /* Formación Académica */
 export const obtenerPerfilFormacionAcademica = async (id) => {
@@ -122,9 +137,7 @@ export const actualizarPerfilFormacionAcademica = async (id, formacionAcademica)
 /* Cursos */
 export const obtenerPerfilCursos = async (id) => {
   try {
-    console.log("Identificador:", id);
     const response = await apiClient.get(`/api/Capacitacion/ObtenerPorPostulante/${id}`);
-    console.log("Respuesta completa:", response);
     return response.data.datos; // Asegúrate de que 'datos' existe.
   } catch (error) {
     console.error("Error al obtener los cursos:", error.response?.data || error.message);
@@ -162,7 +175,6 @@ export const actualizarPerfilCurso = async (id, capacitacion) => {
 /* Idiomas */
 export const obtenerPerfilIdiomas = async (id) => {
   try {
-    console.log("Identificador:" + id);
     const response = await apiClient.get(`/api/ConocimientoIdioma/ObtenerPorPostulante/${id}`);
     return response.data.datos;
   } catch (error) {
@@ -237,7 +249,6 @@ export const actualizarPerfilSistema = async (id, sistema) => {
 /* Experiencia Laboral */
 export const obtenerPerfilExperienciaLaboral = async (id) => {
   try {
-    console.log("Identificador:" + id);
     const response = await apiClient.get(`/api/ExperienciaLaboral/ObtenerPorPostulante/${id}`);
     return response.data.datos;
   } catch (error) {
@@ -275,7 +286,6 @@ export const actualizarPerfilExperienciaLaboral = async (id, sistema) => {
 /* Referencia Personal */
 export const obtenerPerfilReferenciaPersonal = async (id) => {
   try {
-    console.log("Identificador:" + id);
     const response = await apiClient.get(`/api/ReferenciaPersonal/ObtenerPorPostulante/${id}`);
     return response.data.datos;
   } catch (error) {
@@ -313,7 +323,6 @@ export const actualizarPerfilReferenciaPersonal = async (id, sistema) => {
 /* Referencia Laboral */
 export const obtenerPerfilReferenciaLaboral = async (id) => {
   try {
-    console.log("Identificador:" + id);
     const response = await apiClient.get(`/api/ReferenciaLaboral/ObtenerPorPostulante/${id}`);
     return response.data.datos;
   } catch (error) {
@@ -360,7 +369,6 @@ export const obtenerParIdioma = async () => {
 export const obtenerParNivelConocimiento = async () => {
   try {
     const response = await apiClient.get(`/api/ParNivelConocimiento`);
-    console.log("Respuesta completa de la API:", response);
     return response.data.datos;
   } catch (error) {
     throw error;

@@ -30,6 +30,7 @@ import PerfilReferenciaLaboralModal from "@/components/common/PerfilReferenciaLa
 import { obtenerPerfil } from '@/services/convocatoriaService';
 import { agregarPerfil } from '@/services/convocatoriaService';
 import { actualizarPerfil } from '@/services/convocatoriaService';
+import { guardarImagen } from '@/services/convocatoriaService';
 
 import { obtenerPerfilFormacionAcademica } from '@/services/convocatoriaService';
 import { agregarPerfilFormacionAcademica } from '@/services/convocatoriaService';
@@ -90,8 +91,10 @@ const Perfil = ({ params }) => {
     const [ParTipoCapacitacion, setParTipoCapacitacion] = useState([]);
     const [ParParentesco, setParParentesco] = useState([]);
 
+    const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
     const [selectedImage, setSelectedImage] = useState(null);
+    const [archivo, setArchivo] = useState(null);
 
     /* Modales */
     const [showInfoAcademicaModal, setShowInfoAcademicaModal] = useState(false);
@@ -137,7 +140,6 @@ const Perfil = ({ params }) => {
         try {
             const perfilIdiomas = await obtenerPerfilIdiomas(idPerfil);
             setIdiomas(perfilIdiomas);
-            console.log('Lista actualizada:', perfilIdiomas);
         } catch (error) {
             console.error('Error al obtener los idiomas actualizados:', error);
         }
@@ -156,7 +158,6 @@ const Perfil = ({ params }) => {
         try {
             const perfilSistemas = await obtenerPerfilSistemas(idPerfil);
             setSistemas(perfilSistemas);
-            console.log('Lista actualizada:', perfilSistemas);
         } catch (error) {
             console.error('Error al obtener los sistemas actualizados:', error);
         }
@@ -259,22 +260,60 @@ const Perfil = ({ params }) => {
         return <div>Cargando...</div>;
     }
 
-    const handleImageChange = (event) => {
-        const file = event.target.files[0];
+    const handleImageChange = async (event) => {
+        const file = event.target.files[0];  // Obtén el archivo seleccionado
         if (file) {
             const reader = new FileReader();
             reader.onloadend = () => {
-                setSelectedImage(reader.result);
+                setSelectedImage(reader.result);  // Vista previa (opcional)
             };
             reader.readAsDataURL(file);
+        
+            setArchivo(file);  // Guarda el archivo en el estado
+            console.log("precarga imagen");
+            // Llama automáticamente a la función para enviar el archivo
+            try {
+                // Ahora pasa 'archivo' en lugar de 'file' directamente
+                const resultado = await handleSubmitImage();
+                console.log("respuesta: " + resultado);
+
+            } catch (error) {
+                console.log("Ocurrió un error al subir la imagen");
+                console.error("Error al cargar la imagen:", error);
+            }
         } else {
-            setSelectedImage(null);
+            setSelectedImage(null);  // Si no se selecciona archivo, limpia la vista previa
         }
     };
-
+    const handleSubmitImage = async () => {
+        // Verifica que 'archivo' esté presente
+        if (!archivo) {
+            setError("Debe cargar un archivo válido.");
+            return;
+        }
+        console.log("Carga imagen");
+        const formData = new FormData();
+        formData.append('file', archivo);
+        formData.append('ruta', ruta || '/');
+    
+        try {
+            const respuesta = await cargarImagen(formData);
+            openSnackbar(respuesta.mensaje || "Imagen guardada con éxito.");
+            setArchivo(null); 
+            setFileName("");  
+            setFileType("");  
+            setPreview(null); 
+            setError("");
+    
+        } catch (error) {
+            console.error("Error al subir el archivo:", error.message);
+            setError("Error al subir el archivo. Intente nuevamente.");
+        }
+    };
+    
+    
     const handleChange = (e) => {
         const { name, value } = e.target;
-        console.log(e);
         setDatosPersonales({
             ...datosPersonales,
             [name]: value,
@@ -482,7 +521,6 @@ const Perfil = ({ params }) => {
                 handleIdiomasModalClose();
 
                 const perfilIdiomas = await obtenerPerfilIdiomas(idPerfil);
-                console.log(perfilIdiomas); // Verifica si los datos están actualizados
                 setIdiomas(perfilIdiomas);
             });
         } catch (error) {
@@ -862,22 +900,21 @@ const Perfil = ({ params }) => {
                                                     <div className="col-md-6">
                                                         <label className="form-label">Fotografía del Postulante</label>
                                                         <div className="custom-file">
-                                                            <input
-                                                                type="file"
-                                                                className="custom-file-input"
-                                                                id="customFile"
-                                                                accept="image/*"
-                                                                onChange={handleImageChange}
-                                                            />
+                                                        <input
+                                                            type="file"
+                                                            className="custom-file-input"
+                                                            id="customFile"
+                                                            accept="image/*"
+                                                            onChange={handleImageChange}
+                                                        />
                                                             <label className="custom-file-label" htmlFor="customFile">Seleccionar archivo</label>
                                                         </div>
                                                         {selectedImage && (
                                                             <div className="mt-3">
                                                                 <img
-                                                                    src={selectedImage}
-                                                                    alt="Preview"
-                                                                    className="img-thumbnail"
-                                                                    style={{ maxWidth: '100%', maxHeight: '200px' }}
+                                                                src={selectedImage}
+                                                                alt="Vista previa"
+                                                                style={{ width: '100px', height: '100px', objectFit: 'cover', marginTop: '10px' }}
                                                                 />
                                                             </div>
                                                         )}
