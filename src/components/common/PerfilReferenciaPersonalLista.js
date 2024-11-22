@@ -88,12 +88,12 @@ const PerfilReferenciaPersonalLista = ({ referenciaPersonalLista, onEditClick, i
                 <div style={{
                     position: 'fixed', top: 0, left: 0, right: 0, bottom: 0,
                     backgroundColor: 'rgba(0, 0, 0, 0.2)',
-                    display: 'flex', justifyContent: 'center', alignItems: 'center',
+                    display: 'flex', justifyContent: 'center', alignItems: 'start',
                     zIndex: 1000,
                 }}>
                     <div style={{
                         backgroundColor: 'white', padding: '20px', borderRadius: '8px',
-                        width: '500px', textAlign: 'center', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)',
+                        width: '500px', textAlign: 'center', boxShadow: '0 4px 8px rgba(0, 0, 0, 0.2)', margin: '30px 0 0 0'
                     }}>
                         <h2>Confirmar eliminación</h2>
                         <p>¿Estás seguro de que deseas eliminar la Referencia personal {selectedRefPersonal?.nombre}?</p>
