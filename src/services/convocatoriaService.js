@@ -96,6 +96,15 @@ export const guardarImagen = async (archivo) => {
       throw error; // Relanza el error para manejarlo en otro lugar
   }
 };
+export const registrarPostulacion = async (postulacion) => {
+  try {
+    const response = await apiClient.post('/api/Postulacion', postulacion);
+    return response.data;
+  } catch (error) {
+    console.error("Error al agregar la postulación:", error.response?.data || error.message);
+    throw error;
+  }
+};
 
 /* Formación Académica */
 export const obtenerPerfilFormacionAcademica = async (id) => {
