@@ -3,6 +3,7 @@
 import EncabezadoConvocatoria from "@/components/common/EncabezadoConvocatoria";
 import Estilos from '@/estilos/InfoAcademica.module.css';
 import React, { useState, useEffect } from 'react';
+import { useForm } from "react-hook-form";
 import Swal from 'sweetalert2';
 
 import PerfilFormacionAcademicaLista from "@/components/common/PerfilFormacionAcademicaLista";
@@ -67,6 +68,12 @@ import { obtenerParTipoCapacitacion } from '@/services/convocatoriaService';
 import { obtenerParParentesco } from '@/services/convocatoriaService';
 
 const Perfil = ({ params }) => {
+    const {
+        register,
+        handleSubmit,
+        formState: { errors },
+    } = useForm();
+
     const [datosPersonales, setDatosPersonales] = useState(null);
     const [formacionLista, setFormacionAcademica] = useState(null);
     const [cursosLista, setCursos] = useState([]);
@@ -267,6 +274,7 @@ const Perfil = ({ params }) => {
 
     const handleChange = (e) => {
         const { name, value } = e.target;
+        console.log(e);
         setDatosPersonales({
             ...datosPersonales,
             [name]: value,
@@ -759,7 +767,9 @@ const Perfil = ({ params }) => {
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Apellido del padre *</label>
-                                                        <input type="text" id="apellidoPadre" className="form-control" name="apellidoPadre" value={datosPersonales ? datosPersonales.apellidoPaterno : ''} onChange={handleChange} required />
+                                                        <input type="text" id="apellidoPadre" className="form-control" name="apellidoPadre" 
+                                                        {...register("apellidoPadre", { required: "Nombre del seguro es requerido" })}
+                                                        required />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Apellido de la madre *</label>
@@ -773,6 +783,29 @@ const Perfil = ({ params }) => {
                                                         <label className="form-label">Lugar de Nacimiento *</label>
                                                         <input type="text" id="lugarNacimiento" className="form-control" name="ciudadNacimiento" placeholder="Ciudad" value={datosPersonales ? datosPersonales.ciudadNacimiento : ''} onChange={handleChange} required />
                                                     </div>
+
+
+
+
+
+
+                                                    {/* <div>
+                                                        <label htmlFor="nombre">Nombre de Seguro</label>
+                                                        <input id="nombre" type="text"
+                                                            {...register("nombre", { required: "Nombre del seguro es requerido" })} />
+                                                        {errors.nombre &&
+                                                            <span style={{ color: "red" }}>{errors.nombre.message}</span>}
+                                                    </div>
+                                                    <div>
+                                                        <label htmlFor="nombreCorto">Nombre Corto</label>
+                                                        <input id="nombreCorto" type="text" {...register("nombreCorto", { required: "Nombre corto es requerido" })} /> {errors.nombreCorto && <span style={{ color: "red" }}>{errors.nombreCorto.message}</span>}
+                                                    </div> */}
+
+
+
+
+
+
                                                     <div className="col-md-6">
                                                         <label className="form-label">País de Nacimiento *</label>
                                                         <select id="paisNacimiento" onChange={handleChange} className="form-select" name="paisNacimiento" required>
