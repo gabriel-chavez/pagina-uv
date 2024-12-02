@@ -104,7 +104,7 @@ export default async function Page({ params }) {
         );
 
     } catch (error) {
-        console.error("Error al obtener datos:", error);
+        //console.error("Error al obtener datos:", error);
         return (
             <>
                 <p>{error.message}</p>

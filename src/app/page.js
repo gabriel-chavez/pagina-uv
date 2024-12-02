@@ -12,7 +12,7 @@ import MobileNav from "@/components/layout/MobileNav";
 import SearchPopup from "@/components/layout/SearchPopup";
 import FormularioEjemplo from "@/components/common/FormularioEjemplo";
 import SeccionSliderPrincipal from "@/components/layout/secciones/SeccionSliderPrincipal";
-
+import ButtonAuth from '@/components/buttonAuth';
 export default function Home() {
   return (
     <>
@@ -23,6 +23,7 @@ export default function Home() {
       <SeccionNoticias />
       <SeccionVarios></SeccionVarios>
       <SeccionDescargaApp></SeccionDescargaApp>
+      <ButtonAuth></ButtonAuth>
       {/* <FormularioEjemplo></FormularioEjemplo> */}
 
     </>
