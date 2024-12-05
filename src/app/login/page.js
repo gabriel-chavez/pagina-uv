@@ -6,8 +6,8 @@ import { useState } from "react";
 
 const LoginPage = () => {
   const [errors, setErrors] = useState([]);
-  const [email, setEmail] = useState("test@test.com");
-  const [password, setPassword] = useState("123123");
+  const [usuario, setUsuario] = useState("lchavez");
+  const [password, setPassword] = useState("123");
   const router = useRouter();
 
   const handleSubmit = async (event) => {
@@ -15,22 +15,30 @@ const LoginPage = () => {
     setErrors([]);
 
     const responseNextAuth = await signIn("credentials", {
-      email,
+      usuario,
       password,
       redirect: false,
     });
 
     if (responseNextAuth?.error) {
-        console.log("===<",responseNextAuth)
+      console.log("page.js:", responseNextAuth);
       setErrors(responseNextAuth.error.split(","));
       return;
     }
 
-    router.push("/dashboard");
+    const callbackUrl =
+      new URL(window.location.href).searchParams.get("callbackUrl") || "/";
+    router.push(callbackUrl);
   };
 
   return (
-    <div className="d-flex justify-content-center align-items-center min-vh-100 bg-light">
+    <div
+      className="d-flex justify-content-center align-items-center  bg-light"
+      style={{
+     
+        height: "calc(100vh - 100px)", 
+      }}
+    >
       <div className="card shadow-sm" style={{ maxWidth: "400px", width: "100%" }}>
         <div className="card-body">
           <h3 className="text-center mb-4">Inicio de sesión</h3>
@@ -38,21 +46,25 @@ const LoginPage = () => {
           {/* Formulario de Login */}
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
-              <label htmlFor="email" className="form-label">Correo Electrónico</label>
+              <label htmlFor="email" className="form-label">
+                Usuario
+              </label>
               <input
-                type="email"
-                id="email"
-                placeholder="test@test.com"
-                name="email"
+                type="text"
+                id="usuario"
+                placeholder=""
+                name="usuario"
                 className="form-control"
-                value={email}
-                onChange={(event) => setEmail(event.target.value)}
+                value={usuario}
+                onChange={(event) => setUsuario(event.target.value)}
                 required
               />
             </div>
 
             <div className="mb-3">
-              <label htmlFor="password" className="form-label">Contraseña</label>
+              <label htmlFor="password" className="form-label">
+                Contraseña
+              </label>
               <input
                 type="password"
                 id="password"
@@ -66,7 +78,9 @@ const LoginPage = () => {
             </div>
 
             <div className="d-grid gap-2">
-              <button type="submit" className="btn btn-primary btn-block">Iniciar sesión</button>
+              <button type="submit" className="btn btn-primary btn-block">
+                Iniciar sesión
+              </button>
             </div>
           </form>
 
@@ -82,7 +96,9 @@ const LoginPage = () => {
           )}
 
           <div className="text-center mt-3">
-            <a href="#" className="text-muted">¿Olvidaste tu contraseña?</a>
+            <a href="#" className="text-muted">
+              ¿Olvidaste tu contraseña?
+            </a>
           </div>
         </div>
       </div>

@@ -13,6 +13,7 @@ import SessionAuthProvider from '@/context/SessionAuthProvider';
 
 
 
+
 const inter = Inter({ subsets: ["latin"] });
 
 
@@ -69,8 +70,16 @@ export default function RootLayoutxxx({ children }) {
         <div className="page-wrapper">
           <Header></Header>
           <SessionAuthProvider>
+
+
+
+
+
+
             {children}
-          
+
+
+
           </SessionAuthProvider>
 
 

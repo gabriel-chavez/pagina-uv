@@ -9,7 +9,7 @@ export default async function Page({ params }) {
   try {
     // Obtener slug de la URL
     const slug = params.slug
-    console.log(slug)
+    //console.log(slug)
     let rutaFormateada = '/' + slug.join('/');
     const ruta=encodeURIComponent(rutaFormateada);    
     
