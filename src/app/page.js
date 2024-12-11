@@ -23,7 +23,7 @@ export default function Home() {
       <SeccionNoticias />
       <SeccionVarios></SeccionVarios>
       <SeccionDescargaApp></SeccionDescargaApp>
-      <ButtonAuth></ButtonAuth>
+      {/* <ButtonAuth></ButtonAuth> */}
       {/* <FormularioEjemplo></FormularioEjemplo> */}
 
     </>
