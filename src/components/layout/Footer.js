@@ -38,7 +38,7 @@ const Footer = () => {
                     <li><Link href="/">Inicio</Link></li>
                     <li><Link href="/contact">Contacto</Link></li>
                     <li><Link href="/insurance">Direcciones y horarios</Link></li>
-                    <li><Link href="/work-with-us">Trabaja con nosotros</Link></li>
+                    <li><Link href="/convocatorias">Trabaja con nosotros</Link></li>
                   </ul>
                 </div>
               </div>

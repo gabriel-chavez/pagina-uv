@@ -68,7 +68,13 @@ import { obtenerParPrograma } from '@/services/convocatoriaService';
 import { obtenerParTipoCapacitacion } from '@/services/convocatoriaService';
 import { obtenerParParentesco } from '@/services/convocatoriaService';
 
+import { signIn, signOut, useSession } from "next-auth/react";
+
 const Perfil = ({ params }) => {
+    const { data: session, status } = useSession();
+    //obtener datos de la sessión
+    console.log({ session, status });
+    
     const {
         register,
         handleSubmit,
@@ -268,7 +274,7 @@ const Perfil = ({ params }) => {
                 setSelectedImage(reader.result);  // Vista previa (opcional)
             };
             reader.readAsDataURL(file);
-        
+
             setArchivo(file);  // Guarda el archivo en el estado
             console.log("precarga imagen");
             // Llama automáticamente a la función para enviar el archivo
@@ -295,23 +301,23 @@ const Perfil = ({ params }) => {
         const formData = new FormData();
         formData.append('file', archivo);
         formData.append('ruta', ruta || '/');
-    
+
         try {
             const respuesta = await cargarImagen(formData);
             openSnackbar(respuesta.mensaje || "Imagen guardada con éxito.");
-            setArchivo(null); 
-            setFileName("");  
-            setFileType("");  
-            setPreview(null); 
+            setArchivo(null);
+            setFileName("");
+            setFileType("");
+            setPreview(null);
             setError("");
-    
+
         } catch (error) {
             console.error("Error al subir el archivo:", error.message);
             setError("Error al subir el archivo. Intente nuevamente.");
         }
     };
-    
-    
+
+
     const handleChange = (e) => {
         const { name, value } = e.target;
         setDatosPersonales({
@@ -322,7 +328,7 @@ const Perfil = ({ params }) => {
 
     const handleGuardarPerfil = async (event) => {
         event.preventDefault(); // Evitar recarga de la página
-        
+
         const nombre = document.getElementById('nombre').value;
         const apellidoPaterno = document.getElementById('apellidopadre').value;
         const apellidoMaterno = document.getElementById('apellidoMadre').value;
@@ -340,7 +346,7 @@ const Perfil = ({ params }) => {
         const numeroDocumento = document.getElementById('numeroDocumento').value;
         const expedidoEn = document.getElementById('expedidoEn').value;
         const fotografia = '';
-    
+
         const datos = {
             nombres: nombre,
             apellidoPaterno: apellidoPaterno,
@@ -359,17 +365,17 @@ const Perfil = ({ params }) => {
             numeroDocumento: numeroDocumento,
             fotografia: fotografia,
         };
-    
+
         try {
             let result = await actualizarPerfil(idPerfil, datos);
-    
+
             Swal.fire({
                 title: '¡Éxito!',
                 text: result.mensaje,
                 icon: 'success',
                 confirmButtonText: 'Aceptar',
             }).then(async () => {
-                const perfil = await obtenerPerfil(idPerfil); 
+                const perfil = await obtenerPerfil(idPerfil);
                 setDatosPersonales(perfil);
             });
         } catch (error) {
@@ -381,7 +387,7 @@ const Perfil = ({ params }) => {
                 confirmButtonText: 'Intentar nuevamente',
             });
         }
-    };    
+    };
     const handleGuardarFormacionAcademica = async () => {
         const NivelFormacionId = document.getElementById('NivelFormacionId').value;
         const centroEstudios = document.getElementById('centroEstudios').value;
@@ -415,7 +421,7 @@ const Perfil = ({ params }) => {
                 confirmButtonText: 'Aceptar',
             }).then(async () => {
                 handleInfoAcademicaModalClose();
-                
+
                 const perfilFormacion = await obtenerPerfilFormacionAcademica(idPerfil);
                 setFormacionAcademica(perfilFormacion);
             });
@@ -805,9 +811,9 @@ const Perfil = ({ params }) => {
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Apellido del padre *</label>
-                                                        <input type="text" id="apellidoPadre" className="form-control" name="apellidoPadre" 
-                                                        {...register("apellidoPadre", { required: "Nombre del seguro es requerido" })}
-                                                        required />
+                                                        <input type="text" id="apellidoPadre" className="form-control" name="apellidoPadre"
+                                                            {...register("apellidoPadre", { required: "Nombre del seguro es requerido" })}
+                                                            required />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Apellido de la madre *</label>
@@ -900,30 +906,30 @@ const Perfil = ({ params }) => {
                                                     <div className="col-md-6">
                                                         <label className="form-label">Fotografía del Postulante</label>
                                                         <div className="custom-file">
-                                                        <input
-                                                            type="file"
-                                                            className="custom-file-input"
-                                                            id="customFile"
-                                                            accept="image/*"
-                                                            onChange={handleImageChange}
-                                                        />
+                                                            <input
+                                                                type="file"
+                                                                className="custom-file-input"
+                                                                id="customFile"
+                                                                accept="image/*"
+                                                                onChange={handleImageChange}
+                                                            />
                                                             <label className="custom-file-label" htmlFor="customFile">Seleccionar archivo</label>
                                                         </div>
                                                         {selectedImage && (
                                                             <div className="mt-3">
                                                                 <img
-                                                                src={selectedImage}
-                                                                alt="Vista previa"
-                                                                style={{ width: '100px', height: '100px', objectFit: 'cover', marginTop: '10px' }}
+                                                                    src={selectedImage}
+                                                                    alt="Vista previa"
+                                                                    style={{ width: '100px', height: '100px', objectFit: 'cover', marginTop: '10px' }}
                                                                 />
                                                             </div>
                                                         )}
                                                     </div>
-                                                    
+
                                                     <div className="col-12">
-                                                        <button 
-                                                            type="submit" 
-                                                            className="btn btn-primary" 
+                                                        <button
+                                                            type="submit"
+                                                            className="btn btn-primary"
                                                             onClick={handleGuardarPerfil}
                                                         >
                                                             Guardar
@@ -938,10 +944,10 @@ const Perfil = ({ params }) => {
                                                 <h2>INFORMACIÓN SOBRE FORMACIÓN ACADÉMICA</h2>
                                                 <button className={Estilos.addButton} onClick={handleInfoAcademicaModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                <PerfilFormacionAcademicaLista 
-                                                    formacionLista={formacionLista} 
-                                                    onEditClick={handleInfoAcademicaModalOpen} 
-                                                    idPerfil={idPerfil} 
+                                                <PerfilFormacionAcademicaLista
+                                                    formacionLista={formacionLista}
+                                                    onEditClick={handleInfoAcademicaModalOpen}
+                                                    idPerfil={idPerfil}
                                                 />
                                                 <PerfilFormacionAcademicaModal
                                                     show={showInfoAcademicaModal}
@@ -950,7 +956,7 @@ const Perfil = ({ params }) => {
                                                     selectedInfoAcademica={selectedInfoAcademica}
                                                     ParNivelFormacion={ParNivelFormacion}
                                                 />
-                                                
+
                                             </div>
                                         </li>
 
@@ -959,10 +965,10 @@ const Perfil = ({ params }) => {
                                                 <h2>CURSOS/TALLERES</h2>
                                                 <button className={Estilos.addButton} onClick={handleCursosModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                <PerfilCursosLista 
-                                                    cursosLista={cursosLista} 
-                                                    onEditClick={handleCursosModalOpen} 
-                                                    idPerfil={idPerfil} 
+                                                <PerfilCursosLista
+                                                    cursosLista={cursosLista}
+                                                    onEditClick={handleCursosModalOpen}
+                                                    idPerfil={idPerfil}
                                                 />
                                                 <PerfilCursosModal
                                                     show={showCursosModal}
@@ -980,10 +986,10 @@ const Perfil = ({ params }) => {
                                                 <h2>IDIOMAS</h2>
                                                 <button className={Estilos.addButton} onClick={handleIdiomasModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                <PerfilIdiomasLista 
-                                                    idiomasLista={idiomasLista} 
-                                                    onEditClick={handleIdiomasModalOpen} 
-                                                    idPerfil={idPerfil} 
+                                                <PerfilIdiomasLista
+                                                    idiomasLista={idiomasLista}
+                                                    onEditClick={handleIdiomasModalOpen}
+                                                    idPerfil={idPerfil}
                                                 />
                                                 <PerfilIdiomasModal
                                                     show={showIdiomasModal}
@@ -1002,10 +1008,10 @@ const Perfil = ({ params }) => {
                                                 <h2>SISTEMAS</h2>
                                                 <button className={Estilos.addButton} onClick={handleSistemasModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                <PerfilSistemasLista 
-                                                    sistemasLista={sistemasLista} 
+                                                <PerfilSistemasLista
+                                                    sistemasLista={sistemasLista}
                                                     onEditClick={handleSistemasModalOpen}
-                                                    idPerfil={idPerfil}  
+                                                    idPerfil={idPerfil}
                                                 />
                                                 <PerfilSistemasModal
                                                     show={showSistemasModal}
@@ -1024,10 +1030,10 @@ const Perfil = ({ params }) => {
                                                 <h2>EXPERIENCIA LABORAL</h2>
                                                 <button className={Estilos.addButton} onClick={() => handleExpLaboralModalOpen(null)}>+ ADICIONAR EXPERIENCIA LABORAL</button>
 
-                                                <PerfilExperienciaLaboralLista 
-                                                    experienciaLaboralLista={experienciaLaboralLista} 
-                                                    onEditClick={handleExpLaboralModalOpen} 
-                                                    idPerfil={idPerfil}  
+                                                <PerfilExperienciaLaboralLista
+                                                    experienciaLaboralLista={experienciaLaboralLista}
+                                                    onEditClick={handleExpLaboralModalOpen}
+                                                    idPerfil={idPerfil}
                                                 />
                                                 <PerfilExperienciaLaboralModal
                                                     show={showExpLaboralModal}
@@ -1044,10 +1050,10 @@ const Perfil = ({ params }) => {
                                                 <h2>REFERENCIAS PERSONALES</h2>
                                                 <button className={Estilos.addButton} onClick={handleRefPersonalModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                <PerfilReferenciaPersonalLista 
-                                                    referenciaPersonalLista={referenciaPersonalLista} 
+                                                <PerfilReferenciaPersonalLista
+                                                    referenciaPersonalLista={referenciaPersonalLista}
                                                     onEditClick={handleRefPersonalModalOpen}
-                                                    idPerfil={idPerfil}  
+                                                    idPerfil={idPerfil}
                                                 />
                                                 <PerfilReferenciaPersonalModal
                                                     show={showRefPersonalModal}
@@ -1056,7 +1062,7 @@ const Perfil = ({ params }) => {
                                                     selectedRefPersonal={selectedRefPersonal}
                                                     parParentesco={ParParentesco}
                                                 />
-                                                
+
                                             </div>
                                         </li>
 
@@ -1065,10 +1071,10 @@ const Perfil = ({ params }) => {
                                                 <h2>REFERENCIAS LABORALES</h2>
                                                 <button className={Estilos.addButton} onClick={handleRefLaboralModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                <PerfilReferenciaLaboralLista 
-                                                    referenciaLaboralLista={referenciaLaboralLista} 
-                                                    onEditClick={handleRefLaboralModalOpen} 
-                                                    idPerfil={idPerfil}  
+                                                <PerfilReferenciaLaboralLista
+                                                    referenciaLaboralLista={referenciaLaboralLista}
+                                                    onEditClick={handleRefLaboralModalOpen}
+                                                    idPerfil={idPerfil}
                                                 />
                                                 <PerfilReferenciaLaboralModal
                                                     show={showRefLaboralModal}

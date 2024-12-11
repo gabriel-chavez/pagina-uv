@@ -8,6 +8,10 @@ import Footer from "../components/layout/Footer";
 import MobileNav from "@/components/layout/MobileNav";
 import SearchPopup from "@/components/layout/SearchPopup";
 import BootstrapClient from '@/components/BootstrapClient';
+import SessionAuthProvider from '@/context/SessionAuthProvider';
+
+
+
 
 
 const inter = Inter({ subsets: ["latin"] });
@@ -65,7 +69,19 @@ export default function RootLayoutxxx({ children }) {
         </div> */}
         <div className="page-wrapper">
           <Header></Header>
-          {children}
+          <SessionAuthProvider>
+
+
+
+
+
+
+            {children}
+
+
+
+          </SessionAuthProvider>
+
 
           <Footer></Footer>
         </div>
@@ -74,7 +90,7 @@ export default function RootLayoutxxx({ children }) {
         </div>
         <SearchPopup />
         <a href="#" data-target="html" className="scroll-to-target scroll-to-top"><i className="fas fa-arrow-up"></i></a>
-        
+
         <BootstrapClient></BootstrapClient>
         {/* scripts  */}
         <script src="/assets/vendors/jquery/jquery-3.6.0.min.js" />

@@ -9,9 +9,10 @@ export default async function Page({ params }) {
   try {
     // Obtener slug de la URL
     const slug = params.slug
-   
+    //console.log(slug)
     let rutaFormateada = '/' + slug.join('/');
     const ruta=encodeURIComponent(rutaFormateada);    
+    
     // Obtener la página específica por una ruta
     const resultado = await obtenerPaginaPorRuta(ruta);
     const data=resultado.datos
@@ -45,7 +46,7 @@ export default async function Page({ params }) {
       </>
     );
   } catch (error) {
-    console.error("Error al obtener datos:", error);
+    //console.error("Error al obtener datos:", error);
     return (
       <>
         <p>{error.message}</p>

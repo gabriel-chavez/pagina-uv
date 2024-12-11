@@ -1,54 +1,76 @@
-// src/config/api-config.ts
+
 import axios from 'axios';
+import { getSession } from 'next-auth/react';
+import { getServerSession } from 'next-auth'; 
+import { authOptions } from '../app/api/auth/[...nextauth]/route';
 
 const apiClient = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_BASE_URL, // URL base de tu API
-  timeout: 10000, // tiempo de espera de 10 segundos
+    baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
+    timeout: 10000,
 });
 
-// apiClient.interceptors.request.use(
-//   config => {
-//     // Puedes agregar configuraciones adicionales aquí, como headers
-//     const token = localStorage.getItem('token');
-//     if (token) {
-//       config.headers.Authorization = `Bearer ${token}`;
-//     }
-//     return config;
-//   },
-//   error => {
-//     return Promise.reject(error);
-//   }
-// );
+const isClient = typeof window !== 'undefined';
 
-// Interceptor global para manejar errores
-apiClient.interceptors.response.use(
-  response => response,
-  error => {
-      if (error.response) {
-          // El servidor respondió con un código de estado fuera del rango 2xx
-         // console.log("respuestas:",error.response)
-          switch (error.response.status) {
-              case 400:
-                  // Manejar error 400 (Bad Request)
-                  return Promise.reject({ status: 400, message: error.response.data.detail });
-              case 401:
-                  // Manejar error 401 (Unauthorized)
-                  return Promise.reject({ status: 401, message: error.response.data.detail });
-              case 404:                
-                  // Manejar error 404 (Not Found)
-                  return Promise.reject({ status: 404, message: error.response.data.detail });
-              default:
-                
-                  // Otros errores de respuesta no manejados específicamente
-                  return Promise.reject({ status: error.response.status, message: 'Error en la solicitud: '+ error.response.data.detail });
-          }
-      } else if (error.request) {
-          // La solicitud fue hecha pero no se recibió respuesta
-          return Promise.reject({ status: 500, message: 'Error de red. Inténtalo de nuevo más tarde.' });
-      } else {
-          // Error antes de hacer la solicitud
-          return Promise.reject({ status: 500, message: 'Error en la solicitud. Inténtalo de nuevo más tarde.' });
-      }
-  }
+apiClient.interceptors.request.use(
+    async (config) => {
+        let session;
+        try {
+            if (isClient) {
+             
+                session = await getSession();
+            } else {
+               
+                session = await getServerSession(authOptions);
+            }
+            
+           
+            if (session && session.user && session.user.token) {
+             
+                config.headers['Authorization'] = `Bearer ${session.user.token}`;
+               // console.log("api-config: Token añadido al header:", session.user.token);
+            } 
+            // else {
+            //     console.log("api-config: No se encontró el token.");
+            // }
+
+        } catch (error) {
+            console.error("api-config: Error al obtener la sesión", error);
+        }
+        
+        return config;
+    },
+    (error) => {
+        return Promise.reject(error);
+    }
 );
+
+
+apiClient.interceptors.response.use(
+    response => response,
+    error => {
+        if (error.response) {
+            const { status, data } = error.response;
+
+            const mensaje = data.mensaje || 'Error en la solicitud';
+            const datos = data.datos || null;
+
+            switch (status) {
+                case 400:
+                    return Promise.reject({ status: 400, message: mensaje, datos: datos });
+                case 401:
+                    return Promise.reject({ status: 401, message: mensaje, datos: datos });
+                case 404:
+                    return Promise.reject({ status: 404, message: mensaje, datos: datos });
+                default:
+                    return Promise.reject({ status: status, message: mensaje + error.response.data.detail, datos: datos });
+            }
+        } else if (error.request) {
+            return Promise.reject({ status: 500, message: 'Error de red. Inténtalo de nuevo más tarde.', datos: null });
+        } else {
+            console.log(error);
+            return Promise.reject({ status: 500, message: 'Error en la solicitud. Inténtalo de nuevo más tarde.', datos: null });
+        }
+    }
+);
+
 export default apiClient;
