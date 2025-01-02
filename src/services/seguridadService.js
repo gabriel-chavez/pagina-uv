@@ -1,4 +1,10 @@
 import apiClient from '../config/api-config';
+import Cookies from 'js-cookie';
+
+const almacenarToken = (token, postulanteId) => {
+  Cookies.set('token', token, { expires: 1 }); // 1 día de expiración
+  Cookies.set('postulanteId', postulanteId, { expires: 1 });
+};
 
 export const login = async (UserNameEmail, Password) => {
   try {    
@@ -12,6 +18,8 @@ export const login = async (UserNameEmail, Password) => {
     console.log('Response:', response);
     console.log('Response Data:', response.data);
     console.log('Response Headers:', response.headers);
+
+    almacenarToken(resultado.datos.token, resultado.datos.postulanteId);
 
     return response.data;
 

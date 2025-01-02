@@ -1,5 +1,7 @@
 "use client";
 
+import Cookies from 'js-cookie';
+
 import EncabezadoConvocatoria from "@/components/common/EncabezadoConvocatoria";
 import Estilos from '@/estilos/InfoAcademica.module.css';
 import React, { useState, useEffect } from 'react';
@@ -70,10 +72,16 @@ import { obtenerParParentesco } from '@/services/convocatoriaService';
 
 import { signIn, signOut, useSession } from "next-auth/react";
 
+
+const usuarioToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMCIsInVzZXJFbWFpbCI6Impvc2VAY29ycm9lLmNvbSIsInBvc3R1bGFudGVJZCI6IjAiLCJleHAiOjE3MzU4MjI0NzYsImlzcyI6Imh0dHBzOi8vd3d3LnVuaXZpZGEuYm8iLCJhdWQiOiJ3ZWIifQ.Ys9gcAZWItzk0vHDjblSSg3e0lgofNuXkD9v_qpDD00";//Cookies.get('token');
+const usuarioPostulanteId = 0;//Cookies.get('postulanteId');
+
 const Perfil = ({ params }) => {
     const { data: session, status } = useSession();
     //obtener datos de la sessión
     console.log({ session, status });
+    
+    const idPerfil = usuarioPostulanteId
     
     const {
         register,
@@ -82,13 +90,13 @@ const Perfil = ({ params }) => {
     } = useForm();
 
     const [datosPersonales, setDatosPersonales] = useState(null);
-    const [formacionLista, setFormacionAcademica] = useState(null);
+    const [formacionLista, setFormacionAcademica] = useState([]);
     const [cursosLista, setCursos] = useState([]);
-    const [idiomasLista, setIdiomas] = useState(null);
-    const [sistemasLista, setSistemas] = useState(null);
-    const [experienciaLaboralLista, setExperienciaLaboral] = useState(null);
-    const [referenciaPersonalLista, setReferenciaPersonal] = useState(null);
-    const [referenciaLaboralLista, setReferenciaLaboral] = useState(null);
+    const [idiomasLista, setIdiomas] = useState([]);
+    const [sistemasLista, setSistemas] = useState([]);
+    const [experienciaLaboralLista, setExperienciaLaboral] = useState([]);
+    const [referenciaPersonalLista, setReferenciaPersonal] = useState([]);
+    const [referenciaLaboralLista, setReferenciaLaboral] = useState([]);
 
     const [ParNivelFormacion, setParNivelFormacion] = useState([]);
     const [ParIdioma, setIdioma] = useState([]);
@@ -105,8 +113,9 @@ const Perfil = ({ params }) => {
     /* Modales */
     const [showInfoAcademicaModal, setShowInfoAcademicaModal] = useState(false);
     const [selectedInfoAcademica, setSelectedInfoAcademica] = useState(null);
+
     const handleInfoAcademicaModalOpen = (id) => {
-        const infoAcademicaSeleccionado = formacionLista.find((InfoAcademica) => InfoAcademica.id === id);
+        const infoAcademicaSeleccionado = formacionLista?.find((InfoAcademica) => InfoAcademica.id === id);
         setSelectedInfoAcademica(infoAcademicaSeleccionado || null);
         setShowInfoAcademicaModal(true);
     };
@@ -124,7 +133,7 @@ const Perfil = ({ params }) => {
     const [showCursosModal, setShowCursosModal] = useState(false);
     const [selectedCurso, setSelectedCurso] = useState(null);
     const handleCursosModalOpen = (id) => {
-        const cursoSeleccionado = cursosLista.find((curso) => curso.id === id);
+        const cursoSeleccionado = cursosLista?.find((curso) => curso.id === id);
         setSelectedCurso(cursoSeleccionado);
         setShowCursosModal(true);
     };
@@ -136,7 +145,7 @@ const Perfil = ({ params }) => {
     const [showIdiomasModal, setShowIdiomasModal] = useState(false);
     const [selectedIdioma, setSelectedIdioma] = useState(null);
     const handleIdiomasModalOpen = (id) => {
-        const idiomaSeleccionado = idiomasLista.find((idioma) => idioma.id === id);
+        const idiomaSeleccionado = idiomasLista?.find((idioma) => idioma.id === id);
         setSelectedIdioma(idiomaSeleccionado || null);
         setShowIdiomasModal(true);
     };
@@ -154,7 +163,7 @@ const Perfil = ({ params }) => {
     const [showSistemasModal, setShowSistemasModal] = useState(false);
     const [selectedSistema, setSelectedSistema] = useState(null);
     const handleSistemasModalOpen = (id) => {
-        const sistemaSeleccionado = sistemasLista.find((sistema) => sistema.id === id);
+        const sistemaSeleccionado = sistemasLista?.find((sistema) => sistema.id === id);
         setSelectedSistema(sistemaSeleccionado || null);
         setShowSistemasModal(true);
     };
@@ -172,7 +181,7 @@ const Perfil = ({ params }) => {
     const [showExpLaboralModal, setShowExpLaboralModal] = useState(false);
     const [selectedExpLaboral, setSelectedExpLaboral] = useState(null);
     const handleExpLaboralModalOpen = (id) => {
-        const experienciaLaboralSeleccionado = experienciaLaboralLista.find((experienciaLaboral) => experienciaLaboral.id === id);
+        const experienciaLaboralSeleccionado = experienciaLaboralLista?.find((experienciaLaboral) => experienciaLaboral.id === id);
         setSelectedExpLaboral(experienciaLaboralSeleccionado);
         setShowExpLaboralModal(true);
     };
@@ -184,7 +193,7 @@ const Perfil = ({ params }) => {
     const [showRefPersonalModal, setShowRefPersonalModal] = useState(false);
     const [selectedRefPersonal, setSelectedRefPersonal] = useState(null);
     const handleRefPersonalModalOpen = (id) => {
-        const referenciaPersonalSeleccionado = referenciaPersonalLista.find((referenciaPersonal) => referenciaPersonal.id === id);
+        const referenciaPersonalSeleccionado = referenciaPersonalLista?.find((referenciaPersonal) => referenciaPersonal.id === id);
         setSelectedRefPersonal(referenciaPersonalSeleccionado);
         setShowRefPersonalModal(true);
     };
@@ -196,7 +205,7 @@ const Perfil = ({ params }) => {
     const [showRefLaboralModal, setShowRefLaboralModal] = useState(false);
     const [selectedRefLaboral, setSelectedRefLaboral] = useState(null);
     const handleRefLaboralModalOpen = (id) => {
-        const referenciaLaboralSeleccionado = referenciaLaboralLista.find((referenciaLaboral) => referenciaLaboral.id === id);
+        const referenciaLaboralSeleccionado = referenciaLaboralLista?.find((referenciaLaboral) => referenciaLaboral.id === id);
         setSelectedRefLaboral(referenciaLaboralSeleccionado);
         setShowRefLaboralModal(true);
     };
@@ -205,7 +214,6 @@ const Perfil = ({ params }) => {
         setShowRefLaboralModal(false);
     };
 
-    const idPerfil = 1
     const loadData = async () => {
         try {
             const perfil = await obtenerPerfil(idPerfil);  // actualizar el id por el ID de la persona autenticada
@@ -367,7 +375,10 @@ const Perfil = ({ params }) => {
         };
 
         try {
-            let result = await actualizarPerfil(idPerfil, datos);
+            if(usuarioPostulanteId != 0)
+                {let result = await actualizarPerfil(idPerfil, datos);}
+            else
+                {let result = await agregarPerfil(datos, usuarioToken);}
 
             Swal.fire({
                 title: '¡Éxito!',
@@ -398,7 +409,7 @@ const Perfil = ({ params }) => {
 
         const datos = {
             postulanteId: idPerfil,
-            parNivelFormacionId: NivelFormacionId,
+            parNivelFormacion: NivelFormacionId,
             centroEstudios: centroEstudios,
             tituloObtenido: tituloObtenido,
             fechaTitulo: fechaTitulo,

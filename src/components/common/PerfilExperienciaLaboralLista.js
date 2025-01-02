@@ -66,11 +66,11 @@ const PerfilExperienciaLaboralLista = ({ experienciaLaboralLista, onEditClick, i
                             <strong>Sector:</strong> {expLaboral.sector}
                         </div>
                         <div className={Estilos.actions}>
-                            <button onClick={() => onEditClick(expLaboral.id)}>
+                            <button className={Estilos.btnEditar} onClick={() => onEditClick(expLaboral.id)}>
                                 <span className="fa fa-edit"></span>
                             </button>
                             &nbsp;
-                            <button onClick={() => handleDeleteClick(expLaboral)}>
+                            <button className={Estilos.btnEliminar} onClick={() => handleDeleteClick(expLaboral)}>
                                 <span className="fa fa-trash"></span>
                             </button>
                         </div>

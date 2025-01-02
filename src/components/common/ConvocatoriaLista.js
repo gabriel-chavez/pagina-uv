@@ -29,11 +29,11 @@ const ConvocatoriaLista = ({ convocatorias }) => {
                     </div>
                   </div>
                   <div className='row'>
-                    <div className='col-md-3'>
-                      <em className='fa fa-building' /> 
-                      {convocatoria.nombre}
-                    </div>
                     <div className='col-md-6'>
+                      <em className='fa fa-building' /> 
+                      {convocatoria.descripcion.split(' ').slice(0, 20).join(' ')}...
+                    </div>
+                    <div className='col-md-3'>
                       <em className='fa fa-file'/>
                       {convocatoria.codigo}
                     </div>
