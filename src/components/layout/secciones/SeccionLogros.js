@@ -40,7 +40,7 @@ const SeccionLogros = () => {
                   <img src="/assets/images/shapes/work-step-one-hover-shape-1.png" alt="" />
                 </div>
               </div>
-              <h3 className="work-step-one__title"><a href="">Moody's Local</a></h3>
+              <h3 className="work-step-one__title"><a href="">Moody&apos;s Local</a></h3>
             </div>
           </div>
         </div>

@@ -22,8 +22,8 @@ export default async function Page() {
                 <section className="insurence-page">
                     <div className="container">
                         <div className="row justify-content-center">
-                            {data.map((seguro) => (
-                                <div className="col-xl-4 col-lg-4">
+                            {data.map((seguro,index) => (
+                                <div className="col-xl-4 col-lg-4" key={index}>
                                     <Tarjeta1
                                         key={seguro.id}
                                         titulo={seguro.nombreCorto}

@@ -1,9 +1,9 @@
 import apiClient from '../config/api-config';
 
-export const login = async (UserName, Password) => {
+export const login = async (UserNameEmail, Password) => {
   try {    
     const response = await apiClient.post('/api/auth/login', {
-      UserName,
+      UserNameEmail,
       Password,
     }, {
       withCredentials: true
