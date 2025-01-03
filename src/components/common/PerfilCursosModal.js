@@ -25,18 +25,27 @@ const PerfilCursosModal = ({
                     <form>
                         <div className="mb-3">
                             <label className="form-label">Tipo</label>
-                            <select className="form-control" id='tipoCapacitacion' defaultValue={selectedCurso?.parTipoCapacitacionId || ''} required>
+                            <select
+                                className="form-control"
+                                id="tipoCapacitacion"
+                                defaultValue={selectedCurso?.parTipoCapacitacionId || ''}
+                                required
+                                >
                                 <option value="">Selecciona una opción</option>
-                                {parTipoCapacitacion.map((TipoCapacitacion) => (
+                                {parTipoCapacitacion && parTipoCapacitacion.length > 0 ? (
+                                    parTipoCapacitacion.map((TipoCapacitacion) => (
                                     <option value={TipoCapacitacion.id} key={TipoCapacitacion.id}>
-                                    {TipoCapacitacion.descripcion}
+                                        {TipoCapacitacion.descripcion}
                                     </option>
-                                ))}
+                                    ))
+                                ) : (
+                                    <option value="">Cargando opciones...</option>
+                                )}
                             </select>
                         </div>
                         <div className="mb-3">
                             <label className="form-label">Nombre del Curso/Taller</label>
-                            <input type="text" id='nombre' className="form-control" defaultValue={selectedCurso?.nombre || ''} required />
+                            <input type="text" id='nombres' className="form-control" defaultValue={selectedCurso?.nombres || ''} required />
                         </div>
                         <div className="mb-3">
                             <label className="form-label">Centro de Estudio</label>

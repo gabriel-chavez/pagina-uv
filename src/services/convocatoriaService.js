@@ -26,13 +26,9 @@ export const obtenerPerfil = async (id) => {
     throw error;
   }
 };
-export const agregarPerfil = async (perfil, token) => {
+export const agregarPerfil = async (perfil) => {
   try {
-    const response = await apiClient.post('/api/Postulante', perfil, {
-      headers: {
-        Authorization: `Bearer ${token}`,
-      },
-    });
+    const response = await apiClient.post('/api/Postulante', perfil);
     return response.data;
   } catch (error) {
     console.error("Error al agregar datos personales:", error.response?.data || error.message);

@@ -114,7 +114,7 @@ const PerfilExperienciaLaboralLista = ({ experienciaLaboralLista, onEditClick, i
                 </div>
                 ))
             ) : (
-                <tr><td colSpan="7">No hay formaciones disponibles.</td></tr>
+                <div>No hay formaciones disponibles.</div>
             )}
             {/* Modal de confirmación de eliminación */}
             {showConfirmModal && (
