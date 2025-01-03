@@ -26,12 +26,11 @@ apiClient.interceptors.request.use(
            
             if (session && session.user && session.user.token) {
              
-                config.headers['Authorization'] = `Bearer ${session.user.token}`;
-               // console.log("api-config: Token añadido al header:", session.user.token);
+                config.headers['Authorization'] = `Bearer ${session.user.token}`;               
             } 
-            // else {
-            //     console.log("api-config: No se encontró el token.");
-            // }
+            else {
+                console.log("api-config: No se encontró el token.");
+            }
 
         } catch (error) {
             console.error("api-config: Error al obtener la sesión", error);

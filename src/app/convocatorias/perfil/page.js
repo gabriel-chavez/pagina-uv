@@ -1,7 +1,5 @@
 "use client";
 
-import Cookies from 'js-cookie';
-
 import EncabezadoConvocatoria from "@/components/common/EncabezadoConvocatoria";
 import Estilos from '@/estilos/InfoAcademica.module.css';
 import React, { useState, useEffect } from 'react';
@@ -79,7 +77,7 @@ const usuarioPostulanteId = 0;//Cookies.get('postulanteId');
 const Perfil = ({ params }) => {
     const { data: session, status } = useSession();
     //obtener datos de la sessión
-    console.log({ session, status });
+    console.log( session?.user.postulanteId);
     
     const idPerfil = usuarioPostulanteId
     

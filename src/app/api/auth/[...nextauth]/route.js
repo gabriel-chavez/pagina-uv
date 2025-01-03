@@ -16,9 +16,8 @@ export const authOptions = {
       async authorize(credentials) {
         const token = await login(credentials.usuario, credentials?.password);
         console.log("token=>>>>", token);
-
         if (token.error) {
-          console.log("token=>>>>", token);
+       //   console.log("token=>>>>", token);
           throw new Error(token.error);
         }
 
@@ -36,7 +35,7 @@ export const authOptions = {
 
     async session({ session, token }) {
       session.user = token; 
-      console.log("route.js: session:", session, "token:", token);
+    //  console.log("route.js: session:", session, "token:", token);
       return session;
     },
   },

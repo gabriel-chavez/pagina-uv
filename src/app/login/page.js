@@ -3,11 +3,12 @@
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Link from 'next/link';
 
 const LoginPage = () => {
   const [errors, setErrors] = useState([]);
-  const [usuario, setUsuario] = useState("lchavez");
-  const [password, setPassword] = useState("123");
+  const [usuario, setUsuario] = useState();
+  const [password, setPassword] = useState();
   const router = useRouter();
 
   const handleSubmit = async (event) => {
@@ -27,7 +28,7 @@ const LoginPage = () => {
     }
 
     const callbackUrl =
-      new URL(window.location.href).searchParams.get("callbackUrl") || "/";
+      new URL(window.location.href).searchParams.get("callbackUrl") || "/convocatorias/perfil";
     router.push(callbackUrl);
   };
 
@@ -35,8 +36,8 @@ const LoginPage = () => {
     <div
       className="d-flex justify-content-center align-items-center  bg-light"
       style={{
-     
-        height: "calc(100vh - 100px)", 
+
+        height: "calc(100vh - 100px)",
       }}
     >
       <div className="card shadow-sm" style={{ maxWidth: "400px", width: "100%" }}>
@@ -68,7 +69,7 @@ const LoginPage = () => {
               <input
                 type="password"
                 id="password"
-                placeholder="123123"
+                placeholder=""
                 name="password"
                 className="form-control"
                 value={password}
@@ -96,9 +97,9 @@ const LoginPage = () => {
           )}
 
           <div className="text-center mt-3">
-            <a href="#" className="text-muted">
+            <Link href="/recuperar-contrasena" className="text-muted">
               ¿Olvidaste tu contraseña?
-            </a>
+            </Link>
           </div>
         </div>
       </div>

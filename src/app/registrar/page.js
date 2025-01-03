@@ -1,54 +1,30 @@
 "use client";
 
-import { signIn } from "next-auth/react";
+import { registrar } from "@/services/seguridadService";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
+import Link from "next/link";
 
 const RegisterPage = () => {
   const [errors, setErrors] = useState([]);
-  const [name, setName] = useState("test");
-  const [email, setEmail] = useState("test@test.com");
-  const [password, setPassword] = useState("123123");
+  const [name, setName] = useState("");
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
   const router = useRouter();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setErrors([]);
-
-    const res = await fetch(
-      `${process.env.NEXT_PUBLIC_BACKEND_URL}/auth/register`,
-      {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          name,
-          email,
-          password,
-        }),
-      }
-    );
-
-    const responseAPI = await res.json();
-
-    if (!res.ok) {
-      setErrors(responseAPI.message);
-      return;
+    try {
+      const res = await registrar({
+        Email: email,
+        Username: name,
+        Password: password
+      });
+      router.push("/login");
+    } catch (error) {
+      setErrors([error.message]);
     }
-
-    const responseNextAuth = await signIn("credentials", {
-      email,
-      password,
-      redirect: false,
-    });
-
-    if (responseNextAuth?.error) {
-      setErrors(responseNextAuth.error.split(","));
-      return;
-    }
-
-    router.push("/dashboard");
   };
 
   return (
@@ -58,12 +34,12 @@ const RegisterPage = () => {
     >
       <div className="card shadow-sm" style={{ maxWidth: "400px", width: "100%" }}>
         <div className="card-body">
-          <h3 className="text-center mb-4">Registro</h3>
+          <h3 className="text-center mb-4">Registro de usuario</h3>
 
           <form onSubmit={handleSubmit}>
             <div className="mb-3">
               <label htmlFor="name" className="form-label">
-                Nombre
+                Usuario
               </label>
               <input
                 type="text"
@@ -78,7 +54,7 @@ const RegisterPage = () => {
 
             <div className="mb-3">
               <label htmlFor="email" className="form-label">
-              Usuario o correo electrónico
+                Correo electrónico
               </label>
               <input
                 type="email"
@@ -124,9 +100,9 @@ const RegisterPage = () => {
           )}
 
           <div className="text-center mt-3">
-            <a href="#" className="text-muted">
+            <Link href="/login" className="text-muted">
               ¿Ya tienes una cuenta? Inicia sesión
-            </a>
+            </Link>
           </div>
         </div>
       </div>
