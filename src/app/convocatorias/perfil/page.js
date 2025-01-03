@@ -1,10 +1,7 @@
 "use client";
 
-<<<<<<< HEAD
-=======
 import NextAuth from "next-auth";
 
->>>>>>> 0aae4864be53cae28f438941ba5186c78a5b9b4f
 import EncabezadoConvocatoria from "@/components/common/EncabezadoConvocatoria";
 import Estilos from '@/estilos/InfoAcademica.module.css';
 import React, { useState, useEffect } from 'react';
@@ -77,11 +74,6 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 const Perfil = ({ params }) => {
     const { data: session, status } = useSession();
-<<<<<<< HEAD
-    //obtener datos de la sessión
-    console.log( session?.user.postulanteId);
-=======
->>>>>>> 0aae4864be53cae28f438941ba5186c78a5b9b4f
     
     const idPerfil = session?.user?.postulanteId > 0 ? session.user.postulanteId : null;
     
