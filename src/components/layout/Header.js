@@ -32,8 +32,8 @@ function renderSubMenu(subMenus) {
 }
 
 export default async function Header() {
-  const resultado = await obtenerMenuPrincipal();
-  const menu = resultado.datos;
+  const resultado = await obtenerMenuPrincipal();  
+  const menu = resultado.datos.sort((a, b) => a.orden - b.orden);
 
   return (
     <>

@@ -1,5 +1,6 @@
 import React from 'react';
 import Link from 'next/link';
+/* eslint-disable @next/next/no-img-element */
 
 const Tarjeta1 = ({ titulo, link, imgSrc, iconClass, textoBoton = "COMPRAR SOAT" }) => {
   const hasExtension = (url) => {

@@ -11,6 +11,7 @@ import BootstrapClient from '@/components/BootstrapClient';
 import SessionAuthProvider from '@/context/SessionAuthProvider';
 
 
+import Script from 'next/script';
 
 
 
@@ -93,28 +94,43 @@ export default function RootLayoutxxx({ children }) {
 
         <BootstrapClient></BootstrapClient>
         {/* scripts  */}
-        <script src="/assets/vendors/jquery/jquery-3.6.0.min.js" />
-        {/* <script src="/assets/vendors/bootstrap/js/bootstrap.bundle.min.js" /> */}
-        {/* <script src="/assets/vendors/jarallax/jarallax.min.js" /> */}
-        <script src="/assets/vendors/jquery-ajaxchimp/jquery.ajaxchimp.min.js" />
-        <script src="/assets/vendors/jquery-appear/jquery.appear.min.js" />
-        <script src="/assets/vendors/jquery-circle-progress/jquery.circle-progress.min.js" />
-        <script src="/assets/vendors/jquery-magnific-popup/jquery.magnific-popup.min.js" />
-        <script src="/assets/vendors/jquery-validate/jquery.validate.min.js" />
-        <script src="/assets/vendors/odometer/odometer.min.js" />
-        {/* <script src="/assets/vendors/swiper/swiper.min.js" /> */}
-        <script src="/assets/vendors/wnumb/wNumb.min.js" />
-        <script src="/assets/vendors/wow/wow.js" />
-        <script src="/assets/vendors/isotope/isotope.js" />
-        {/* <script src="/assets/vendors/owl-carousel/owl.carousel.min.js" />  */}
-        {/* <script src="/assets/vendors/bootstrap-select/js/bootstrap-select.min.js" /> */}
-        <script src="/assets/vendors/jquery-ui/jquery-ui.js" />
+        <Script src="/assets/vendors/jquery/jquery-3.6.0.min.js" />
+        {/* comentado <script src="/assets/vendors/bootstrap/js/bootstrap.bundle.min.js" /> */}
+        {/* comentado<script src="/assets/vendors/jarallax/jarallax.min.js" /> */}
+        <Script src="/assets/vendors/jquery-ajaxchimp/jquery.ajaxchimp.min.js" />
+        <Script src="/assets/vendors/jquery-appear/jquery.appear.min.js" />
+        <Script src="/assets/vendors/jquery-circle-progress/jquery.circle-progress.min.js" />
+        <Script src="/assets/vendors/jquery-magnific-popup/jquery.magnific-popup.min.js" />
+        <Script src="/assets/vendors/jquery-validate/jquery.validate.min.js" />
+        <Script src="/assets/vendors/odometer/odometer.min.js" />
+        {/* comentado<script src="/assets/vendors/swiper/swiper.min.js" /> */}
+        <Script src="/assets/vendors/wnumb/wNumb.min.js" />
+        <Script src="/assets/vendors/wow/wow.js" />
+        <Script src="/assets/vendors/isotope/isotope.js" />
+        {/* comentado<script src="/assets/vendors/owl-carousel/owl.carousel.min.js" />  */}
+        {/* comentado<script src="/assets/vendors/bootstrap-select/js/bootstrap-select.min.js" /> */}
+        <Script src="/assets/vendors/jquery-ui/jquery-ui.js" />
         <script src="/assets/vendors/jquery.circle-type/jquery.circleType.js" />
         <script src="/assets/vendors/jquery.circle-type/jquery.lettering.min.js" />
         <script src="/assets/vendors/nice-select/jquery.nice-select.min.js" />
         <script src="/assets/vendors/marquee/marquee.min.js" />
         {/* Fin de los scripts */}
-        {/* <script src="/assets/js/sonchoy.js"></script> */}
+        {/* comentado<script src="/assets/js/sonchoy.js"></script> */}
+        <Script src="/assets/vendors/jquery/jquery-3.6.0.min.js" strategy="beforeInteractive" />
+        <Script src="/assets/vendors/jquery-ajaxchimp/jquery.ajaxchimp.min.js" strategy="lazyOnload" />
+        <Script src="/assets/vendors/jquery-appear/jquery.appear.min.js" strategy="lazyOnload" />
+        <Script src="/assets/vendors/jquery-circle-progress/jquery.circle-progress.min.js" strategy="lazyOnload" />
+        <Script src="/assets/vendors/jquery-magnific-popup/jquery.magnific-popup.min.js" strategy="lazyOnload" />
+        <Script src="/assets/vendors/jquery-validate/jquery.validate.min.js" strategy="lazyOnload" />
+        <Script src="/assets/vendors/odometer/odometer.min.js" strategy="afterInteractive" />
+        <Script src="/assets/vendors/wnumb/wNumb.min.js" strategy="lazyOnload" />
+        <Script src="/assets/vendors/wow/wow.js" strategy="lazyOnload" />
+        <Script src="/assets/vendors/isotope/isotope.js" strategy="lazyOnload" />
+        <Script src="/assets/vendors/jquery-ui/jquery-ui.js" strategy="lazyOnload" />
+        <Script src="/assets/vendors/jquery.circle-type/jquery.circleType.js" strategy="lazyOnload" />
+        <Script src="/assets/vendors/jquery.circle-type/jquery.lettering.min.js" strategy="lazyOnload" />
+        <Script src="/assets/vendors/nice-select/jquery.nice-select.min.js" strategy="lazyOnload" />
+        <Script src="/assets/vendors/marquee/marquee.min.js" strategy="lazyOnload" />
       </body>
     </html>
   );
