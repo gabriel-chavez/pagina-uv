@@ -1,6 +1,6 @@
 "use client";
 
-import Cookies from 'js-cookie';
+import NextAuth from "next-auth";
 
 import EncabezadoConvocatoria from "@/components/common/EncabezadoConvocatoria";
 import Estilos from '@/estilos/InfoAcademica.module.css';
@@ -72,16 +72,10 @@ import { obtenerParParentesco } from '@/services/convocatoriaService';
 
 import { signIn, signOut, useSession } from "next-auth/react";
 
-
-const usuarioToken = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySWQiOiIxMCIsInVzZXJFbWFpbCI6Impvc2VAY29ycm9lLmNvbSIsInBvc3R1bGFudGVJZCI6IjAiLCJleHAiOjE3MzU4MjI0NzYsImlzcyI6Imh0dHBzOi8vd3d3LnVuaXZpZGEuYm8iLCJhdWQiOiJ3ZWIifQ.Ys9gcAZWItzk0vHDjblSSg3e0lgofNuXkD9v_qpDD00";//Cookies.get('token');
-const usuarioPostulanteId = 0;//Cookies.get('postulanteId');
-
 const Perfil = ({ params }) => {
     const { data: session, status } = useSession();
-    //obtener datos de la sessión
-    console.log({ session, status });
     
-    const idPerfil = usuarioPostulanteId
+    const idPerfil = session?.user?.postulanteId > 0 ? session.user.postulanteId : null;
     
     const {
         register,
@@ -89,7 +83,21 @@ const Perfil = ({ params }) => {
         formState: { errors },
     } = useForm();
 
-    const [datosPersonales, setDatosPersonales] = useState(null);
+    const [datosPersonales, setDatosPersonales] = useState({
+        nombres: '',
+        apellidoPadre: '',
+        apellidoMadre: '',
+        fechaNacimiento: '',
+        lugarNacimiento: '',
+        lugarResidencia: '',
+        dirección: '',
+        zona: '',
+        teléfono: '',
+        telefonoMovil: '',
+        email: '',
+        numeroDocumento: '',
+        expedidoEn: ''
+    });
     const [formacionLista, setFormacionAcademica] = useState([]);
     const [cursosLista, setCursos] = useState([]);
     const [idiomasLista, setIdiomas] = useState([]);
@@ -216,29 +224,32 @@ const Perfil = ({ params }) => {
 
     const loadData = async () => {
         try {
-            const perfil = await obtenerPerfil(idPerfil);  // actualizar el id por el ID de la persona autenticada
-            setDatosPersonales(perfil);
+            if(idPerfil > 0)
+            {
+                const perfil = await obtenerPerfil(idPerfil); 
+                setDatosPersonales(perfil);    
 
-            const perfilFormacion = await obtenerPerfilFormacionAcademica(idPerfil);
-            setFormacionAcademica(perfilFormacion);
-
-            const perfilCursos = await obtenerPerfilCursos(idPerfil);
-            setCursos(perfilCursos);
-
-            const perfilIdiomas = await obtenerPerfilIdiomas(idPerfil);
-            setIdiomas(perfilIdiomas);
-
-            const perfilSistemas = await obtenerPerfilSistemas(idPerfil);
-            setSistemas(perfilSistemas);
-
-            const perfilExpLaboral = await obtenerPerfilExperienciaLaboral(idPerfil);
-            setExperienciaLaboral(perfilExpLaboral);
-
-            const perfilRefPersonal = await obtenerPerfilReferenciaPersonal(idPerfil);
-            setReferenciaPersonal(perfilRefPersonal);
-
-            const perfilRefLaboral = await obtenerPerfilReferenciaLaboral(idPerfil);
-            setReferenciaLaboral(perfilRefLaboral);
+                const perfilFormacion = await obtenerPerfilFormacionAcademica(idPerfil);
+                setFormacionAcademica(perfilFormacion);
+    
+                const perfilCursos = await obtenerPerfilCursos(idPerfil);
+                setCursos(perfilCursos);
+    
+                const perfilIdiomas = await obtenerPerfilIdiomas(idPerfil);
+                setIdiomas(perfilIdiomas);
+    
+                const perfilSistemas = await obtenerPerfilSistemas(idPerfil);
+                setSistemas(perfilSistemas);
+    
+                const perfilExpLaboral = await obtenerPerfilExperienciaLaboral(idPerfil);
+                setExperienciaLaboral(perfilExpLaboral);
+    
+                const perfilRefPersonal = await obtenerPerfilReferenciaPersonal(idPerfil);
+                setReferenciaPersonal(perfilRefPersonal);
+    
+                const perfilRefLaboral = await obtenerPerfilReferenciaLaboral(idPerfil);
+                setReferenciaLaboral(perfilRefLaboral);
+            }
 
             /* paramétricas */
             const parNivelFormacion = await obtenerParNivelFormacion();
@@ -337,8 +348,8 @@ const Perfil = ({ params }) => {
     const handleGuardarPerfil = async (event) => {
         event.preventDefault(); // Evitar recarga de la página
 
-        const nombre = document.getElementById('nombre').value;
-        const apellidoPaterno = document.getElementById('apellidopadre').value;
+        const nombres = document.getElementById('nombres').value;
+        const apellidoPaterno = document.getElementById('apellidoPadre').value;
         const apellidoMaterno = document.getElementById('apellidoMadre').value;
         const fechaNacimiento = document.getElementById('fechaNacimiento').value;
         const lugarNacimiento = document.getElementById('lugarNacimiento').value;
@@ -356,7 +367,7 @@ const Perfil = ({ params }) => {
         const fotografia = '';
 
         const datos = {
-            nombres: nombre,
+            nombres: nombres,
             apellidoPaterno: apellidoPaterno,
             apellidoMaterno: apellidoMaterno,
             fechaNacimiento: fechaNacimiento,
@@ -453,7 +464,7 @@ const Perfil = ({ params }) => {
     };
     const handleGuardarCurso = async () => {
         const tipoCapacitacion = document.getElementById('tipoCapacitacion').value;
-        const nombre = document.getElementById('nombre').value;
+        const nombres = document.getElementById('nombres').value;
         const centroEstudio = document.getElementById('centroEstudio').value;
         const pais = document.getElementById('pais').value;
         const duracion = document.getElementById('duracion').value;
@@ -464,7 +475,7 @@ const Perfil = ({ params }) => {
         const datos = {
             postulanteId: idPerfil,
             parTipoCapacitacionId: tipoCapacitacion,
-            nombre: nombre,
+            nombres: nombres,
             centroEstudios: centroEstudio,
             pais: pais,
             horasAcademicas: duracion,
@@ -666,7 +677,7 @@ const Perfil = ({ params }) => {
         }
     };
     const handleGuardarRefPersonal = async () => {
-        const nombre = document.getElementById('nombre').value;
+        const nombres = document.getElementById('nombres').value;
         const empresa = document.getElementById('empresa').value;
         const cargo = document.getElementById('cargo').value;
         const parentesco = document.getElementById('parentesco').value;
@@ -676,7 +687,7 @@ const Perfil = ({ params }) => {
 
         const datos = {
             postulanteId: idPerfil,
-            nombre: nombre,
+            nombres: nombres,
             cargo: cargo,
             empresa: empresa,
             telefono: telefono,
@@ -720,7 +731,7 @@ const Perfil = ({ params }) => {
         }
     };
     const handleGuardarRefLaboral = async () => {
-        const nombre = document.getElementById('nombre').value;
+        const nombres = document.getElementById('nombres').value;
         const empresa = document.getElementById('empresa').value;
         const cargo = document.getElementById('cargo').value;
         const relacion = document.getElementById('relacion').value;
@@ -730,13 +741,14 @@ const Perfil = ({ params }) => {
 
         const datos = {
             postulanteId: idPerfil,
-            nombre: nombre,
+            nombres: nombres,
             cargo: cargo,
             empresa: empresa,
             telefono: telefono,
             telefonoMovil: telefonoMovil,
             relacion: relacion,
             email: email,
+
         };
 
         try {
@@ -818,7 +830,7 @@ const Perfil = ({ params }) => {
                                                 <form className="row g-3" onSubmit={handleGuardarPerfil}>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Nombres *</label>
-                                                        <input type="text" id="nombre" className="form-control" name="nombres" value={datosPersonales ? datosPersonales.nombres : ''} onChange={handleChange} required />
+                                                        <input type="text" id="nombres" className="form-control" name="nombres" value={datosPersonales ? datosPersonales.nombres : ''} onChange={handleChange} required />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Apellido del padre *</label>
@@ -982,11 +994,11 @@ const Perfil = ({ params }) => {
                                                     idPerfil={idPerfil}
                                                 />
                                                 <PerfilCursosModal
-                                                    show={showCursosModal}
-                                                    onClose={handleCursosModalClose}
-                                                    onSave={handleGuardarCurso}
-                                                    selectedCurso={selectedCurso}
-                                                    parTipoCapacitacion={ParTipoCapacitacion}
+                                                      show={showCursosModal}
+                                                      onClose={handleCursosModalClose}
+                                                      onSave={handleGuardarCurso}
+                                                      selectedCurso={selectedCurso}
+                                                      parTipoCapacitacion={ParTipoCapacitacion}
                                                 />
 
                                             </div>

@@ -35,7 +35,6 @@ const LoginPage = () => {
     <div
       className="d-flex justify-content-center align-items-center  bg-light"
       style={{
-     
         height: "calc(100vh - 100px)", 
       }}
     >
