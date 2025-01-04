@@ -1,5 +1,6 @@
 'use client'
 
+
 import EncabezadoPagina from "@/components/common/EncabezadoPagina";
 import React, { useState, useEffect } from 'react';
 import dynamic from 'next/dynamic';

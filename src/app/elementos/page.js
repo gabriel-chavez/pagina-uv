@@ -7,6 +7,7 @@ import EncabezadoPagina from "@/components/common/EncabezadoPagina";
 import Tarejta4 from "@/components/common/Tarjeta4";
 import Tarjeta5 from "@/components/common/Tarjeta5";
 
+export const dynamic = 'force-dynamic';
 
 export default function Page() {
     const breadcrumbs = [

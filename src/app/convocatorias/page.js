@@ -2,6 +2,8 @@ import ConvocatoriaLista from "@/components/common/ConvocatoriaLista";
 import EncabezadoConvocatoria from "@/components/common/EncabezadoConvocatoria";
 import { obtenerConvocatorias } from '@/services/convocatoriaService';
 
+export const dynamic = 'force-dynamic';
+
 export default async function Page() {
     try {
         const resultado = await obtenerConvocatorias();
