@@ -802,25 +802,25 @@ const Perfil = ({ params }) => {
                                     <input type="radio" name="pcss3t" defaultChecked id="tab1" className="tab-content-first" />
                                     <label htmlFor="tab1"><i className="icon-bolt"></i>Datos del postulante</label>
 
-                                    <input type="radio" name="pcss3t" id="tab2" className="tab-content-2" />
+                                    <input type="radio" name="pcss3t" id="tab2" className="tab-content-2" disabled={idPerfil === 0} />
                                     <label htmlFor="tab2"><i className="icon-picture"></i>Información académica</label>
 
-                                    <input type="radio" name="pcss3t" id="tab3" className="tab-content-3" />
+                                    <input type="radio" name="pcss3t" id="tab3" className="tab-content-3" disabled={idPerfil === 0} />
                                     <label htmlFor="tab3"><i className="icon-cogs"></i>Cursos/Talleres</label>
 
-                                    <input type="radio" name="pcss3t" id="tab4" className="tab-content-4" />
+                                    <input type="radio" name="pcss3t" id="tab4" className="tab-content-4" disabled={idPerfil === 0} />
                                     <label htmlFor="tab4"><i className="icon-globe"></i>Idiomas</label>
 
-                                    <input type="radio" name="pcss3t" id="tab5" className="tab-content-5" />
+                                    <input type="radio" name="pcss3t" id="tab5" className="tab-content-5" disabled={idPerfil === 0} />
                                     <label htmlFor="tab5"><i className="icon-globe"></i>Sistemas</label>
 
-                                    <input type="radio" name="pcss3t" id="tab6" className="tab-content-6" />
+                                    <input type="radio" name="pcss3t" id="tab6" className="tab-content-6" disabled={idPerfil === 0} />
                                     <label htmlFor="tab6"><i className="icon-globe"></i>Experiencia Laboral</label>
 
-                                    <input type="radio" name="pcss3t" id="tab7" className="tab-content-7" />
+                                    <input type="radio" name="pcss3t" id="tab7" className="tab-content-7" disabled={idPerfil === 0} />
                                     <label htmlFor="tab7"><i className="icon-globe"></i>Ref. Personal</label>
 
-                                    <input type="radio" name="pcss3t" id="tab8" className="tab-content-last" />
+                                    <input type="radio" name="pcss3t" id="tab8" className="tab-content-last" disabled={idPerfil === 0} />
                                     <label htmlFor="tab8"><i className="icon-globe"></i>Ref. Laboral</label>
 
                                     <ul>

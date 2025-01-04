@@ -1,9 +1,12 @@
 "use client";
 
+import NextAuth from "next-auth";
 import { useEffect, useState } from 'react';
 import EncabezadoConvocatoria from '@/components/common/EncabezadoConvocatoria';
 import { obtenerConvocatoria } from '@/services/convocatoriaService';
 import { registrarPostulacion } from '@/services/convocatoriaService';
+
+import { signIn, signOut, useSession } from "next-auth/react";
 
 const ConvocatoriaDetail = ({ params }) => {
   const [convocatoria, setConvocatoria] = useState(null);
@@ -18,9 +21,14 @@ const ConvocatoriaDetail = ({ params }) => {
   const [nombreParentescoFuncionario, setNombreParentescoFuncionario] = useState('');
   const [confirmData, setConfirmData] = useState(false);
   const id = params.id;
-  const idPerfil = 1;
+  
+  const { data: session, status } = useSession();
+  console.log(session);
+  const idPerfil = session?.user?.postulanteId > 0 ? session.user.postulanteId : null;
+  console.log(idPerfil);
 
   useEffect(() => {
+
     const loadData = async () => {
       try {
         const data = await obtenerConvocatoria(id);
@@ -137,79 +145,130 @@ const ConvocatoriaDetail = ({ params }) => {
       </section>
 
       {modalOpen && (
-        <div className="modal" style={{ display: 'block', backgroundColor: 'rgba(0, 0, 0, 0.5)' }}>
-          <div className="modal-dialog modal-dialog-wide">
-            <div className="modal-content">
-              <div className="modal-header">
-                <h5 className="modal-title">Formulario de Postulación</h5>
-              </div>
-              <div className="modal-body">
-                <form>
-                  <div className="form-group">
-                    <label>Pretensión Salarial</label>
-                    <input 
-                      type="text" 
-                      className="form-control" 
-                      placeholder="Ingrese su pretensión salarial" 
-                      value={pretensionSalarial}
-                      onChange={(e) => setPretensionSalarial(e.target.value)}
-                    />
-                  </div>
-
-                  <div className="form-group">
-                    <label>Disponibilidad Inmediata</label><br />
-                    <input type="radio" name="availability" onClick={() => { setShowDaysField(false); setDisponibilidadInmediata(true); }} /> Sí
-                    &nbsp;&nbsp;
-                    <input type="radio" name="availability" onClick={() => { setShowDaysField(true); setDisponibilidadInmediata(false); }} /> No
-                    {showDaysField && (
-                      <input 
-                        type="number" 
-                        className="form-control mt-2" 
-                        placeholder="Ingrese el número de días" 
-                        value={cantidadDiasDisponibilidad}
-                        onChange={(e) => setCantidadDiasDisponibilidad(e.target.value)}
-                      />
-                    )}
-                  </div>
-
-                  <div className="form-group">
-                    <label>¿Tiene parentesco con algún trabajador de la empresa?</label><br />
-                    <input type="radio" name="relative" onClick={() => { setShowRelativeNameField(true); setTieneParentescoConFuncionario(true); }} /> Sí
-                    &nbsp;&nbsp;
-                    <input type="radio" name="relative" onClick={() => { setShowRelativeNameField(false); setTieneParentescoConFuncionario(false); }} /> No
-                    {showRelativeNameField && (
-                      <input 
-                        type="text" 
-                        className="form-control mt-2" 
-                        placeholder="Ingrese el nombre de la persona" 
-                        value={nombreParentescoFuncionario}
-                        onChange={(e) => setNombreParentescoFuncionario(e.target.value)}
-                      />
-                    )}
-                  </div>
-
-                  <div className="form-group form-check">
-                    <input 
-                      type="checkbox" 
-                      className="form-check-input" 
-                      id="confirmData" 
-                      onChange={(e) => setConfirmData(e.target.checked)}
-                    />
-                    <label className="form-check-label" htmlFor="confirmData">
-                      Yo <strong>(Nombre persona)</strong> con CI <strong>(4932402)</strong> al participar del presente proceso de reclutamiento y selección de personal de UNIVIDA S.A., manifiesto de mi libre voluntad, mi compromiso a cumplir todas las condiciones de selección y evaluación que determine UNIVIDA S.A. Asimismo, declaro que la información brindada en el formulario de postulación es verdadera y mi obligación el sustentarla con los respaldos originales y doy mi autorización para que puedan verificar las referencias del formulario de postulación. Por último, conozco y acepto que es causal de rechazo de la postulación al proceso, sin lugar a reclamo, el tener en los últimos 5 años alguna denuncia o conflicto legal, laboral, administrativo o financiero contra Univida S.A.<br /><br /> UNIVIDA S.A. se reserva el derecho de anular la postulación en caso de que se evidencie alguna irregularidad por parte del postulante en cualquier etapa de evaluación.
-                    </label>
-                  </div>
-
-                </form>
-              </div>
-              <div className="modal-footer">
-                <button className="btn btn-primary" onClick={handlePostulacion}>Enviar Postulación</button>
-                <button className="btn btn-secondary" onClick={() => setModalOpen(false)}>Cerrar</button>
-              </div>
-            </div>
-          </div>
+  <div
+    className="modal"
+    style={{ display: "block", backgroundColor: "rgba(0, 0, 0, 0.5)" }}
+  >
+    <div className="modal-dialog modal-dialog-wide">
+      <div className="modal-content">
+        <div className="modal-header">
+          <h5 className="modal-title">Formulario de Postulación</h5>
         </div>
-      )}
+        <div className="modal-body">
+          {idPerfil >= 1 ? (
+            <form>
+              <div className="form-group">
+                <label>Pretensión Salarial</label>
+                <input
+                  type="text"
+                  className="form-control"
+                  placeholder="Ingrese su pretensión salarial"
+                  value={pretensionSalarial}
+                  onChange={(e) => setPretensionSalarial(e.target.value)}
+                />
+              </div>
+
+              <div className="form-group">
+                <label>Disponibilidad Inmediata</label>
+                <br />
+                <input
+                  type="radio"
+                  name="availability"
+                  onClick={() => {
+                    setShowDaysField(false);
+                    setDisponibilidadInmediata(true);
+                  }}
+                />{" "}
+                Sí
+                &nbsp;&nbsp;
+                <input
+                  type="radio"
+                  name="availability"
+                  onClick={() => {
+                    setShowDaysField(true);
+                    setDisponibilidadInmediata(false);
+                  }}
+                />{" "}
+                No
+                {showDaysField && (
+                  <input
+                    type="number"
+                    className="form-control mt-2"
+                    placeholder="Ingrese el número de días"
+                    value={cantidadDiasDisponibilidad}
+                    onChange={(e) => setCantidadDiasDisponibilidad(e.target.value)}
+                  />
+                )}
+              </div>
+
+              <div className="form-group">
+                <label>¿Tiene parentesco con algún trabajador de la empresa?</label>
+                <br />
+                <input
+                  type="radio"
+                  name="relative"
+                  onClick={() => {
+                    setShowRelativeNameField(true);
+                    setTieneParentescoConFuncionario(true);
+                  }}
+                />{" "}
+                Sí
+                &nbsp;&nbsp;
+                <input
+                  type="radio"
+                  name="relative"
+                  onClick={() => {
+                    setShowRelativeNameField(false);
+                    setTieneParentescoConFuncionario(false);
+                  }}
+                />{" "}
+                No
+                {showRelativeNameField && (
+                  <input
+                    type="text"
+                    className="form-control mt-2"
+                    placeholder="Ingrese el nombre de la persona"
+                    value={nombreParentescoFuncionario}
+                    onChange={(e) => setNombreParentescoFuncionario(e.target.value)}
+                  />
+                )}
+              </div>
+
+              <div className="form-group form-check">
+                <input
+                  type="checkbox"
+                  className="form-check-input"
+                  id="confirmData"
+                  onChange={(e) => setConfirmData(e.target.checked)}
+                />
+                <label className="form-check-label" htmlFor="confirmData">
+                  Yo <strong>(Nombre persona)</strong> con CI <strong>(4932402)</strong> al
+                  participar del presente proceso de reclutamiento y selección de personal de
+                  UNIVIDA S.A., manifiesto de mi libre voluntad...
+                </label>
+              </div>
+            </form>
+          ) : (
+            <p className="text-danger">
+              Para acceder a este formulario, primero debe registrarse y llenar su perfil.
+            </p>
+          )}
+        </div>
+        <div className="modal-footer">
+          {idPerfil >= 1 && (
+            <button className="btn btn-primary" onClick={handlePostulacion}>
+              Enviar Postulación
+            </button>
+          )}
+          <button className="btn btn-secondary" onClick={() => setModalOpen(false)}>
+            Cerrar
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+)}
+
     </div>
   );
 };

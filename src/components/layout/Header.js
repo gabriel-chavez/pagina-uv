@@ -55,7 +55,9 @@ export default async function Header() {
                   <a href="#" className="mobile-nav__toggler">
                     <i className="fa fa-bars"></i>
                   </a>
-                  <ul className="main-menu__list">{renderMenu(menu)}</ul>
+                  <ul className="main-menu__list">
+                    {renderMenu(menu)}
+                  </ul>
                 </div>
               </div>
               <div className="main-menu__right">
