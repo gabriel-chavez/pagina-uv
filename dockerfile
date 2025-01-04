@@ -27,4 +27,4 @@ RUN ls -la .next
 EXPOSE 3000
 
 # Iniciar la aplicación
-CMD ["npm", "run", "start"]
+CMD ["npm", "run", "start", "--", "-H", "0.0.0.0"]
