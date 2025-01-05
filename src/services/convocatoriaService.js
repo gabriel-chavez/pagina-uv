@@ -44,11 +44,11 @@ export const actualizarPerfil = async (id, perfil) => {
   if (!perfil || typeof perfil !== "object") {
     throw new Error("El perfil debe ser un objeto válido.");
   }
-
+  console.log("verificacion metodo actualiza perfil");
+  console.log(id, perfil);
   try {
-    // Llamada a la API
     const response = await apiClient.put(`/api/Postulante/${id}`, perfil);
-
+    console.log(response.status);
     // Validación de la respuesta
     if (!response || !response.data) {
       throw new Error("La respuesta de la API es inválida o está vacía.");
