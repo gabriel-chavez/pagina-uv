@@ -47,9 +47,11 @@ apiClient.interceptors.request.use(
 apiClient.interceptors.response.use(
     response => response,
     error => {
+        
         if (error.response) {
+            console.log(error.response)
             const { status, data } = error.response;
-
+            
             const mensaje = data.mensaje || 'Error en la solicitud';
             const datos = data.datos || null;
 
