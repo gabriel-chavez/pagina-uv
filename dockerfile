@@ -7,10 +7,10 @@ WORKDIR /app
 COPY package.json package-lock.json* ./
 RUN npm install
 
-COPY . .
+COPY . . 
 
-# Construir la aplicación Next.js
-RUN npm run build
+# Realizar el build
+RUN npm run build && ls -la .next
 
 # Etapa 2: Servir la aplicación
 FROM node:20-alpine
@@ -22,7 +22,10 @@ COPY --from=builder /app/package.json ./
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
+COPY .env.production .env
+RUN ls -la .next
 
 EXPOSE 3000
 
-CMD ["npm", "run", "start"]
+# Iniciar la aplicación
+CMD ["npm", "run", "start", "--", "-H", "0.0.0.0"]

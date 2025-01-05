@@ -5,6 +5,7 @@ import Tarjeta1 from '@/components/common/Tarjeta1'
 import MarkdownRenderer from '@/utils/MarkdownRenderer';
 
 const SeccionSliderTipo1 = ({ seccion }) => {
+    
     useEffect(() => {
         if (typeof window !== 'undefined') {
             const $ = require('jquery');

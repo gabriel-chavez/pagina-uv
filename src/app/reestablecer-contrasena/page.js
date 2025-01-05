@@ -1,6 +1,7 @@
 "use client";
+export const dynamic = 'force-dynamic';
 
-import { useRouter, useSearchParams } from "next/navigation";
+import { useRouter } from "next/navigation";
 import { useState, useEffect } from "react";
 import Link from "next/link";
 import { reestablecerContrasena } from "@/services/seguridadService";
@@ -11,17 +12,19 @@ const ReestablecerContrasena = () => {
     const [success, setSuccess] = useState(null);
     const [token, setToken] = useState(null);
     const router = useRouter();
-    const searchParams = useSearchParams();
 
-    // Extraer el token de la URL
+    // Extraer el token de la URL usando window.location
     useEffect(() => {
-        const tokenFromUrl = searchParams.get("token");
-        if (tokenFromUrl) {
-            setToken(tokenFromUrl);
-        } else {
-            setErrors(["No se encontró un token válido."]);
+        if (typeof window !== "undefined") {
+            const urlParams = new URLSearchParams(window.location.search);
+            const tokenFromUrl = urlParams.get("token");
+            if (tokenFromUrl) {
+                setToken(tokenFromUrl);
+            } else {
+                setErrors(["No se encontró un token válido."]);
+            }
         }
-    }, [searchParams]);
+    }, []);
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -31,7 +34,7 @@ const ReestablecerContrasena = () => {
         if (!token) {
             setErrors(["Token no encontrado."]);
             return;
-        }       
+        }
 
         try {
             const res = await reestablecerContrasena({
@@ -39,7 +42,7 @@ const ReestablecerContrasena = () => {
                 NuevaContraseña: nuevaContrasena
             });
             setSuccess(res.mensaje);
-            setNuevaContrasena(""); 
+            setNuevaContrasena("");
         } catch (error) {
             setErrors([error.message]);
         }

@@ -1,4 +1,5 @@
 "use client";
+export const dynamic = 'force-dynamic';
 
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -7,8 +8,8 @@ import Link from 'next/link';
 
 const LoginPage = () => {
   const [errors, setErrors] = useState([]);
-  const [usuario, setUsuario] = useState();
-  const [password, setPassword] = useState();
+  const [usuario, setUsuario] = useState("");  
+  const [password, setPassword] = useState(""); 
   const router = useRouter();
 
   const handleSubmit = async (event) => {

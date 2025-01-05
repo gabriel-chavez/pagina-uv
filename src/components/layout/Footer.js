@@ -36,8 +36,8 @@ const Footer = () => {
                 <div className="footer-widget__column footer-widget__navigation">
                   <ul className="footer-widget__navigation-list list-unstyled">
                     <li><Link href="/">Inicio</Link></li>
-                    <li><Link href="/contact">Contacto</Link></li>
-                    <li><Link href="/insurance">Direcciones y horarios</Link></li>
+                    <li><Link href="/contacto">Contacto</Link></li>
+                    <li><Link href="/direcciones-horarios">Direcciones y horarios</Link></li>
                     <li><Link href="/convocatorias">Trabaja con nosotros</Link></li>
                   </ul>
                 </div>
@@ -45,19 +45,19 @@ const Footer = () => {
               <div className="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="300ms">
                 <div className="footer-widget__column footer-widget__quick-link">
                   <ul className="footer-widget__navigation-list list-unstyled">
-                    <li><Link href="/reprint-invoice">Reimprima su factura</Link></li>
-                    <li><Link href="/faq">Preguntas frecuentes</Link></li>
-                    <li><Link href="/suggestions">Sugerencias</Link></li>
+                    <li><Link href="/facturacion-electronica">Reimprima su factura</Link></li>
+                    <li><Link href="/seguros-obligatorios/soat">Preguntas frecuentes</Link></li>
+                    {/* <li><Link href="/">Sugerencias</Link></li> */}
                   </ul>
                 </div>
               </div>
               <div className="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="300ms">
                 <div className="footer-widget__column footer-widget__quick-link">
                   <ul className="footer-widget__navigation-list list-unstyled">
-                    <li><Link href="/announcements">Comunicados</Link></li>
-                    <li><Link href="/medical-centers">Centros médicos</Link></li>
-                    <li><Link href="/insurance-culture">Cultura de seguros</Link></li>
-                    <li><Link href="/claim-point">Punto de reclamo</Link></li>
+                    {/* <li><Link href="/">Comunicados</Link></li> */}
+                    {/* <li><Link href="/centros-medicos">Centros médicos</Link></li> */}
+                    {/* <li><Link href="/">Cultura de seguros</Link></li> */}
+                    {/* <li><Link href="/">Punto de reclamo</Link></li> */}
                   </ul>
                 </div>
               </div>

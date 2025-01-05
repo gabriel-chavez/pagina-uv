@@ -13,35 +13,35 @@ const isClient = typeof window !== 'undefined';
 
 apiClient.interceptors.request.use(
     async (config) => {
+        if (process.env.NEXT_PHASE === 'phase-production-build') {
+            console.log("🚧 api-config: Omitiendo sesión durante el build.");
+            return config;
+        }
+
         let session;
         try {
             if (isClient) {
-             
                 session = await getSession();
             } else {
-               
                 session = await getServerSession(authOptions);
             }
-            
-           
-            if (session && session.user && session.user.token) {
-             
-                config.headers['Authorization'] = `Bearer ${session.user.token}`;               
-            } 
-            else {
+
+            if (session?.user?.token) {
+                config.headers['Authorization'] = `Bearer ${session.user.token}`;
+            } else {
                 console.log("api-config: No se encontró el token.");
             }
-
         } catch (error) {
-            console.error("api-config: Error al obtener la sesión", error);
+            console.error("🚨 Error obteniendo sesión:", error.message || error);
         }
-        
+
         return config;
     },
     (error) => {
         return Promise.reject(error);
     }
 );
+
 
 
 apiClient.interceptors.response.use(

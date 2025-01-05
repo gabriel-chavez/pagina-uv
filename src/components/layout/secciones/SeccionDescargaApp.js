@@ -11,7 +11,7 @@ const SeccionDescargaApp = () => {
               <h3 className="download-app__title">Descarga Nuestra Aplicación Móvil</h3>
               <p className="download-app__text">Descarga nuestra aplicación móvil UnividaApp de forma GRATUITA disponible en google play y App Store</p>
               <div className="download-app__store">
-                <a href="#">
+                <a href="https://play.google.com/store/apps/details?id=bo.vulcan.unividasoat&hl=es_BO" target="_blank">
                   <div className="download-app__store-icon">
                     <span className="icon-square"></span>
                   </div>
@@ -20,7 +20,7 @@ const SeccionDescargaApp = () => {
                     <h3>Google Play</h3>
                   </div>
                 </a>
-                <a href="#">
+                <a href="https://apps.apple.com/bo/app/unividaapp/id1372997342" target="_blank">
                   <div className="download-app__store-icon">
                     <span className="icon-square"></span>
                   </div>
