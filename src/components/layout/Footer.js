@@ -36,8 +36,8 @@ const Footer = () => {
                 <div className="footer-widget__column footer-widget__navigation">
                   <ul className="footer-widget__navigation-list list-unstyled">
                     <li><Link href="/">Inicio</Link></li>
-                    <li><Link href="/">Contacto</Link></li>
-                    <li><Link href="/">Direcciones y horarios</Link></li>
+                    <li><Link href="/contacto">Contacto</Link></li>
+                    <li><Link href="/direcciones-horarios">Direcciones y horarios</Link></li>
                     <li><Link href="/convocatorias">Trabaja con nosotros</Link></li>
                   </ul>
                 </div>
@@ -45,19 +45,19 @@ const Footer = () => {
               <div className="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="300ms">
                 <div className="footer-widget__column footer-widget__quick-link">
                   <ul className="footer-widget__navigation-list list-unstyled">
-                    <li><Link href="/">Reimprima su factura</Link></li>
-                    <li><Link href="/">Preguntas frecuentes</Link></li>
-                    <li><Link href="/">Sugerencias</Link></li>
+                    <li><Link href="/facturacion-electronica">Reimprima su factura</Link></li>
+                    <li><Link href="/seguros-obligatorios/soat">Preguntas frecuentes</Link></li>
+                    {/* <li><Link href="/">Sugerencias</Link></li> */}
                   </ul>
                 </div>
               </div>
               <div className="col-xl-3 col-lg-6 col-md-6 wow fadeInUp" data-wow-delay="300ms">
                 <div className="footer-widget__column footer-widget__quick-link">
                   <ul className="footer-widget__navigation-list list-unstyled">
-                    <li><Link href="/">Comunicados</Link></li>
-                    <li><Link href="/">Centros médicos</Link></li>
-                    <li><Link href="/">Cultura de seguros</Link></li>
-                    <li><Link href="/">Punto de reclamo</Link></li>
+                    {/* <li><Link href="/">Comunicados</Link></li> */}
+                    {/* <li><Link href="/centros-medicos">Centros médicos</Link></li> */}
+                    {/* <li><Link href="/">Cultura de seguros</Link></li> */}
+                    {/* <li><Link href="/">Punto de reclamo</Link></li> */}
                   </ul>
                 </div>
               </div>

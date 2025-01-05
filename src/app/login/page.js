@@ -8,8 +8,8 @@ import Link from 'next/link';
 
 const LoginPage = () => {
   const [errors, setErrors] = useState([]);
-  const [usuario, setUsuario] = useState();
-  const [password, setPassword] = useState();
+  const [usuario, setUsuario] = useState("");  
+  const [password, setPassword] = useState(""); 
   const router = useRouter();
 
   const handleSubmit = async (event) => {

@@ -18,17 +18,17 @@ const Tarjeta2 = ({ imgSrc, dateDay, dateMonth, title, description, link }) => {
             <img src="assets/images/shapes/services-six-shape-1.png" alt="" />
         </div>
         <h3 className="news-six__title">
-          <Link href={link}>
+          {/* <Link href={link}> */}
             {title}
-          </Link>
+          {/* </Link> */}
         </h3>
         <p className="news-six__text">
           {description}
         </p>
         <div className="news-six__btn-box">
-          <Link href={link} className="news-six__btn thm-btn-three">          
+          {/* <Link href={link} className="news-six__btn thm-btn-three">          
               Leer Más<span className="icon-right-arrow1"></span>      
-          </Link>
+          </Link> */}
         </div>
       </div>
     </div>

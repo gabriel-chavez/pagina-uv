@@ -1,10 +1,7 @@
-// src/app/api/auth/[...nextauth]/route.js
-
 import { login } from "@/services/seguridadService";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-// Definir authOptions
 export const authOptions = {
   providers: [
     CredentialsProvider({
@@ -16,35 +13,47 @@ export const authOptions = {
       async authorize(credentials) {
         const token = await login(credentials.usuario, credentials?.password);
         console.log("token=>>>>", token);
+        
         if (token.error) {
-       //   console.log("token=>>>>", token);
           throw new Error(token.error);
-        }
-
-        return token.datos; 
+        }        
+        return { token: token.datos.token, user: token.datos.user }; 
       },
     }),
   ],
+  session: {
+    strategy: "jwt",
+    maxAge: 30 * 60, 
+    updateAge: 5 * 60, 
+  },
+  jwt: {
+    signingKey: process.env.JWT_SIGNING_KEY,  
+    verificationOptions: {
+      algorithms: ['HS256'],
+    },
+  },
   callbacks: {
     async jwt({ token, user }) {
-      if (user) {
-        return { ...token, ...user }; 
+      if (user) {        
+        token.accessToken = user.token; 
+        token.user = user.user;
       }
       return token;
     },
 
     async session({ session, token }) {
-      session.user = token; 
-    //  console.log("route.js: session:", session, "token:", token);
+      // Inyecta el JWT y datos del usuario en la sesión
+      session.accessToken = token.accessToken;
+      session.user = token.user;
       return session;
     },
   },
   pages: {
-    signIn: "/login", 
+    signIn: "/login",
   },
   debug: true,
 };
 
-const handler = NextAuth(authOptions); 
+const handler = NextAuth(authOptions);
 
-export { handler as GET, handler as POST }; 
+export { handler as GET, handler as POST };

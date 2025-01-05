@@ -31,7 +31,7 @@ export default function RootLayoutxxx({ children }) {
         <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/favicons/apple-touch-icon.png" />
         <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicons/favicon-32x32.png" />
         <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicons/favicon-16x16.png" />
-        <link rel="manifest" href="/assets/images/favicons/site.webmanifest" />
+        {/* <link rel="manifest" href="/assets/images/favicons/site.webmanifest" /> */}
         <meta name="description" content="Sonchoy HTML 5 Template" />
 
         {/* fonts */}
@@ -69,25 +69,16 @@ export default function RootLayoutxxx({ children }) {
           <div className="preloader__image"></div>
         </div> */}
         <div className="page-wrapper">
-          <Header></Header>
           <SessionAuthProvider>
-
-
-
-
-
-
+            <Header></Header>
             {children}
-
-
-
+            <Footer></Footer>
           </SessionAuthProvider>
-
-
-          <Footer></Footer>
         </div>
         <div className="mobile-nav__wrapper">
+          <h1 className="mobile-nav__heading">Navigatsadfasdf asdfsdion</h1>
           <MobileNav></MobileNav>
+
         </div>
         <SearchPopup />
         <a href="#" data-target="html" className="scroll-to-target scroll-to-top"><i className="fas fa-arrow-up"></i></a>
