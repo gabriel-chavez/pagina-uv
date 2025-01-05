@@ -74,30 +74,17 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 const Perfil = ({ params }) => {
     const { data: session, status } = useSession();
-    
-    const idPerfil = session?.user?.postulanteId > 0 ? session.user.postulanteId : null;
-    
+    console.log("Verificación de datoss");
+    console.log(session);
+    const idPerfil = 6;//session?.user?.postulanteId > 0 ? session.user.postulanteId : null;
+    console.log(idPerfil);
     const {
         register,
         handleSubmit,
         formState: { errors },
     } = useForm();
 
-    const [datosPersonales, setDatosPersonales] = useState({
-        nombres: '',
-        apellidoPadre: '',
-        apellidoMadre: '',
-        fechaNacimiento: '',
-        lugarNacimiento: '',
-        lugarResidencia: '',
-        dirección: '',
-        zona: '',
-        teléfono: '',
-        telefonoMovil: '',
-        email: '',
-        numeroDocumento: '',
-        expedidoEn: ''
-    });
+    const [datosPersonales, setDatosPersonales] = useState({});
     const [formacionLista, setFormacionAcademica] = useState([]);
     const [cursosLista, setCursos] = useState([]);
     const [idiomasLista, setIdiomas] = useState([]);
@@ -384,12 +371,71 @@ const Perfil = ({ params }) => {
             numeroDocumento: numeroDocumento,
             fotografia: fotografia,
         };
-
+        console.log(datos);
         try {
-            if(usuarioPostulanteId != 0)
-                {let result = await actualizarPerfil(idPerfil, datos);}
-            else
-                {let result = await agregarPerfil(datos, usuarioToken);}
+            let result = await actualizarPerfil(idPerfil, datos);
+
+            Swal.fire({
+                title: '¡Éxito!',
+                text: result.mensaje,
+                icon: 'success',
+                confirmButtonText: 'Aceptar',
+            }).then(async () => {
+                const perfil = await obtenerPerfil(idPerfil);
+                setDatosPersonales(perfil);
+            });
+        } catch (error) {
+            console.error('Error al guardar los datos personales', error);
+            Swal.fire({
+                title: 'Error',
+                text: 'Hubo un problema al guardar los datos personales.',
+                icon: 'error',
+                confirmButtonText: 'Intentar nuevamente',
+            });
+        }
+    };
+    const handleRegistraPerfil = async (event) => {
+        event.preventDefault(); // Evitar recarga de la página
+
+        const nombres = document.getElementById('nombres').value;
+        const apellidoPaterno = document.getElementById('apellidoPadre').value;
+        const apellidoMaterno = document.getElementById('apellidoMadre').value;
+        const fechaNacimiento = document.getElementById('fechaNacimiento').value;
+        const lugarNacimiento = document.getElementById('lugarNacimiento').value;
+        const paisNacimiento = document.getElementById('paisNacimiento').value;
+        const lugarResidencia = document.getElementById('lugarResidencia').value;
+        const paisResidencia = document.getElementById('paisResidencia').value;
+        const direccion = document.getElementById('direccion').value;
+        const zona = document.getElementById('zona').value;
+        const telefono = document.getElementById('telefono').value;
+        const telefonoMovil = document.getElementById('telefonoMovil').value;
+        const email = document.getElementById('email').value;
+        const tipoDocumento = document.getElementById('tipoDocumento').value;
+        const numeroDocumento = document.getElementById('numeroDocumento').value;
+        const expedidoEn = document.getElementById('expedidoEn').value;
+        const fotografia = '';
+
+        const datos = {
+            nombres: nombres,
+            apellidoPaterno: apellidoPaterno,
+            apellidoMaterno: apellidoMaterno,
+            fechaNacimiento: fechaNacimiento,
+            ciudadNacimiento: lugarNacimiento,
+            paisNacimiento: paisNacimiento,
+            ciudadResidencia: lugarResidencia,
+            paisResidencia: paisResidencia,
+            direccion: direccion,
+            zona: zona,
+            telefono: telefono,
+            telefonoMovil: telefonoMovil,
+            email: email,
+            documentoExpedido: expedidoEn,
+            numeroDocumento: numeroDocumento,
+            fotografia: fotografia,
+        };
+        console.log(datos);
+        try {
+            let result = await agregarPerfil(datos);
 
             Swal.fire({
                 title: '¡Éxito!',
@@ -802,25 +848,25 @@ const Perfil = ({ params }) => {
                                     <input type="radio" name="pcss3t" defaultChecked id="tab1" className="tab-content-first" />
                                     <label htmlFor="tab1"><i className="icon-bolt"></i>Datos del postulante</label>
 
-                                    <input type="radio" name="pcss3t" id="tab2" className="tab-content-2" />
+                                    <input type="radio" name="pcss3t" id="tab2" className="tab-content-2" disabled={idPerfil === 0} />
                                     <label htmlFor="tab2"><i className="icon-picture"></i>Información académica</label>
 
-                                    <input type="radio" name="pcss3t" id="tab3" className="tab-content-3" />
+                                    <input type="radio" name="pcss3t" id="tab3" className="tab-content-3" disabled={idPerfil === 0} />
                                     <label htmlFor="tab3"><i className="icon-cogs"></i>Cursos/Talleres</label>
 
-                                    <input type="radio" name="pcss3t" id="tab4" className="tab-content-4" />
+                                    <input type="radio" name="pcss3t" id="tab4" className="tab-content-4" disabled={idPerfil === 0} />
                                     <label htmlFor="tab4"><i className="icon-globe"></i>Idiomas</label>
 
-                                    <input type="radio" name="pcss3t" id="tab5" className="tab-content-5" />
+                                    <input type="radio" name="pcss3t" id="tab5" className="tab-content-5" disabled={idPerfil === 0} />
                                     <label htmlFor="tab5"><i className="icon-globe"></i>Sistemas</label>
 
-                                    <input type="radio" name="pcss3t" id="tab6" className="tab-content-6" />
+                                    <input type="radio" name="pcss3t" id="tab6" className="tab-content-6" disabled={idPerfil === 0} />
                                     <label htmlFor="tab6"><i className="icon-globe"></i>Experiencia Laboral</label>
 
-                                    <input type="radio" name="pcss3t" id="tab7" className="tab-content-7" />
+                                    <input type="radio" name="pcss3t" id="tab7" className="tab-content-7" disabled={idPerfil === 0} />
                                     <label htmlFor="tab7"><i className="icon-globe"></i>Ref. Personal</label>
 
-                                    <input type="radio" name="pcss3t" id="tab8" className="tab-content-last" />
+                                    <input type="radio" name="pcss3t" id="tab8" className="tab-content-last" disabled={idPerfil === 0} />
                                     <label htmlFor="tab8"><i className="icon-globe"></i>Ref. Laboral</label>
 
                                     <ul>
@@ -834,13 +880,27 @@ const Perfil = ({ params }) => {
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Apellido del padre *</label>
-                                                        <input type="text" id="apellidoPadre" className="form-control" name="apellidoPadre"
-                                                            {...register("apellidoPadre", { required: "Nombre del seguro es requerido" })}
-                                                            required />
+                                                        <input
+                                                        type="text"
+                                                        id="apellidoPadre"
+                                                        className="form-control"
+                                                        name="apellidoPadre"
+                                                        defaultValue={datosPersonales?.apellidoPaterno || ""}
+                                                        {...register("apellidoPaterno", { required: "Apellido es requerido" })}
+                                                        required
+                                                        />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Apellido de la madre *</label>
-                                                        <input type="text" id="apellidoMadre" className="form-control" name="apellidoMadre" value={datosPersonales ? datosPersonales.apellidoMaterno : ''} onChange={handleChange} required />
+                                                        <input
+                                                        type="text"
+                                                        id="apellidoMadre"
+                                                        className="form-control"
+                                                        name="apellidoMadre"
+                                                        defaultValue={datosPersonales?.apellidoMaterno || ""}
+                                                        {...register("apellidoMaterno", { required: "Apellido es requerido" })}
+                                                        required
+                                                        />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Fecha de Nacimiento *</label>
