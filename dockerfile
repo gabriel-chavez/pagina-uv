@@ -1,31 +1,28 @@
-# Etapa 1: Construcción
+# Etapa 1: Construcción (builder)
 FROM node:20 AS builder
-
 WORKDIR /app
 
-# Copiar archivos del proyecto
 COPY package.json package-lock.json* ./
-RUN npm install
+RUN [ -f package-lock.json ] || npm install --package-lock-only
+RUN npm ci
 
 COPY . . 
 
-# Realizar el build
-RUN npm run build && ls -la .next
+# Cache del build
+RUN npm run build && mkdir -p .next/cache
 
-# Etapa 2: Servir la aplicación
-FROM node:20-alpine
-
+# Etapa 2: Producción (runner)
+FROM node:20-alpine AS runner
 WORKDIR /app
 
-# Copiar solo los archivos necesarios desde la etapa anterior
 COPY --from=builder /app/package.json ./
-COPY --from=builder /app/node_modules ./node_modules
+COPY --from=builder /app/package-lock.json ./
 COPY --from=builder /app/.next ./.next
 COPY --from=builder /app/public ./public
-COPY .env.production .env
-RUN ls -la .next
 
+RUN npm ci --only=production
+
+COPY .env.production .env
 EXPOSE 3000
 
-# Iniciar la aplicación
 CMD ["npm", "run", "start", "--", "-H", "0.0.0.0"]

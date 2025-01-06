@@ -28,9 +28,7 @@ apiClient.interceptors.request.use(
 
             if (session?.user?.token) {
                 config.headers['Authorization'] = `Bearer ${session.user.token}`;
-            } else {
-                console.log("api-config: No se encontró el token.");
-            }
+            } 
         } catch (error) {
             console.error("🚨 Error obteniendo sesión:", error.message || error);
         }
