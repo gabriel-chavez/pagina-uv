@@ -74,9 +74,8 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 const Perfil = ({ params }) => {
     const { data: session, status } = useSession();
-    console.log(session);
-    const idPerfil = session?.user?.postulanteId > 0 ? session.user.postulanteId : null;
-    console.log(idPerfil);
+    const idPerfil = session?.user?.postulanteId > 0 ? session.user.postulanteId : 0;
+
     const {
         register,
         handleSubmit,
@@ -299,7 +298,6 @@ const Perfil = ({ params }) => {
             setError("Debe cargar un archivo válido.");
             return;
         }
-        
         const formData = new FormData();
         formData.append('file', archivo);
         formData.append('ruta', ruta || '/');
@@ -367,7 +365,6 @@ const Perfil = ({ params }) => {
             numeroDocumento: numeroDocumento,
             fotografia: fotografia,
         };
-        
         try {
             let result = await actualizarPerfil(idPerfil, datos);
 
@@ -432,7 +429,7 @@ const Perfil = ({ params }) => {
         
         try {
             let result = await agregarPerfil(datos);
-            console.log(result);
+
             Swal.fire({
                 title: '¡Éxito!',
                 text: result.mensaje,
@@ -844,25 +841,25 @@ const Perfil = ({ params }) => {
                                     <input type="radio" name="pcss3t" defaultChecked id="tab1" className="tab-content-first" />
                                     <label htmlFor="tab1"><i className="icon-bolt"></i>Datos del postulante</label>
 
-                                    <input type="radio" name="pcss3t" id="tab2" className="tab-content-2" />
+                                    <input type="radio" name="pcss3t" id="tab2" className="tab-content-2" disabled={idPerfil === 0} />
                                     <label htmlFor="tab2"><i className="icon-picture"></i>Información académica</label>
 
-                                    <input type="radio" name="pcss3t" id="tab3" className="tab-content-3" />
+                                    <input type="radio" name="pcss3t" id="tab3" className="tab-content-3" disabled={idPerfil === 0} />
                                     <label htmlFor="tab3"><i className="icon-cogs"></i>Cursos/Talleres</label>
 
-                                    <input type="radio" name="pcss3t" id="tab4" className="tab-content-4" />
+                                    <input type="radio" name="pcss3t" id="tab4" className="tab-content-4" disabled={idPerfil === 0} />
                                     <label htmlFor="tab4"><i className="icon-globe"></i>Idiomas</label>
 
-                                    <input type="radio" name="pcss3t" id="tab5" className="tab-content-5" />
+                                    <input type="radio" name="pcss3t" id="tab5" className="tab-content-5" disabled={idPerfil === 0} />
                                     <label htmlFor="tab5"><i className="icon-globe"></i>Sistemas</label>
 
-                                    <input type="radio" name="pcss3t" id="tab6" className="tab-content-6" />
+                                    <input type="radio" name="pcss3t" id="tab6" className="tab-content-6" disabled={idPerfil === 0} />
                                     <label htmlFor="tab6"><i className="icon-globe"></i>Experiencia Laboral</label>
 
-                                    <input type="radio" name="pcss3t" id="tab7" className="tab-content-7" />
+                                    <input type="radio" name="pcss3t" id="tab7" className="tab-content-7" disabled={idPerfil === 0} />
                                     <label htmlFor="tab7"><i className="icon-globe"></i>Ref. Personal</label>
 
-                                    <input type="radio" name="pcss3t" id="tab8" className="tab-content-last" />
+                                    <input type="radio" name="pcss3t" id="tab8" className="tab-content-last" disabled={idPerfil === 0} />
                                     <label htmlFor="tab8"><i className="icon-globe"></i>Ref. Laboral</label>
 
                                     <ul>
@@ -872,7 +869,15 @@ const Perfil = ({ params }) => {
                                                 <form className="row g-3" onSubmit={handleGuardarPerfil}>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Nombres *</label>
-                                                        <input type="text" id="nombres" className="form-control" name="nombres" value={datosPersonales ? datosPersonales.nombres : ''} onChange={handleChange} required />
+                                                        <input
+                                                        type="text"
+                                                        id="nombres"
+                                                        className="form-control"
+                                                        name="nombres"
+                                                        defaultValue={datosPersonales?.nombres || ""}
+                                                        {...register("nombres", { required: "Apellido es requerido" })}
+                                                        required
+                                                        />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Apellido del padre *</label>
@@ -900,11 +905,27 @@ const Perfil = ({ params }) => {
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Fecha de Nacimiento *</label>
-                                                        <input type="date" id="fechaNacimiento" className="form-control" name="fechaNacimiento" value={datosPersonales ? datosPersonales.fechaNacimiento : ''} onChange={handleChange} required />
+                                                        <input
+                                                        type="date"
+                                                        id="fechaNacimiento"
+                                                        className="form-control"
+                                                        name="fechaNacimiento"
+                                                        defaultValue={datosPersonales?.fechaNacimiento || ""}
+                                                        {...register("fechaNacimiento", { required: "Apellido es requerido" })}
+                                                        required
+                                                        />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Lugar de Nacimiento *</label>
-                                                        <input type="text" id="lugarNacimiento" className="form-control" name="ciudadNacimiento" placeholder="Ciudad" value={datosPersonales ? datosPersonales.ciudadNacimiento : ''} onChange={handleChange} required />
+                                                        <input
+                                                        type="text"
+                                                        id="lugarNacimiento"
+                                                        className="form-control"
+                                                        name="ciudadNacimiento"
+                                                        defaultValue={datosPersonales?.ciudadNacimiento || ""}
+                                                        {...register("ciudadNacimiento", { required: "La Ciudad de nacimiento es un dato requerido" })}
+                                                        required
+                                                        />
                                                     </div>
 
 
@@ -938,7 +959,15 @@ const Perfil = ({ params }) => {
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Lugar de Residencia</label>
-                                                        <input type="text" id="lugarResidencia" className="form-control" name="ciudadResidencia" value={datosPersonales ? datosPersonales.ciudadResidencia : ''} onChange={handleChange} placeholder="Lugar residencia" />
+                                                        <input
+                                                        type="text"
+                                                        id="lugarResidencia"
+                                                        className="form-control"
+                                                        name="ciudadResidencia"
+                                                        defaultValue={datosPersonales?.ciudadResidencia || ""}
+                                                        {...register("ciudadResidencia", { required: "La Ciudad de residencia es un dato requerido" })}
+                                                        required
+                                                        />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">País de Residencia</label>
@@ -949,23 +978,63 @@ const Perfil = ({ params }) => {
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Dirección</label>
-                                                        <input type="text" id="direccion" className="form-control" name="direccion" value={datosPersonales ? datosPersonales.direccion : ''} onChange={handleChange} />
+                                                        <input
+                                                        type="text"
+                                                        id="direccion"
+                                                        className="form-control"
+                                                        name="direccion"
+                                                        defaultValue={datosPersonales?.direccion || ""}
+                                                        {...register("direccion", { required: "La Dirección es un dato requerido" })}
+                                                        required
+                                                        />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Zona</label>
-                                                        <input type="text" id="zona" className="form-control" name="zona" value={datosPersonales ? datosPersonales.zona : ''} onChange={handleChange} />
+                                                        <input
+                                                        type="text"
+                                                        id="zona"
+                                                        className="form-control"
+                                                        name="zona"
+                                                        defaultValue={datosPersonales?.zona || ""}
+                                                        {...register("zona", { required: "La Zona es un dato requerido" })}
+                                                        required
+                                                        />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Teléfono *</label>
-                                                        <input type="text" id="telefono" className="form-control" name="telefono" placeholder="Teléfono Fijo" value={datosPersonales ? datosPersonales.telefono : ''} onChange={handleChange} required />
+                                                        <input
+                                                        type="text"
+                                                        id="telefono"
+                                                        className="form-control"
+                                                        name="telefono"
+                                                        defaultValue={datosPersonales?.telefono || ""}
+                                                        {...register("telefono")}
+                                                        required
+                                                        />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Teléfono Móvil</label>
-                                                        <input type="text" id="telefonoMovil" className="form-control" name="telefonoMovil" placeholder="Teléfono Móvil" value={datosPersonales ? datosPersonales.telefonoMovil : ''} onChange={handleChange} />
+                                                        <input
+                                                        type="text"
+                                                        id="telefonoMovil"
+                                                        className="form-control"
+                                                        name="telefonoMovil"
+                                                        defaultValue={datosPersonales?.telefonoMovil || ""}
+                                                        {...register("telefonoMovil", { required: "El teléfono móvil es un dato requerido" })}
+                                                        required
+                                                        />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Email *</label>
-                                                        <input type="email" id="email" className="form-control" name="email" value={datosPersonales ? datosPersonales.email : ''} onChange={handleChange} required />
+                                                        <input
+                                                        type="text"
+                                                        id="email"
+                                                        className="form-control"
+                                                        name="email"
+                                                        defaultValue={datosPersonales?.email || ""}
+                                                        {...register("email", { required: "El email es un dato requerido" })}
+                                                        required
+                                                        />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Tipo de Documento *</label>
@@ -976,11 +1045,27 @@ const Perfil = ({ params }) => {
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Número de Documento *</label>
-                                                        <input type="text" id="numeroDocumento" className="form-control" name="numeroDocumento" value={datosPersonales ? datosPersonales.numeroDocumento : ''} onChange={handleChange} required />
+                                                        <input
+                                                        type="text"
+                                                        id="numeroDocumento"
+                                                        className="form-control"
+                                                        name="numeroDocumento"
+                                                        defaultValue={datosPersonales?.numeroDocumento || ""}
+                                                        {...register("numeroDocumento", { required: "El número de documento de identidad es un dato requerido" })}
+                                                        required
+                                                        />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Expedido en</label>
-                                                        <input type="text" id="expedidoEn" className="form-control" name="expedidoEn" placeholder="Expedido en" value={datosPersonales ? datosPersonales.documentoExpedido : ''} onChange={handleChange} />
+                                                        <input
+                                                        type="text"
+                                                        id="expedidoEn"
+                                                        className="form-control"
+                                                        name="expedidoEn"
+                                                        defaultValue={datosPersonales?.documentoExpedido || ""}
+                                                        {...register("documentoExpedido", { required: "El número de documento de identidad es un dato requerido" })}
+                                                        required
+                                                        />
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Fotografía del Postulante</label>
@@ -1005,16 +1090,25 @@ const Perfil = ({ params }) => {
                                                         )}
                                                     </div>
 
-
-                                                        
                                                     <div className="col-12">
+                                                    { 
+                                                    idPerfil === 0 ? (
                                                         <button
-                                                        type="submit"
-                                                        className="btn btn-primary"
-                                                        onClick={idPerfil === 0 ? handleRegistraPerfil : handleGuardarPerfil}
+                                                            type="submit"
+                                                            className="btn btn-primary"
+                                                            onClick={handleRegistraPerfil}
                                                         >
-                                                        Guardar
+                                                            Registrar Perfil
                                                         </button>
+                                                        ) : (
+                                                        <button
+                                                            type="submit"
+                                                            className="btn btn-primary"
+                                                            onClick={handleGuardarPerfil}
+                                                        >
+                                                            Actualizar Perfil
+                                                        </button>
+                                                        )}
                                                     </div>
                                                 </form>
                                             </div>
@@ -1023,193 +1117,182 @@ const Perfil = ({ params }) => {
                                         <li className="tab-content tab-content-2 typography">
                                             <div className={Estilos.container}>
                                                 <h2>INFORMACIÓN SOBRE FORMACIÓN ACADÉMICA</h2>
+                                                { idPerfil > 0 ? (
+                                                <>
+                                                    <button className={Estilos.addButton} onClick={handleInfoAcademicaModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                {idPerfil > 0 ? (
-                                                    <>
-                                                        <button className={Estilos.addButton} onClick={handleInfoAcademicaModalOpen}>
-                                                            + ADICIONAR NUEVO
-                                                        </button>
-
-                                                        <PerfilFormacionAcademicaLista
-                                                            formacionLista={formacionLista}
-                                                            onEditClick={handleInfoAcademicaModalOpen}
-                                                            idPerfil={idPerfil}
-                                                        />
-
-                                                        <PerfilFormacionAcademicaModal
-                                                            show={showInfoAcademicaModal}
-                                                            onClose={handleInfoAcademicaModalClose}
-                                                            onSave={handleGuardarFormacionAcademica}
-                                                            selectedInfoAcademica={selectedInfoAcademica}
-                                                            ParNivelFormacion={ParNivelFormacion}
-                                                        />
-                                                    </>
+                                                    <PerfilFormacionAcademicaLista
+                                                        formacionLista={formacionLista}
+                                                        onEditClick={handleInfoAcademicaModalOpen}
+                                                        idPerfil={idPerfil}
+                                                    />
+                                                    <PerfilFormacionAcademicaModal
+                                                        show={showInfoAcademicaModal}
+                                                        onClose={handleInfoAcademicaModalClose}
+                                                        onSave={handleGuardarFormacionAcademica}
+                                                        selectedInfoAcademica={selectedInfoAcademica}
+                                                        ParNivelFormacion={ParNivelFormacion}
+                                                    />
+                                                </>
                                                 ) : (
-                                                    <h3 className={Estilos.errorMessage}><center><br/>Primero debe registrar sus Datos Personales.</center></h3>
+                                                    <h3><br/><center>Primero debe registrar sus Datos Personales</center></h3>
                                                 )}
                                             </div>
                                         </li>
 
-
                                         <li className="tab-content tab-content-3 typography">
                                             <div className={Estilos.container}>
                                                 <h2>CURSOS/TALLERES</h2>
-                                                {idPerfil > 0 ? (
-                                                    <>
-                                                        <button className={Estilos.addButton} onClick={handleCursosModalOpen}>+ ADICIONAR NUEVO</button>
+                                                { idPerfil > 0 ? (
+                                                <>
+                                                    <button className={Estilos.addButton} onClick={handleCursosModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                        <PerfilCursosLista
-                                                            cursosLista={cursosLista}
-                                                            onEditClick={handleCursosModalOpen}
-                                                            idPerfil={idPerfil}
-                                                        />
-                                                        <PerfilCursosModal
-                                                            show={showCursosModal}
-                                                            onClose={handleCursosModalClose}
-                                                            onSave={handleGuardarCurso}
-                                                            selectedCurso={selectedCurso}
-                                                            parTipoCapacitacion={ParTipoCapacitacion}
-                                                        />
-                                                    </>
+                                                    <PerfilCursosLista
+                                                        cursosLista={cursosLista}
+                                                        onEditClick={handleCursosModalOpen}
+                                                        idPerfil={idPerfil}
+                                                    />
+                                                    <PerfilCursosModal
+                                                        show={showCursosModal}
+                                                        onClose={handleCursosModalClose}
+                                                        onSave={handleGuardarCurso}
+                                                        selectedCurso={selectedCurso}
+                                                        parTipoCapacitacion={ParTipoCapacitacion}
+                                                    />
+                                                </>
                                                 ) : (
-                                                    <h3 className={Estilos.errorMessage}><center><br/>Primero debe registrar sus Datos Personales.</center></h3>
+                                                    <h3><br/><center>Primero debe registrar sus Datos Personales</center></h3>
                                                 )}
-
                                             </div>
                                         </li>
 
                                         <li className="tab-content tab-content-4 typography">
                                             <div className={Estilos.container}>
                                                 <h2>IDIOMAS</h2>
-                                                {idPerfil > 0 ? (
-                                                    <>
-                                                        <button className={Estilos.addButton} onClick={handleIdiomasModalOpen}>+ ADICIONAR NUEVO</button>
+                                                { idPerfil > 0 ? (
+                                                <>
+                                                    <button className={Estilos.addButton} onClick={handleIdiomasModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                        <PerfilIdiomasLista
-                                                            idiomasLista={idiomasLista}
-                                                            onEditClick={handleIdiomasModalOpen}
-                                                            idPerfil={idPerfil}
-                                                        />
-                                                        <PerfilIdiomasModal
-                                                            show={showIdiomasModal}
-                                                            onClose={handleIdiomasModalClose}
-                                                            onSave={handleGuardarIdioma}
-                                                            selectedIdioma={selectedIdioma}
-                                                            ParIdioma={ParIdioma}
-                                                            ParNivelConocimiento={ParNivelConocimiento}
-                                                        />
-                                                    </>
+                                                    <PerfilIdiomasLista
+                                                        idiomasLista={idiomasLista}
+                                                        onEditClick={handleIdiomasModalOpen}
+                                                        idPerfil={idPerfil}
+                                                    />
+                                                    <PerfilIdiomasModal
+                                                        show={showIdiomasModal}
+                                                        onClose={handleIdiomasModalClose}
+                                                        onSave={handleGuardarIdioma}
+                                                        selectedIdioma={selectedIdioma}
+                                                        ParIdioma={ParIdioma}
+                                                        ParNivelConocimiento={ParNivelConocimiento}
+                                                    />
+                                                </>
                                                 ) : (
-                                                    <h3 className={Estilos.errorMessage}><center><br/>Primero debe registrar sus Datos Personales.</center></h3>
+                                                    <h3><br/><center>Primero debe registrar sus Datos Personales</center></h3>
                                                 )}
-
                                             </div>
                                         </li>
 
                                         <li className="tab-content tab-content-5 typography">
                                             <div className={Estilos.container}>
                                                 <h2>SISTEMAS</h2>
-                                                {idPerfil > 0 ? (
-                                                    <>
-                                                        <button className={Estilos.addButton} onClick={handleSistemasModalOpen}>+ ADICIONAR NUEVO</button>
+                                                { idPerfil > 0 ? (
+                                                <>
+                                                    <button className={Estilos.addButton} onClick={handleSistemasModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                        <PerfilSistemasLista
-                                                            sistemasLista={sistemasLista}
-                                                            onEditClick={handleSistemasModalOpen}
-                                                            idPerfil={idPerfil}
-                                                        />
-                                                        <PerfilSistemasModal
-                                                            show={showSistemasModal}
-                                                            onClose={handleSistemasModalClose}
-                                                            onSave={handleGuardarSistema}
-                                                            selectedSistema={selectedSistema}
-                                                            ParPrograma={ParPrograma}
-                                                            ParNivelConocimiento={ParNivelConocimiento}
-                                                        />
-                                                    </>
+                                                    <PerfilSistemasLista
+                                                        sistemasLista={sistemasLista}
+                                                        onEditClick={handleSistemasModalOpen}
+                                                        idPerfil={idPerfil}
+                                                    />
+                                                    <PerfilSistemasModal
+                                                        show={showSistemasModal}
+                                                        onClose={handleSistemasModalClose}
+                                                        onSave={handleGuardarSistema}
+                                                        selectedSistema={selectedSistema}
+                                                        ParPrograma={ParPrograma}
+                                                        ParNivelConocimiento={ParNivelConocimiento}
+                                                    />
+                                                </>
                                                 ) : (
-                                                    <h3 className={Estilos.errorMessage}><center><br/>Primero debe registrar sus Datos Personales.</center></h3>
+                                                    <h3><br/><center>Primero debe registrar sus Datos Personales</center></h3>
                                                 )}
-
                                             </div>
                                         </li>
 
                                         <li className="tab-content tab-content-6 typography">
                                             <div className={Estilos.container}>
                                                 <h2>EXPERIENCIA LABORAL</h2>
-                                                {idPerfil > 0 ? (
-                                                    <>
-                                                        <button className={Estilos.addButton} onClick={() => handleExpLaboralModalOpen(null)}>+ ADICIONAR EXPERIENCIA LABORAL</button>
+                                                { idPerfil > 0 ? (
+                                                <>
+                                                    <button className={Estilos.addButton} onClick={() => handleExpLaboralModalOpen(null)}>+ ADICIONAR EXPERIENCIA LABORAL</button>
 
-                                                        <PerfilExperienciaLaboralLista
-                                                            experienciaLaboralLista={experienciaLaboralLista}
-                                                            onEditClick={handleExpLaboralModalOpen}
-                                                            idPerfil={idPerfil}
-                                                        />
-                                                        <PerfilExperienciaLaboralModal
-                                                            show={showExpLaboralModal}
-                                                            onClose={handleExpLaboralModalClose}
-                                                            onSave={handleGuardarExpLaboral}
-                                                            selectedExpLaboral={selectedExpLaboral}
-                                                        />
-                                                    </>
+                                                    <PerfilExperienciaLaboralLista
+                                                        experienciaLaboralLista={experienciaLaboralLista}
+                                                        onEditClick={handleExpLaboralModalOpen}
+                                                        idPerfil={idPerfil}
+                                                    />
+                                                    <PerfilExperienciaLaboralModal
+                                                        show={showExpLaboralModal}
+                                                        onClose={handleExpLaboralModalClose}
+                                                        onSave={handleGuardarExpLaboral}
+                                                        selectedExpLaboral={selectedExpLaboral}
+                                                    />
+                                                </>
                                                 ) : (
-                                                    <h3 className={Estilos.errorMessage}><center><br/>Primero debe registrar sus Datos Personales.</center></h3>
+                                                    <h3><br/><center>Primero debe registrar sus Datos Personales</center></h3>
                                                 )}
-
                                             </div>
                                         </li>
 
                                         <li className="tab-content tab-content-7 typography">
                                             <div className={Estilos.container}>
                                                 <h2>REFERENCIAS PERSONALES</h2>
-                                                {idPerfil > 0 ? (
-                                                    <>
-                                                        <button className={Estilos.addButton} onClick={handleRefPersonalModalOpen}>+ ADICIONAR NUEVO</button>
+                                                { idPerfil > 0 ? (
+                                                <>
+                                                    <button className={Estilos.addButton} onClick={handleRefPersonalModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                        <PerfilReferenciaPersonalLista
-                                                            referenciaPersonalLista={referenciaPersonalLista}
-                                                            onEditClick={handleRefPersonalModalOpen}
-                                                            idPerfil={idPerfil}
-                                                        />
-                                                        <PerfilReferenciaPersonalModal
-                                                            show={showRefPersonalModal}
-                                                            onClose={handleRefPersonalModalClose}
-                                                            onSave={handleGuardarRefPersonal}
-                                                            selectedRefPersonal={selectedRefPersonal}
-                                                            parParentesco={ParParentesco}
-                                                        />
-                                                    </>
+                                                    <PerfilReferenciaPersonalLista
+                                                        referenciaPersonalLista={referenciaPersonalLista}
+                                                        onEditClick={handleRefPersonalModalOpen}
+                                                        idPerfil={idPerfil}
+                                                    />
+                                                    <PerfilReferenciaPersonalModal
+                                                        show={showRefPersonalModal}
+                                                        onClose={handleRefPersonalModalClose}
+                                                        onSave={handleGuardarRefPersonal}
+                                                        selectedRefPersonal={selectedRefPersonal}
+                                                        parParentesco={ParParentesco}
+                                                    />
+                                                </>
                                                 ) : (
-                                                    <h3 className={Estilos.errorMessage}><center><br/>Primero debe registrar sus Datos Personales.</center></h3>
+                                                    <h3><br/><center>Primero debe registrar sus Datos Personales</center></h3>
                                                 )}
-
                                             </div>
                                         </li>
 
                                         <li className="tab-content tab-content-last typography">
                                             <div className={Estilos.container}>
                                                 <h2>REFERENCIAS LABORALES</h2>
-                                                {idPerfil > 0 ? (
-                                                    <>
-                                                        <button className={Estilos.addButton} onClick={handleRefLaboralModalOpen}>+ ADICIONAR NUEVO</button>
+                                                { idPerfil > 0 ? (
+                                                <>
+                                                    <button className={Estilos.addButton} onClick={handleRefLaboralModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                        <PerfilReferenciaLaboralLista
-                                                            referenciaLaboralLista={referenciaLaboralLista}
-                                                            onEditClick={handleRefLaboralModalOpen}
-                                                            idPerfil={idPerfil}
-                                                        />
-                                                        <PerfilReferenciaLaboralModal
-                                                            show={showRefLaboralModal}
-                                                            onClose={handleRefLaboralModalClose}
-                                                            onSave={handleGuardarRefLaboral}
-                                                            selectedRefLaboral={selectedRefLaboral}
-                                                        />
-                                                    </>
+                                                    <PerfilReferenciaLaboralLista
+                                                        referenciaLaboralLista={referenciaLaboralLista}
+                                                        onEditClick={handleRefLaboralModalOpen}
+                                                        idPerfil={idPerfil}
+                                                    />
+                                                    <PerfilReferenciaLaboralModal
+                                                        show={showRefLaboralModal}
+                                                        onClose={handleRefLaboralModalClose}
+                                                        onSave={handleGuardarRefLaboral}
+                                                        selectedRefLaboral={selectedRefLaboral}
+                                                    />
+                                                </>
                                                 ) : (
-                                                    <h3 className={Estilos.errorMessage}><center><br/>Primero debe registrar sus Datos Personales.</center></h3>
+                                                    <h3><br/><center>Primero debe registrar sus Datos Personales</center></h3>
                                                 )}
-
                                             </div>
                                         </li>
                                     </ul>

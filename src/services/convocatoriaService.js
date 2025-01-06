@@ -29,8 +29,6 @@ export const obtenerPerfil = async (id) => {
 export const agregarPerfil = async (perfil) => {
   try {
     const response = await apiClient.post('/api/Postulante', perfil);
-    console.log("Valida registro de postulante");
-    console.log(response.status);
     return response.data;
   } catch (error) {
     console.error("Error al agregar datos personales:", error.response?.data || error.message);
@@ -39,7 +37,6 @@ export const agregarPerfil = async (perfil) => {
 };
 
 export const actualizarPerfil = async (id, perfil) => {
-  // Validación inicial de parámetros
   if (!id) {
     throw new Error("El ID del perfil es requerido.");
   }
