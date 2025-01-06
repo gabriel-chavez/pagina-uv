@@ -74,9 +74,8 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 const Perfil = ({ params }) => {
     const { data: session, status } = useSession();
-    console.log("Verificación de datoss");
     console.log(session);
-    const idPerfil = 6;//session?.user?.postulanteId > 0 ? session.user.postulanteId : null;
+    const idPerfil = session?.user?.postulanteId > 0 ? session.user.postulanteId : null;
     console.log(idPerfil);
     const {
         register,
@@ -282,15 +281,12 @@ const Perfil = ({ params }) => {
             reader.readAsDataURL(file);
 
             setArchivo(file);  // Guarda el archivo en el estado
-            console.log("precarga imagen");
             // Llama automáticamente a la función para enviar el archivo
             try {
                 // Ahora pasa 'archivo' en lugar de 'file' directamente
                 const resultado = await handleSubmitImage();
-                console.log("respuesta: " + resultado);
 
             } catch (error) {
-                console.log("Ocurrió un error al subir la imagen");
                 console.error("Error al cargar la imagen:", error);
             }
         } else {
@@ -303,7 +299,7 @@ const Perfil = ({ params }) => {
             setError("Debe cargar un archivo válido.");
             return;
         }
-        console.log("Carga imagen");
+        
         const formData = new FormData();
         formData.append('file', archivo);
         formData.append('ruta', ruta || '/');
@@ -371,7 +367,7 @@ const Perfil = ({ params }) => {
             numeroDocumento: numeroDocumento,
             fotografia: fotografia,
         };
-        console.log(datos);
+        
         try {
             let result = await actualizarPerfil(idPerfil, datos);
 
@@ -433,10 +429,10 @@ const Perfil = ({ params }) => {
             numeroDocumento: numeroDocumento,
             fotografia: fotografia,
         };
-        console.log(datos);
+        
         try {
             let result = await agregarPerfil(datos);
-
+            console.log(result);
             Swal.fire({
                 title: '¡Éxito!',
                 text: result.mensaje,
@@ -848,25 +844,25 @@ const Perfil = ({ params }) => {
                                     <input type="radio" name="pcss3t" defaultChecked id="tab1" className="tab-content-first" />
                                     <label htmlFor="tab1"><i className="icon-bolt"></i>Datos del postulante</label>
 
-                                    <input type="radio" name="pcss3t" id="tab2" className="tab-content-2" disabled={idPerfil === 0} />
+                                    <input type="radio" name="pcss3t" id="tab2" className="tab-content-2" />
                                     <label htmlFor="tab2"><i className="icon-picture"></i>Información académica</label>
 
-                                    <input type="radio" name="pcss3t" id="tab3" className="tab-content-3" disabled={idPerfil === 0} />
+                                    <input type="radio" name="pcss3t" id="tab3" className="tab-content-3" />
                                     <label htmlFor="tab3"><i className="icon-cogs"></i>Cursos/Talleres</label>
 
-                                    <input type="radio" name="pcss3t" id="tab4" className="tab-content-4" disabled={idPerfil === 0} />
+                                    <input type="radio" name="pcss3t" id="tab4" className="tab-content-4" />
                                     <label htmlFor="tab4"><i className="icon-globe"></i>Idiomas</label>
 
-                                    <input type="radio" name="pcss3t" id="tab5" className="tab-content-5" disabled={idPerfil === 0} />
+                                    <input type="radio" name="pcss3t" id="tab5" className="tab-content-5" />
                                     <label htmlFor="tab5"><i className="icon-globe"></i>Sistemas</label>
 
-                                    <input type="radio" name="pcss3t" id="tab6" className="tab-content-6" disabled={idPerfil === 0} />
+                                    <input type="radio" name="pcss3t" id="tab6" className="tab-content-6" />
                                     <label htmlFor="tab6"><i className="icon-globe"></i>Experiencia Laboral</label>
 
-                                    <input type="radio" name="pcss3t" id="tab7" className="tab-content-7" disabled={idPerfil === 0} />
+                                    <input type="radio" name="pcss3t" id="tab7" className="tab-content-7" />
                                     <label htmlFor="tab7"><i className="icon-globe"></i>Ref. Personal</label>
 
-                                    <input type="radio" name="pcss3t" id="tab8" className="tab-content-last" disabled={idPerfil === 0} />
+                                    <input type="radio" name="pcss3t" id="tab8" className="tab-content-last" />
                                     <label htmlFor="tab8"><i className="icon-globe"></i>Ref. Laboral</label>
 
                                     <ul>
@@ -1009,13 +1005,15 @@ const Perfil = ({ params }) => {
                                                         )}
                                                     </div>
 
+
+                                                        
                                                     <div className="col-12">
                                                         <button
-                                                            type="submit"
-                                                            className="btn btn-primary"
-                                                            onClick={handleGuardarPerfil}
+                                                        type="submit"
+                                                        className="btn btn-primary"
+                                                        onClick={idPerfil === 0 ? handleRegistraPerfil : handleGuardarPerfil}
                                                         >
-                                                            Guardar
+                                                        Guardar
                                                         </button>
                                                     </div>
                                                 </form>
@@ -1025,41 +1023,57 @@ const Perfil = ({ params }) => {
                                         <li className="tab-content tab-content-2 typography">
                                             <div className={Estilos.container}>
                                                 <h2>INFORMACIÓN SOBRE FORMACIÓN ACADÉMICA</h2>
-                                                <button className={Estilos.addButton} onClick={handleInfoAcademicaModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                <PerfilFormacionAcademicaLista
-                                                    formacionLista={formacionLista}
-                                                    onEditClick={handleInfoAcademicaModalOpen}
-                                                    idPerfil={idPerfil}
-                                                />
-                                                <PerfilFormacionAcademicaModal
-                                                    show={showInfoAcademicaModal}
-                                                    onClose={handleInfoAcademicaModalClose}
-                                                    onSave={handleGuardarFormacionAcademica}
-                                                    selectedInfoAcademica={selectedInfoAcademica}
-                                                    ParNivelFormacion={ParNivelFormacion}
-                                                />
+                                                {idPerfil > 0 ? (
+                                                    <>
+                                                        <button className={Estilos.addButton} onClick={handleInfoAcademicaModalOpen}>
+                                                            + ADICIONAR NUEVO
+                                                        </button>
 
+                                                        <PerfilFormacionAcademicaLista
+                                                            formacionLista={formacionLista}
+                                                            onEditClick={handleInfoAcademicaModalOpen}
+                                                            idPerfil={idPerfil}
+                                                        />
+
+                                                        <PerfilFormacionAcademicaModal
+                                                            show={showInfoAcademicaModal}
+                                                            onClose={handleInfoAcademicaModalClose}
+                                                            onSave={handleGuardarFormacionAcademica}
+                                                            selectedInfoAcademica={selectedInfoAcademica}
+                                                            ParNivelFormacion={ParNivelFormacion}
+                                                        />
+                                                    </>
+                                                ) : (
+                                                    <h3 className={Estilos.errorMessage}><center><br/>Primero debe registrar sus Datos Personales.</center></h3>
+                                                )}
                                             </div>
                                         </li>
+
 
                                         <li className="tab-content tab-content-3 typography">
                                             <div className={Estilos.container}>
                                                 <h2>CURSOS/TALLERES</h2>
-                                                <button className={Estilos.addButton} onClick={handleCursosModalOpen}>+ ADICIONAR NUEVO</button>
+                                                {idPerfil > 0 ? (
+                                                    <>
+                                                        <button className={Estilos.addButton} onClick={handleCursosModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                <PerfilCursosLista
-                                                    cursosLista={cursosLista}
-                                                    onEditClick={handleCursosModalOpen}
-                                                    idPerfil={idPerfil}
-                                                />
-                                                <PerfilCursosModal
-                                                      show={showCursosModal}
-                                                      onClose={handleCursosModalClose}
-                                                      onSave={handleGuardarCurso}
-                                                      selectedCurso={selectedCurso}
-                                                      parTipoCapacitacion={ParTipoCapacitacion}
-                                                />
+                                                        <PerfilCursosLista
+                                                            cursosLista={cursosLista}
+                                                            onEditClick={handleCursosModalOpen}
+                                                            idPerfil={idPerfil}
+                                                        />
+                                                        <PerfilCursosModal
+                                                            show={showCursosModal}
+                                                            onClose={handleCursosModalClose}
+                                                            onSave={handleGuardarCurso}
+                                                            selectedCurso={selectedCurso}
+                                                            parTipoCapacitacion={ParTipoCapacitacion}
+                                                        />
+                                                    </>
+                                                ) : (
+                                                    <h3 className={Estilos.errorMessage}><center><br/>Primero debe registrar sus Datos Personales.</center></h3>
+                                                )}
 
                                             </div>
                                         </li>
@@ -1067,21 +1081,27 @@ const Perfil = ({ params }) => {
                                         <li className="tab-content tab-content-4 typography">
                                             <div className={Estilos.container}>
                                                 <h2>IDIOMAS</h2>
-                                                <button className={Estilos.addButton} onClick={handleIdiomasModalOpen}>+ ADICIONAR NUEVO</button>
+                                                {idPerfil > 0 ? (
+                                                    <>
+                                                        <button className={Estilos.addButton} onClick={handleIdiomasModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                <PerfilIdiomasLista
-                                                    idiomasLista={idiomasLista}
-                                                    onEditClick={handleIdiomasModalOpen}
-                                                    idPerfil={idPerfil}
-                                                />
-                                                <PerfilIdiomasModal
-                                                    show={showIdiomasModal}
-                                                    onClose={handleIdiomasModalClose}
-                                                    onSave={handleGuardarIdioma}
-                                                    selectedIdioma={selectedIdioma}
-                                                    ParIdioma={ParIdioma}
-                                                    ParNivelConocimiento={ParNivelConocimiento}
-                                                />
+                                                        <PerfilIdiomasLista
+                                                            idiomasLista={idiomasLista}
+                                                            onEditClick={handleIdiomasModalOpen}
+                                                            idPerfil={idPerfil}
+                                                        />
+                                                        <PerfilIdiomasModal
+                                                            show={showIdiomasModal}
+                                                            onClose={handleIdiomasModalClose}
+                                                            onSave={handleGuardarIdioma}
+                                                            selectedIdioma={selectedIdioma}
+                                                            ParIdioma={ParIdioma}
+                                                            ParNivelConocimiento={ParNivelConocimiento}
+                                                        />
+                                                    </>
+                                                ) : (
+                                                    <h3 className={Estilos.errorMessage}><center><br/>Primero debe registrar sus Datos Personales.</center></h3>
+                                                )}
 
                                             </div>
                                         </li>
@@ -1089,21 +1109,27 @@ const Perfil = ({ params }) => {
                                         <li className="tab-content tab-content-5 typography">
                                             <div className={Estilos.container}>
                                                 <h2>SISTEMAS</h2>
-                                                <button className={Estilos.addButton} onClick={handleSistemasModalOpen}>+ ADICIONAR NUEVO</button>
+                                                {idPerfil > 0 ? (
+                                                    <>
+                                                        <button className={Estilos.addButton} onClick={handleSistemasModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                <PerfilSistemasLista
-                                                    sistemasLista={sistemasLista}
-                                                    onEditClick={handleSistemasModalOpen}
-                                                    idPerfil={idPerfil}
-                                                />
-                                                <PerfilSistemasModal
-                                                    show={showSistemasModal}
-                                                    onClose={handleSistemasModalClose}
-                                                    onSave={handleGuardarSistema}
-                                                    selectedSistema={selectedSistema}
-                                                    ParPrograma={ParPrograma}
-                                                    ParNivelConocimiento={ParNivelConocimiento}
-                                                />
+                                                        <PerfilSistemasLista
+                                                            sistemasLista={sistemasLista}
+                                                            onEditClick={handleSistemasModalOpen}
+                                                            idPerfil={idPerfil}
+                                                        />
+                                                        <PerfilSistemasModal
+                                                            show={showSistemasModal}
+                                                            onClose={handleSistemasModalClose}
+                                                            onSave={handleGuardarSistema}
+                                                            selectedSistema={selectedSistema}
+                                                            ParPrograma={ParPrograma}
+                                                            ParNivelConocimiento={ParNivelConocimiento}
+                                                        />
+                                                    </>
+                                                ) : (
+                                                    <h3 className={Estilos.errorMessage}><center><br/>Primero debe registrar sus Datos Personales.</center></h3>
+                                                )}
 
                                             </div>
                                         </li>
@@ -1111,19 +1137,25 @@ const Perfil = ({ params }) => {
                                         <li className="tab-content tab-content-6 typography">
                                             <div className={Estilos.container}>
                                                 <h2>EXPERIENCIA LABORAL</h2>
-                                                <button className={Estilos.addButton} onClick={() => handleExpLaboralModalOpen(null)}>+ ADICIONAR EXPERIENCIA LABORAL</button>
+                                                {idPerfil > 0 ? (
+                                                    <>
+                                                        <button className={Estilos.addButton} onClick={() => handleExpLaboralModalOpen(null)}>+ ADICIONAR EXPERIENCIA LABORAL</button>
 
-                                                <PerfilExperienciaLaboralLista
-                                                    experienciaLaboralLista={experienciaLaboralLista}
-                                                    onEditClick={handleExpLaboralModalOpen}
-                                                    idPerfil={idPerfil}
-                                                />
-                                                <PerfilExperienciaLaboralModal
-                                                    show={showExpLaboralModal}
-                                                    onClose={handleExpLaboralModalClose}
-                                                    onSave={handleGuardarExpLaboral}
-                                                    selectedExpLaboral={selectedExpLaboral}
-                                                />
+                                                        <PerfilExperienciaLaboralLista
+                                                            experienciaLaboralLista={experienciaLaboralLista}
+                                                            onEditClick={handleExpLaboralModalOpen}
+                                                            idPerfil={idPerfil}
+                                                        />
+                                                        <PerfilExperienciaLaboralModal
+                                                            show={showExpLaboralModal}
+                                                            onClose={handleExpLaboralModalClose}
+                                                            onSave={handleGuardarExpLaboral}
+                                                            selectedExpLaboral={selectedExpLaboral}
+                                                        />
+                                                    </>
+                                                ) : (
+                                                    <h3 className={Estilos.errorMessage}><center><br/>Primero debe registrar sus Datos Personales.</center></h3>
+                                                )}
 
                                             </div>
                                         </li>
@@ -1131,20 +1163,26 @@ const Perfil = ({ params }) => {
                                         <li className="tab-content tab-content-7 typography">
                                             <div className={Estilos.container}>
                                                 <h2>REFERENCIAS PERSONALES</h2>
-                                                <button className={Estilos.addButton} onClick={handleRefPersonalModalOpen}>+ ADICIONAR NUEVO</button>
+                                                {idPerfil > 0 ? (
+                                                    <>
+                                                        <button className={Estilos.addButton} onClick={handleRefPersonalModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                <PerfilReferenciaPersonalLista
-                                                    referenciaPersonalLista={referenciaPersonalLista}
-                                                    onEditClick={handleRefPersonalModalOpen}
-                                                    idPerfil={idPerfil}
-                                                />
-                                                <PerfilReferenciaPersonalModal
-                                                    show={showRefPersonalModal}
-                                                    onClose={handleRefPersonalModalClose}
-                                                    onSave={handleGuardarRefPersonal}
-                                                    selectedRefPersonal={selectedRefPersonal}
-                                                    parParentesco={ParParentesco}
-                                                />
+                                                        <PerfilReferenciaPersonalLista
+                                                            referenciaPersonalLista={referenciaPersonalLista}
+                                                            onEditClick={handleRefPersonalModalOpen}
+                                                            idPerfil={idPerfil}
+                                                        />
+                                                        <PerfilReferenciaPersonalModal
+                                                            show={showRefPersonalModal}
+                                                            onClose={handleRefPersonalModalClose}
+                                                            onSave={handleGuardarRefPersonal}
+                                                            selectedRefPersonal={selectedRefPersonal}
+                                                            parParentesco={ParParentesco}
+                                                        />
+                                                    </>
+                                                ) : (
+                                                    <h3 className={Estilos.errorMessage}><center><br/>Primero debe registrar sus Datos Personales.</center></h3>
+                                                )}
 
                                             </div>
                                         </li>
@@ -1152,19 +1190,25 @@ const Perfil = ({ params }) => {
                                         <li className="tab-content tab-content-last typography">
                                             <div className={Estilos.container}>
                                                 <h2>REFERENCIAS LABORALES</h2>
-                                                <button className={Estilos.addButton} onClick={handleRefLaboralModalOpen}>+ ADICIONAR NUEVO</button>
+                                                {idPerfil > 0 ? (
+                                                    <>
+                                                        <button className={Estilos.addButton} onClick={handleRefLaboralModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                <PerfilReferenciaLaboralLista
-                                                    referenciaLaboralLista={referenciaLaboralLista}
-                                                    onEditClick={handleRefLaboralModalOpen}
-                                                    idPerfil={idPerfil}
-                                                />
-                                                <PerfilReferenciaLaboralModal
-                                                    show={showRefLaboralModal}
-                                                    onClose={handleRefLaboralModalClose}
-                                                    onSave={handleGuardarRefLaboral}
-                                                    selectedRefLaboral={selectedRefLaboral}
-                                                />
+                                                        <PerfilReferenciaLaboralLista
+                                                            referenciaLaboralLista={referenciaLaboralLista}
+                                                            onEditClick={handleRefLaboralModalOpen}
+                                                            idPerfil={idPerfil}
+                                                        />
+                                                        <PerfilReferenciaLaboralModal
+                                                            show={showRefLaboralModal}
+                                                            onClose={handleRefLaboralModalClose}
+                                                            onSave={handleGuardarRefLaboral}
+                                                            selectedRefLaboral={selectedRefLaboral}
+                                                        />
+                                                    </>
+                                                ) : (
+                                                    <h3 className={Estilos.errorMessage}><center><br/>Primero debe registrar sus Datos Personales.</center></h3>
+                                                )}
 
                                             </div>
                                         </li>
