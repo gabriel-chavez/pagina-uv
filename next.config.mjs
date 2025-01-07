@@ -3,21 +3,24 @@ import webpack from "webpack";
 
 const nextConfig = {
   reactStrictMode: true,
+
   eslint: {
-    ignoreDuringBuilds: true,  // Desactiva ESLint durante el build
+    ignoreDuringBuilds: true,  
   },
 
   images: {
-    unoptimized: true,  // Desactiva optimización de imágenes
+    unoptimized: true,
   },
 
-  swcMinify: false,  // Evita minificación de SWC (puede causar tiempos largos)
+  swcMinify: false,
 
   experimental: {
-    turbo: {},  // Activa Turbo Mode correctamentepush
+    incrementalCacheHandlerPath: false,
+    turbo: true,  
   },
 
-  webpack: (config) => {
+  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+    // Evita minificación de jQuery (puede causar tiempos largos)
     config.plugins.push(
       new webpack.ProvidePlugin({
         $: "jquery",
@@ -25,9 +28,15 @@ const nextConfig = {
         "window.jQuery": "jquery",
       })
     );
+
+    // Evita duplicar jQuery (en caso de builds largos)
     config.resolve.alias['jquery'] = 'jquery';
+
     return config;
   },
+
+  // Desactiva Telemetría de Next.js para ahorrar tiempo
+  telemetry: false,
 };
 
 export default nextConfig;
