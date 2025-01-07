@@ -74,9 +74,7 @@ import { signIn, signOut, useSession } from "next-auth/react";
 
 const Perfil = ({ params }) => {
     const { data: session, status } = useSession();
-    console.log(session);
     const idPerfil = session?.user?.postulanteId > 0 ? session.user.postulanteId : null;
-    console.log(idPerfil);
     const {
         register,
         handleSubmit,
@@ -432,7 +430,6 @@ const Perfil = ({ params }) => {
         
         try {
             let result = await agregarPerfil(datos);
-            console.log(result);
             Swal.fire({
                 title: '¡Éxito!',
                 text: result.mensaje,

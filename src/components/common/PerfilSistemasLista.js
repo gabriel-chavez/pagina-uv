@@ -18,8 +18,6 @@ const PerfilSistemasLista = ({ sistemasLista, onEditClick, idPerfil }) => {
 
     const handleConfirmDelete = async () => {
         try {
-            console.log("prueba");
-            console.log(selectedSistema.id);
             const result = await eliminarPerfilSistema(selectedSistema?.id);
 
             Swal.fire({
