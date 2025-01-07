@@ -5,25 +5,33 @@ import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from 'next/link';
+import ReCAPTCHA from "react-google-recaptcha";
 
 const LoginPage = () => {
   const [errors, setErrors] = useState([]);
   const [usuario, setUsuario] = useState("");  
   const [password, setPassword] = useState(""); 
+  const [recaptchaToken, setRecaptchaToken] = useState(null);
   const router = useRouter();
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setErrors([]);
 
+    if (!recaptchaToken) {
+      setErrors(["Por favor, verifica que no eres un robot."]);
+      return;
+    }
+
     const responseNextAuth = await signIn("credentials", {
       usuario,
       password,
+      recaptchaToken,
       redirect: false,
     });
 
     if (responseNextAuth?.error) {
-      console.log("page.js:", responseNextAuth);
+      //console.log("page.js:", responseNextAuth);
       setErrors(responseNextAuth.error.split(","));
       return;
     }
@@ -33,11 +41,14 @@ const LoginPage = () => {
     router.push(callbackUrl);
   };
 
+  const handleRecaptchaChange = (token) => {
+    setRecaptchaToken(token);
+  };
+
   return (
     <div
-      className="d-flex justify-content-center align-items-center  bg-light"
+      className="d-flex justify-content-center align-items-center bg-light"
       style={{
-
         height: "calc(100vh - 100px)",
       }}
     >
@@ -76,6 +87,13 @@ const LoginPage = () => {
                 value={password}
                 onChange={(event) => setPassword(event.target.value)}
                 required
+              />
+            </div>
+
+            <div className="d-flex justify-content-center mb-3">
+              <ReCAPTCHA
+                sitekey="6LcvLjciAAAAAALicqZR92XT9u9E_KHCDXxvPbgg"
+                onChange={handleRecaptchaChange}
               />
             </div>
 

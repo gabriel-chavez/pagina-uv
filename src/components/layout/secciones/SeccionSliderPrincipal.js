@@ -6,7 +6,7 @@ import { obtenerBannerPaginaPrincipal } from '@/services/cmsService';
 const SeccionSliderPrincipal = async () => {
 
   const data = await obtenerBannerPaginaPrincipal(1);
-  console.log("data:",data.datos)
+  
   if (!data || !data.datos || !data.datos.bannerPaginaPrincipalDetalle) {
     return null; // No renderizar nada si no hay datos
   }

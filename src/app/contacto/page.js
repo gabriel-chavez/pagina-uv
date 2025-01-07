@@ -43,7 +43,7 @@ export default function ContactForm() {
 
     if (validate()) {
       setSubmitted(true);
-      console.log('Datos enviados:', formData);
+      // console.log('Datos enviados:', formData);
 
       setFormData({ fullname: '', email: '', message: '' });
       setTimeout(() => setSubmitted(false), 5000);  

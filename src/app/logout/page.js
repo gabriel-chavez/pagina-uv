@@ -12,9 +12,9 @@ export default function Logout() {
         const cerrarSesion1 = async () => {
             try {
                 const response = await cerrarSesion();
-                const data = await response.json();
+                
 
-                if (data.exito) {
+                if (response.exito) {
                     console.log('Sesión cerrada en el backend.');
                 } else {
                     console.error('Error en la API personalizada:', data.message);

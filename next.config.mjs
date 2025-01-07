@@ -8,23 +8,17 @@ const nextConfig = {
     ignoreDuringBuilds: true,  // Desactiva ESLint durante el build
   },
 
-  // Desactiva optimización de imágenes
   images: {
-    unoptimized: true,
+    unoptimized: true,  // Desactiva optimización de imágenes
   },
 
-  // Desactiva minificación para acelerar builds
-  swcMinify: false,
+  swcMinify: false,  // Evita minificación de SWC (puede causar tiempos largos)
 
-  // Habilita optimización de cache incremental
   experimental: {
-    incrementalCacheHandlerPath: false,
-    turbo: true,  // Turbo mode (experimental) para builds más rápidos
+    turbo: {},  // Activa Turbo Mode correctamentepush
   },
 
-  // Optimización Webpack
-  webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
-    // Evita minificación de jQuery (puede causar tiempos largos)
+  webpack: (config) => {
     config.plugins.push(
       new webpack.ProvidePlugin({
         $: "jquery",
@@ -32,15 +26,9 @@ const nextConfig = {
         "window.jQuery": "jquery",
       })
     );
-
-    // Evita duplicar jQuery (en caso de builds largos)
     config.resolve.alias['jquery'] = 'jquery';
-
     return config;
   },
-
-  // Desactiva Telemetría de Next.js para ahorrar tiempo
-  telemetry: false,
 };
 
 export default nextConfig;

@@ -15,7 +15,7 @@ export default async function Page({ params }) {
         // Obtener la página específica por una ruta
         const resultado = await obtenerSeguroPorRuta(ruta);
         const data = resultado.datos
-        console.log(data);
+       // console.log(data);
         const breadcrumbs = [
             { label: 'Inicio', url: '/' },
             { label: 'Nuestros Seguros', url: '/nuestros-seguros' },

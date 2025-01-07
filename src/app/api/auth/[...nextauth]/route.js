@@ -52,8 +52,8 @@ export const authOptions = {
   },
   pages: {
     signIn: "/login", 
-  },
-  debug: true,
+  }
+  
 };
 
 const handler = NextAuth(authOptions); 
