@@ -13,6 +13,7 @@ const nextConfig = {
   },
 
   swcMinify: false,
+  output: 'standalone',
 
   experimental: {
     incrementalCacheHandlerPath: false,

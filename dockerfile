@@ -23,6 +23,6 @@ COPY --from=builder /app/public ./public
 RUN npm ci --only=production
 
 COPY .env.production .env
-EXPOSE 3000
+EXPOSE 3001
 
 CMD ["npm", "run", "start", "--", "-H", "0.0.0.0"]
