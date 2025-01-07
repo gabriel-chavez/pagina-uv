@@ -1,7 +1,5 @@
 "use client";
 
-import NextAuth from "next-auth";
-
 import EncabezadoConvocatoria from "@/components/common/EncabezadoConvocatoria";
 import Estilos from '@/estilos/InfoAcademica.module.css';
 import React, { useState, useEffect } from 'react';
@@ -326,9 +324,8 @@ const Perfil = ({ params }) => {
         });
     };
 
-    const handleGuardarPerfil = async (event) => {
-        event.preventDefault(); // Evitar recarga de la página
-
+    const handleGuardarPerfil = async (data) => {
+        
         const nombres = document.getElementById('nombres').value;
         const apellidoPaterno = document.getElementById('apellidoPadre').value;
         const apellidoMaterno = document.getElementById('apellidoMadre').value;
@@ -501,6 +498,7 @@ const Perfil = ({ params }) => {
             });
         }
     };
+    
     const handleGuardarCurso = async () => {
         const tipoCapacitacion = document.getElementById('tipoCapacitacion').value;
         const nombres = document.getElementById('nombres').value;
@@ -866,30 +864,31 @@ const Perfil = ({ params }) => {
                                         <li className="tab-content tab-content-first typography">
                                             <div className="container">
                                                 <h2>Datos Generales del Postulante</h2>
-                                                <form className="row g-3" onSubmit={handleGuardarPerfil}>
+                                                <form className="row g-3" onSubmit={handleSubmit(idPerfil > 0 ? handleGuardarPerfil : handleRegistraPerfil)}>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Nombres *</label>
                                                         <input
-                                                        type="text"
-                                                        id="nombres"
-                                                        className="form-control"
-                                                        name="nombres"
-                                                        defaultValue={datosPersonales?.nombres || ""}
-                                                        {...register("nombres", { required: "Apellido es requerido" })}
-                                                        required
+                                                            type="text"
+                                                            id="nombres"
+                                                            className="form-control"
+                                                            name="nombres"
+                                                            defaultValue={datosPersonales?.nombres || ""}
+                                                            {...register("nombres", { required: "El campo 'Nombres' es obligatorio." })}
                                                         />
+                                                        {errors.nombres && <span style={{ color: "red" }}>{errors.nombres.message}</span>}
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Apellido del padre *</label>
                                                         <input
-                                                        type="text"
-                                                        id="apellidoPadre"
-                                                        className="form-control"
-                                                        name="apellidoPadre"
-                                                        defaultValue={datosPersonales?.apellidoPaterno || ""}
-                                                        {...register("apellidoPaterno", { required: "Apellido es requerido" })}
-                                                        required
+                                                            type="text"
+                                                            id="apellidoPadre"
+                                                            className="form-control"
+                                                            name="apellidoPadre"
+                                                            defaultValue={datosPersonales?.apellidoPaterno || ""}
+                                                            {...register("apellidoPaterno", { required: "Apellido es obligatorio" })}
+                                                            required
                                                         />
+                                                        {errors.apellidoPaterno && <span style={{ color: "red" }}>{errors.apellidoPaterno.message}</span>}
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Apellido de la madre *</label>
@@ -926,6 +925,7 @@ const Perfil = ({ params }) => {
                                                         {...register("ciudadNacimiento", { required: "La Ciudad de nacimiento es un dato requerido" })}
                                                         required
                                                         />
+                                                        {errors.ciudadNacimiento && <span style={{ color: "red" }}>{errors.ciudadNacimiento.message}</span>}
                                                     </div>
 
 
@@ -968,6 +968,7 @@ const Perfil = ({ params }) => {
                                                         {...register("ciudadResidencia", { required: "La Ciudad de residencia es un dato requerido" })}
                                                         required
                                                         />
+                                                        {errors.ciudadResidencia && <span style={{ color: "red" }}>{errors.ciudadResidencia.message}</span>}
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">País de Residencia</label>
@@ -987,6 +988,7 @@ const Perfil = ({ params }) => {
                                                         {...register("direccion", { required: "La Dirección es un dato requerido" })}
                                                         required
                                                         />
+                                                        {errors.direccion && <span style={{ color: "red" }}>{errors.direccion.message}</span>}
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Zona</label>
@@ -999,6 +1001,7 @@ const Perfil = ({ params }) => {
                                                         {...register("zona", { required: "La Zona es un dato requerido" })}
                                                         required
                                                         />
+                                                        {errors.zona && <span style={{ color: "red" }}>{errors.zona.message}</span>}
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Teléfono *</label>
@@ -1011,6 +1014,7 @@ const Perfil = ({ params }) => {
                                                         {...register("telefono")}
                                                         required
                                                         />
+                                                        {errors.telefono && <span style={{ color: "red" }}>{errors.telefono.message}</span>}
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Teléfono Móvil</label>
@@ -1020,8 +1024,7 @@ const Perfil = ({ params }) => {
                                                         className="form-control"
                                                         name="telefonoMovil"
                                                         defaultValue={datosPersonales?.telefonoMovil || ""}
-                                                        {...register("telefonoMovil", { required: "El teléfono móvil es un dato requerido" })}
-                                                        required
+                                                        {...register("telefonoMovil")}
                                                         />
                                                     </div>
                                                     <div className="col-md-6">
@@ -1035,6 +1038,7 @@ const Perfil = ({ params }) => {
                                                         {...register("email", { required: "El email es un dato requerido" })}
                                                         required
                                                         />
+                                                        {errors.email && <span style={{ color: "red" }}>{errors.email.message}</span>}
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Tipo de Documento *</label>
@@ -1054,6 +1058,7 @@ const Perfil = ({ params }) => {
                                                         {...register("numeroDocumento", { required: "El número de documento de identidad es un dato requerido" })}
                                                         required
                                                         />
+                                                        {errors.numeroDocumento && <span style={{ color: "red" }}>{errors.numeroDocumento.message}</span>}
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Expedido en</label>
@@ -1066,6 +1071,7 @@ const Perfil = ({ params }) => {
                                                         {...register("documentoExpedido", { required: "El número de documento de identidad es un dato requerido" })}
                                                         required
                                                         />
+                                                        {errors.documentoExpedido && <span style={{ color: "red" }}>{errors.documentoExpedido.message}</span>}
                                                     </div>
                                                     <div className="col-md-6">
                                                         <label className="form-label">Fotografía del Postulante</label>
@@ -1093,19 +1099,11 @@ const Perfil = ({ params }) => {
                                                     <div className="col-12">
                                                     { 
                                                     idPerfil === 0 ? (
-                                                        <button
-                                                            type="submit"
-                                                            className="btn btn-primary"
-                                                            onClick={handleRegistraPerfil}
-                                                        >
+                                                        <button type="submit" className="btn btn-primary">
                                                             Registrar Perfil
                                                         </button>
                                                         ) : (
-                                                        <button
-                                                            type="submit"
-                                                            className="btn btn-primary"
-                                                            onClick={handleGuardarPerfil}
-                                                        >
+                                                        <button type="submit" className="btn btn-primary">
                                                             Actualizar Perfil
                                                         </button>
                                                         )}

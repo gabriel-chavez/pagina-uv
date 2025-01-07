@@ -1,12 +1,17 @@
-
 import axios from 'axios';
 import { getSession } from 'next-auth/react';
 import { getServerSession } from 'next-auth'; 
 import { authOptions } from '../app/api/auth/[...nextauth]/route';
+import https from 'https';
+
+const httpsAgent = new https.Agent({
+    rejectUnauthorized: false, 
+});
 
 const apiClient = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
     timeout: 10000,
+    httpsAgent, 
 });
 
 const isClient = typeof window !== 'undefined';
@@ -40,16 +45,11 @@ apiClient.interceptors.request.use(
     }
 );
 
-
-
 apiClient.interceptors.response.use(
     response => response,
     error => {
-        
         if (error.response) {
-            console.log(error.response)
             const { status, data } = error.response;
-            
             const mensaje = data.mensaje || 'Error en la solicitud';
             const datos = data.datos || null;
 
@@ -61,7 +61,7 @@ apiClient.interceptors.response.use(
                 case 404:
                     return Promise.reject({ status: 404, message: mensaje, datos: datos });
                 default:
-                    return Promise.reject({ status: status, message: mensaje + error.response.data.detail, datos: datos });
+                    return Promise.reject({ status: status, message: mensaje, datos: datos });
             }
         } else if (error.request) {
             return Promise.reject({ status: 500, message: 'Error de red. Inténtalo de nuevo más tarde.', datos: null });

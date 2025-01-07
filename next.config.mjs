@@ -3,7 +3,6 @@ import webpack from "webpack";
 
 const nextConfig = {
   reactStrictMode: true,
-
   eslint: {
     ignoreDuringBuilds: true,  // Desactiva ESLint durante el build
   },
