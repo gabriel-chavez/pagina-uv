@@ -38,6 +38,19 @@ const nextConfig = {
 
   // Desactiva Telemetría de Next.js para ahorrar tiempo
   telemetry: false,
+  async headers() {
+    return [
+      {
+        source: '/(.*)',
+        headers: [
+          {
+            key: 'Content-Security-Policy',
+            value: "upgrade-insecure-requests",
+          },
+        ],
+      },
+    ];
+  }
 };
 
 export default nextConfig;

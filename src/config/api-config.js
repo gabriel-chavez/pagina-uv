@@ -2,16 +2,11 @@ import axios from 'axios';
 import { getSession } from 'next-auth/react';
 import { getServerSession } from 'next-auth'; 
 import { authOptions } from '../app/api/auth/[...nextauth]/route';
-import https from 'https';
 
-const httpsAgent = new https.Agent({
-    rejectUnauthorized: false, 
-});
 
 const apiClient = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
-    timeout: 10000,
-    httpsAgent, 
+    timeout: 10000
 });
 
 const isClient = typeof window !== 'undefined';

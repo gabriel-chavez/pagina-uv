@@ -8,7 +8,11 @@ services:
       - "3001:3001"
     environment:
       NODE_ENV: production
-    volumes:      
-      - /app/node_modules
+ 
     command: npm run start -- -H 0.0.0.0
+    networks:
+      - portalweb  # Agregarlo explícitamente a la red portalweb
 
+networks:
+  portalweb:
+    external: true  # Usa la red existente
