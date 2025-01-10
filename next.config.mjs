@@ -12,35 +12,35 @@ const nextConfig = {
     unoptimized: true, 
   },
 
-  swcMinify: true, 
+  swcMinify: true,
   output: 'standalone',
 
   experimental: {
-    incrementalCacheHandlerPath: false,
-    turbo: true, 
-    nextScriptWorkers: true, 
+    turbo: {},  // Turbo debe ser un objeto vacío o con configuraciones específicas
+    nextScriptWorkers: false,  // Desactivado si no tienes Partytown instalado
   },
 
   webpack: (config, { buildId, dev, isServer }) => {
-  
     if (!dev) {
       config.optimization.minimize = true;
     }
 
- 
     config.plugins.push(
       new webpack.ProvidePlugin({
         $: "jquery",
         jQuery: "jquery",
         "window.jQuery": "jquery",
       })
-    ); 
+    );
+    
     config.resolve.alias['jquery'] = 'jquery';
 
     return config;
   },
 
+  // Telemetría fuera del bloque principal
   telemetry: false,
+
   async headers() {
     return [
       {

@@ -2,6 +2,7 @@ import axios from 'axios';
 import { getSession } from 'next-auth/react';
 import { getServerSession } from 'next-auth'; 
 import { authOptions } from '../app/api/auth/[...nextauth]/route';
+import https from 'https';
 
 
 const apiClient = axios.create({
@@ -44,10 +45,15 @@ apiClient.interceptors.response.use(
     response => response,
     error => {
         if (error.response) {
+            console.log("🌐 API Base URL:", process.env.NEXT_PUBLIC_API_BASE_URL);
+
             const { status, data } = error.response;
             const mensaje = data.mensaje || 'Error en la solicitud';
             const datos = data.datos || null;
-
+            console.error(`🚨 Error en respuesta (${status}): ${mensaje}`);
+            console.error(`📍 Endpoint: ${config.baseURL}${config.url}`);
+            console.error(`🛠️ Datos enviados:`, config.data);
+            console.error(`🔄 Respuesta recibida:`, data);
             switch (status) {
                 case 400:
                     return Promise.reject({ status: 400, message: mensaje, datos: datos });
@@ -59,9 +65,13 @@ apiClient.interceptors.response.use(
                     return Promise.reject({ status: status, message: mensaje, datos: datos });
             }
         } else if (error.request) {
+            console.error(`📡 Solicitud sin respuesta. Configuración:`, error.request);
+
             return Promise.reject({ status: 500, message: 'Error de red. Inténtalo de nuevo más tarde.', datos: null });
         } else {
             console.log(error);
+            console.error(`❌ Error general:`, error.message || error);
+
             return Promise.reject({ status: 500, message: 'Error en la solicitud. Inténtalo de nuevo más tarde.', datos: null });
         }
     }
