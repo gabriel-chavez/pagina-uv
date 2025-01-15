@@ -1,9 +1,9 @@
 import Link from 'next/link';
 import { obtenerMenuPrincipal } from '@/services/cmsService';
-import { getServerSession } from 'next-auth';
-import { authOptions } from '@/app/api/auth/[...nextauth]/route';
+
 import MenuCliente from './MenuCliente';
 
+export const revalidate = 10; 
 export default async function Header() {
 
   const resultado = await obtenerMenuPrincipal(); 
