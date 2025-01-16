@@ -326,9 +326,9 @@ export const obtenerPerfilReferenciaPersonal = async (id) => {
     throw error;
   }
 };
-export const agregarPerfilReferenciaPersonal = async (sistema) => {
+export const agregarPerfilReferenciaPersonal = async (referenciaPersonal) => {
   try {
-    const response = await apiClient.post('/api/ReferenciaPersonal', sistema);
+    const response = await apiClient.post('/api/ReferenciaPersonal', referenciaPersonal);
     return response.data;
   } catch (error) {
     console.error("Error al agregar referencia personal:", error.response?.data || error.message);
@@ -363,9 +363,9 @@ export const obtenerPerfilReferenciaLaboral = async (id) => {
     throw error;
   }
 };
-export const agregarPerfilReferenciaLaboral = async (sistema) => {
+export const agregarPerfilReferenciaLaboral = async (referenciaLaboral) => {
   try {
-    const response = await apiClient.post('/api/ReferenciaLaboral', sistema);
+    const response = await apiClient.post('/api/ReferenciaLaboral', referenciaLaboral);
     return response.data;
   } catch (error) {
     console.error("Error al agregar referencia laboral:", error.response?.data || error.message);

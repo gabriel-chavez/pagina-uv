@@ -6,7 +6,6 @@ import { obtenerPerfilFormacionAcademica } from '@/services/convocatoriaService'
 import { eliminarPerfilFormacionAcademica } from '@/services/convocatoriaService';
 
 const PerfilFormacionAcademicaLista = ({ formacionLista, onEditClick, idPerfil}) => {
-    const [formacion, setFormacionAcademica] = useState(formacionLista); 
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [selectedFormacionAcademica, setSelectedFormacionAcademica] = useState(null);
 

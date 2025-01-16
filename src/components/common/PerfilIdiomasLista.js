@@ -6,10 +6,9 @@ import { obtenerPerfilIdiomas } from '@/services/convocatoriaService';
 import { eliminarPerfilIdioma } from '@/services/convocatoriaService';
 
 const PerfilIdiomasLista = ({ idiomasLista, onEditClick, idPerfil}) => {
-    const [idiomas, setIdiomas] = useState(idiomasLista); 
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [selectedIdioma, setSelectedIdioma] = useState(null);
-
+console.log(idiomasLista);
     const handleDeleteClick = (idioma) => {
         setSelectedIdioma(idioma);
         setShowConfirmModal(true);
@@ -54,8 +53,8 @@ const PerfilIdiomasLista = ({ idiomasLista, onEditClick, idPerfil}) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {idiomas && idiomas.length > 0 ? (
-                        idiomas.map((idioma) => (
+                    {idiomasLista && idiomasLista.length > 0 ? (
+                        idiomasLista.map((idioma) => (
                             <tr key={idioma.id}>
                                 <td>{idioma.parIdioma.descripcion}</td>
                                 <td>{idioma.parNivelConocimientoLectura.descripcion}</td>

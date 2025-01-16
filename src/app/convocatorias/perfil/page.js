@@ -75,7 +75,6 @@ const Perfil = ({ params }) => {
     const router = useRouter();
     const { data: session, status } = useSession();
     const [idPerfil, setIdPerfil] = useState(session?.user?.postulanteId > 0 ? session.user.postulanteId : 0);
-    //const id = session?.user?.postulanteId > 0 ? session.user.postulanteId : 0;
     
     const estadoAut = status;
 
@@ -429,13 +428,9 @@ const Perfil = ({ params }) => {
 
         try {
             const result = await agregarPerfil(datos); 
-            console.log("Resultado del registro")
-            console.log(result)
             if (Number.isInteger(result.datos.id)) {
                 setIdPerfil(result.datos.id);
             }
-
-            console.log(idPerfil,' - ', result.datos.id);
 
             Swal.fire({
                 title: "¡Éxito!",
@@ -544,7 +539,7 @@ const Perfil = ({ params }) => {
                 handleCursosModalClose();
 
                 const perfilCursos = await obtenerPerfilCursos(idPerfil);
-                setIdiomas(perfilCursos);
+                setCursos(perfilCursos);
             });
         } catch (error) {
             console.error('Error al guardar curso:', error);
@@ -646,10 +641,10 @@ const Perfil = ({ params }) => {
                 icon: 'error',
                 confirmButtonText: 'Intentar nuevamente',
             }).then(async () => {
-                handleIdiomasModalClose();
+                handleSistemasModalClose();
 
                 const perfilSistemas = await obtenerPerfilSistemas(idPerfil);
-                setIdiomas(perfilSistemas);
+                setSistemas(perfilSistemas);
             });
         }
     };
@@ -683,8 +678,6 @@ const Perfil = ({ params }) => {
             motivoDesvinculacion: motivoDesvinculación,
             actualmenteTrabajando: actualmenteTrabajando,
         };
-        console.log("datos esp laboral");
-        console.log(datos);
 
         try {
             let result;
@@ -792,7 +785,6 @@ const Perfil = ({ params }) => {
             telefonoMovil: telefonoMovil,
             relacion: relacion,
             email: email,
-
         };
 
         try {

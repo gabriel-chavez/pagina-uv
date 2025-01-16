@@ -6,7 +6,6 @@ import { obtenerPerfilReferenciaLaboral } from '@/services/convocatoriaService';
 import { eliminarPerfilReferenciaLaboral } from '@/services/convocatoriaService';
 
 const PerfilReferenciaLaboralLista = ({ referenciaLaboralLista, onEditClick, idPerfil }) => {
-    const [referenciaLaboral, setReferenciaLaboral] = useState(referenciaLaboralLista);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [selectedRefLaboral, setSelectedRefLaboral] = useState(null);
 

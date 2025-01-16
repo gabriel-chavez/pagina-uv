@@ -6,8 +6,6 @@ import { obtenerPerfilSistemas } from '@/services/convocatoriaService';
 import { eliminarPerfilSistema } from '@/services/convocatoriaService';
 
 const PerfilSistemasLista = ({ sistemasLista, onEditClick, idPerfil }) => {
-    // Cambié el nombre de la variable de estado para evitar conflicto
-    const [sistemas, setSistemas] = useState(sistemasLista); 
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [selectedSistema, setSelectedSistema] = useState(null);
 
@@ -53,8 +51,8 @@ const PerfilSistemasLista = ({ sistemasLista, onEditClick, idPerfil }) => {
                     </tr>
                 </thead>
                 <tbody>
-                    {sistemas && sistemas.length > 0 ? (
-                        sistemas.map((sistema) => (
+                    {sistemasLista && sistemasLista.length > 0 ? (
+                        sistemasLista.map((sistema) => (
                             <tr key={sistema.id}>
                                 <td>{sistema.parPrograma.descripcion}</td>
                                 <td>{sistema.parNivelConocimiento.descripcion}</td>

@@ -6,7 +6,6 @@ import { obtenerPerfilCursos } from '@/services/convocatoriaService';
 import { eliminarPerfilCurso } from '@/services/convocatoriaService';
 
 const PerfilCursosLista = ({ cursosLista, onEditClick, idPerfil }) => {
-    const [cursos, setCursos] = useState(cursosLista); 
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [selectedCurso, setSelectedCurso] = useState(null);
 
@@ -67,8 +66,8 @@ const PerfilCursosLista = ({ cursosLista, onEditClick, idPerfil }) => {
                 </tr>
             </thead>
             <tbody>
-                {cursos && cursos.length > 0 ? (
-                    cursos.map((curso) => (
+                {cursosLista && cursosLista.length > 0 ? (
+                    cursosLista.map((curso) => (
                     <tr key={curso.id}>
                         <td>{curso.parTipoCapacitacion.descripcion}</td>
                         <td>{curso.nombre}</td>

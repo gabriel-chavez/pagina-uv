@@ -6,7 +6,6 @@ import { obtenerPerfilExperienciaLaboral } from '@/services/convocatoriaService'
 import { eliminarPerfilExperienciaLaboral } from '@/services/convocatoriaService';
 
 const PerfilExperienciaLaboralLista = ({ experienciaLaboralLista, onEditClick, idPerfil }) => {
-    const [experienciaLaboral, setExperienciaLaboral] = useState(experienciaLaboralLista); 
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [selectedExpLaboral, setSelectedExpLaboral] = useState(null);
 
@@ -52,8 +51,8 @@ const PerfilExperienciaLaboralLista = ({ experienciaLaboralLista, onEditClick, i
     
     return (
         <>
-        {experienciaLaboral && experienciaLaboral.length > 0 ? (
-            experienciaLaboral.map((expLaboral) => (
+        {experienciaLaboralLista && experienciaLaboralLista.length > 0 ? (
+            experienciaLaboralLista.map((expLaboral) => (
                 <div className={Estilos.experienceContainer} key={expLaboral.id}>
                     <div className={Estilos.experienceHeader}>
                         <div>

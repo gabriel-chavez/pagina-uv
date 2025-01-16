@@ -6,7 +6,6 @@ import { obtenerPerfilReferenciaPersonal } from '@/services/convocatoriaService'
 import { eliminarPerfilReferenciaPersonal } from '@/services/convocatoriaService';
 
 const PerfilReferenciaPersonalLista = ({ referenciaPersonalLista, onEditClick, idPerfil }) => {
-    const [referenciaPersonal, setReferenciaPersonal] = useState(referenciaPersonalLista);
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [selectedRefPersonal, setSelectedRefPersonal] = useState(null);
 
@@ -57,8 +56,8 @@ const PerfilReferenciaPersonalLista = ({ referenciaPersonalLista, onEditClick, i
                     </tr>
                 </thead>
                 <tbody>
-                    {referenciaPersonal && referenciaPersonal.length > 0 ? (
-                        referenciaPersonal.map((referenciaPersonal) => (
+                    {referenciaPersonalLista && referenciaPersonalLista.length > 0 ? (
+                        referenciaPersonalLista.map((referenciaPersonal) => (
                             <tr key={referenciaPersonal.id}>
                                 <td>{referenciaPersonal.nombre}</td>
                                 <td>{referenciaPersonal.empresa}</td>
