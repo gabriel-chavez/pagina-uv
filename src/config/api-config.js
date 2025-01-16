@@ -3,18 +3,10 @@ import { getSession } from 'next-auth/react';
 import { getServerSession } from 'next-auth'; 
 import { authOptions } from '../app/api/auth/[...nextauth]/route';
 import https from 'https';
-<<<<<<< HEAD
-
-const httpsAgent = new https.Agent({
-    rejectUnauthorized: false,
-});
- 
-=======
 const httpsAgent = new https.Agent({
     rejectUnauthorized: false, 
 });
 
->>>>>>> 25d2465df1ec96b64d0196cd505370144788b840
 const apiClient = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
     timeout: 10000,
