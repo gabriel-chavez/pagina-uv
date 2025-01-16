@@ -18,10 +18,10 @@ const LoginPage = () => {
     event.preventDefault();
     setErrors([]);
 
-    if (!recaptchaToken) {
-      setErrors(["Por favor, verifica que no eres un robot."]);
-      return;
-    }
+    // if (!recaptchaToken) {
+    //   setErrors(["Por favor, verifica que no eres un robot."]);
+    //   return;
+    // }
 
     const responseNextAuth = await signIn("credentials", {
       usuario,
@@ -29,7 +29,7 @@ const LoginPage = () => {
       recaptchaToken,
       redirect: false,
     });
-
+    console.log(responseNextAuth);
     if (responseNextAuth?.error) {
       //console.log("page.js:", responseNextAuth);
       setErrors(responseNextAuth.error.split(","));

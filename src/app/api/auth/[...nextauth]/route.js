@@ -13,7 +13,7 @@ export const authOptions = {
         usuario: { label: "Usuario", type: "text", placeholder: "test@test.com" },
         password: { label: "Password", type: "password" },
       },
-      async authorize(credentials) {
+      async authorize(credentials) {        
         const token = await login(credentials.usuario, credentials?.password);
         console.log("token=>>>>", token);
         if (token.error) {

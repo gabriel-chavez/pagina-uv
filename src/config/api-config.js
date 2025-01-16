@@ -3,11 +3,18 @@ import { getSession } from 'next-auth/react';
 import { getServerSession } from 'next-auth'; 
 import { authOptions } from '../app/api/auth/[...nextauth]/route';
 import https from 'https';
+<<<<<<< HEAD
 
 const httpsAgent = new https.Agent({
     rejectUnauthorized: false,
 });
  
+=======
+const httpsAgent = new https.Agent({
+    rejectUnauthorized: false, 
+});
+
+>>>>>>> 25d2465df1ec96b64d0196cd505370144788b840
 const apiClient = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
     timeout: 10000,
@@ -48,14 +55,22 @@ apiClient.interceptors.response.use(
     (response) => response,
     (error) => {
         if (error.response) {
+<<<<<<< HEAD
+=======
+
+>>>>>>> 25d2465df1ec96b64d0196cd505370144788b840
 
             const { status, data } = error.response;
             const mensaje = data.mensaje || "Error en la solicitud";
             const datos = data.datos || null;
+<<<<<<< HEAD
 
             console.error(`🚨 Error en respuesta (${status}): ${mensaje}`);
             console.error(`📍 Endpoint: ${error.config?.baseURL || ""}${error.config?.url || ""}`);
             console.error(`🛠️ Datos enviados:`, error.config?.data);
+=======
+                       
+>>>>>>> 25d2465df1ec96b64d0196cd505370144788b840
             console.error(`🔄 Respuesta recibida:`, data);
 
             switch (status) {
@@ -69,11 +84,14 @@ apiClient.interceptors.response.use(
                     return Promise.reject({ status: status, message: mensaje, datos: datos });
             }
         } else if (error.request) {
-            console.error(`📡 Solicitud sin respuesta. Configuración:`, error.request);
+
 
             return Promise.reject({ status: 500, message: "Error de red. Inténtalo de nuevo más tarde.", datos: null });
         } else {
+<<<<<<< HEAD
             console.error(`❌ Error general:`, error.message || error);
+=======
+>>>>>>> 25d2465df1ec96b64d0196cd505370144788b840
 
             return Promise.reject({ status: 500, message: "Error en la solicitud. Inténtalo de nuevo más tarde.", datos: null });
         }
