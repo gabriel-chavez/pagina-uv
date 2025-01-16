@@ -74,8 +74,21 @@ import { signIn, signOut, useSession } from "next-auth/react";
 const Perfil = ({ params }) => {
     const router = useRouter();
     const { data: session, status } = useSession();
-    const idPerfil = session?.user?.postulanteId > 0 ? session.user.postulanteId : 0;
+    const [idPerfil, setIdPerfil] = useState(session?.user?.postulanteId > 0 ? session.user.postulanteId : 0);
+    //const id = session?.user?.postulanteId > 0 ? session.user.postulanteId : 0;
+    
     const estadoAut = status;
+
+    useEffect(() => {
+        if (session?.user?.postulanteId > 0) {
+            setIdPerfil(session.user.postulanteId);
+        }
+
+        loadData();
+        if (estadoAut == 'unauthenticated') {
+            router.push('/login');
+        }
+    }, [session, status]);
 
     const { register, handleSubmit, formState: { errors } } = useForm();
 
@@ -258,18 +271,6 @@ const Perfil = ({ params }) => {
         }
     };
 
-    useEffect(() => {
-
-        loadData();
-        if (estadoAut == 'unauthenticated') {
-            router.push('/login');
-        }
-    }, [session, status]);
-
-    if (loading) {
-        return <div>Cargando...</div>;
-    }
-
     const handleImageChange = async (event) => {
         const file = event.target.files[0];  // Obtén el archivo seleccionado
         if (file) {
@@ -408,35 +409,39 @@ const Perfil = ({ params }) => {
         const fotografia = '';
 
         const datos = {
-            nombres: nombres,
-            apellidoPaterno: apellidoPaterno,
-            apellidoMaterno: apellidoMaterno,
-            fechaNacimiento: fechaNacimiento,
+            nombres,
+            apellidoPaterno,
+            apellidoMaterno,
+            fechaNacimiento,
             ciudadNacimiento: lugarNacimiento,
-            paisNacimiento: paisNacimiento,
+            paisNacimiento,
             ciudadResidencia: lugarResidencia,
-            paisResidencia: paisResidencia,
-            direccion: direccion,
-            zona: zona,
-            telefono: telefono,
-            telefonoMovil: telefonoMovil,
-            email: email,
+            paisResidencia,
+            direccion,
+            zona,
+            telefono,
+            telefonoMovil,
+            email,
             documentoExpedido: expedidoEn,
-            numeroDocumento: numeroDocumento,
-            fotografia: fotografia,
+            numeroDocumento,
+            fotografia,
         };
 
         try {
-            let result = await agregarPerfil(datos);
+            const result = await agregarPerfil(datos); 
+            console.log("Resultado del registro")
+            console.log(result)
+            if (Number.isInteger(result.datos.id)) {
+                setIdPerfil(result.datos.id);
+            }
+
+            console.log(idPerfil,' - ', result.datos.id);
 
             Swal.fire({
-                title: '¡Éxito!',
+                title: "¡Éxito!",
                 text: result.mensaje,
-                icon: 'success',
-                confirmButtonText: 'Aceptar',
-            }).then(async () => {
-                const perfil = await obtenerPerfil(idPerfil);
-                setDatosPersonales(perfil);
+                icon: "success",
+                confirmButtonText: "Aceptar",
             });
         } catch (error) {
             console.error('Error al guardar los datos personales', error);
@@ -935,29 +940,6 @@ const Perfil = ({ params }) => {
                                                                 />
                                                                 {errors.ciudadNacimiento && <span style={{ color: "red" }}>{errors.ciudadNacimiento.message}</span>}
                                                             </div>
-
-
-
-
-
-
-                                                            {/* <div>
-                                                        <label htmlFor="nombre">Nombre de Seguro</label>
-                                                        <input id="nombre" type="text"
-                                                            {...register("nombre", { required: "Nombre del seguro es requerido" })} />
-                                                        {errors.nombre &&
-                                                            <span style={{ color: "red" }}>{errors.nombre.message}</span>}
-                                                    </div>
-                                                    <div>
-                                                        <label htmlFor="nombreCorto">Nombre Corto</label>
-                                                        <input id="nombreCorto" type="text" {...register("nombreCorto", { required: "Nombre corto es requerido" })} /> {errors.nombreCorto && <span style={{ color: "red" }}>{errors.nombreCorto.message}</span>}
-                                                    </div> */}
-
-
-
-
-
-
                                                             <div className="col-md-6">
                                                                 <label className="form-label">País de Nacimiento *</label>
                                                                 <select id="paisNacimiento" onChange={handleChange} className="form-select" name="paisNacimiento" required>
@@ -1014,7 +996,7 @@ const Perfil = ({ params }) => {
                                                             <div className="col-md-6">
                                                                 <label className="form-label">Teléfono *</label>
                                                                 <input
-                                                                    type="text"
+                                                                    type="number"
                                                                     id="telefono"
                                                                     className="form-control"
                                                                     name="telefono"
@@ -1027,7 +1009,7 @@ const Perfil = ({ params }) => {
                                                             <div className="col-md-6">
                                                                 <label className="form-label">Teléfono Móvil</label>
                                                                 <input
-                                                                    type="text"
+                                                                    type="number"
                                                                     id="telefonoMovil"
                                                                     className="form-control"
                                                                     name="telefonoMovil"
@@ -1058,7 +1040,7 @@ const Perfil = ({ params }) => {
                                                             <div className="col-md-6">
                                                                 <label className="form-label">Número de Documento *</label>
                                                                 <input
-                                                                    type="text"
+                                                                    type="number"
                                                                     id="numeroDocumento"
                                                                     className="form-control"
                                                                     name="numeroDocumento"
