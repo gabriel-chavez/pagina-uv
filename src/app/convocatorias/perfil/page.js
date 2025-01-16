@@ -5,6 +5,7 @@ import Estilos from '@/estilos/InfoAcademica.module.css';
 import React, { useState, useEffect } from 'react';
 import { useForm } from "react-hook-form";
 import Swal from 'sweetalert2';
+import { useRouter } from 'next/navigation';
 
 import PerfilFormacionAcademicaLista from "@/components/common/PerfilFormacionAcademicaLista";
 import PerfilFormacionAcademicaModal from "@/components/common/PerfilFormacionAcademicaModal";
@@ -71,14 +72,12 @@ import { obtenerParParentesco } from '@/services/convocatoriaService';
 import { signIn, signOut, useSession } from "next-auth/react";
 
 const Perfil = ({ params }) => {
+    const router = useRouter();
     const { data: session, status } = useSession();
     const idPerfil = session?.user?.postulanteId > 0 ? session.user.postulanteId : 0;
+    const estadoAut = status;
 
-    const {
-        register,
-        handleSubmit,
-        formState: { errors },
-    } = useForm();
+    const { register, handleSubmit, formState: { errors } } = useForm();
 
     const [datosPersonales, setDatosPersonales] = useState({});
     const [formacionLista, setFormacionAcademica] = useState([]);
@@ -207,29 +206,28 @@ const Perfil = ({ params }) => {
 
     const loadData = async () => {
         try {
-            if(idPerfil > 0)
-            {
-                const perfil = await obtenerPerfil(idPerfil); 
-                setDatosPersonales(perfil);    
+            if (idPerfil > 0) {
+                const perfil = await obtenerPerfil(idPerfil);
+                setDatosPersonales(perfil);
 
                 const perfilFormacion = await obtenerPerfilFormacionAcademica(idPerfil);
                 setFormacionAcademica(perfilFormacion);
-    
+
                 const perfilCursos = await obtenerPerfilCursos(idPerfil);
                 setCursos(perfilCursos);
-    
+
                 const perfilIdiomas = await obtenerPerfilIdiomas(idPerfil);
                 setIdiomas(perfilIdiomas);
-    
+
                 const perfilSistemas = await obtenerPerfilSistemas(idPerfil);
                 setSistemas(perfilSistemas);
-    
+
                 const perfilExpLaboral = await obtenerPerfilExperienciaLaboral(idPerfil);
                 setExperienciaLaboral(perfilExpLaboral);
-    
+
                 const perfilRefPersonal = await obtenerPerfilReferenciaPersonal(idPerfil);
                 setReferenciaPersonal(perfilRefPersonal);
-    
+
                 const perfilRefLaboral = await obtenerPerfilReferenciaLaboral(idPerfil);
                 setReferenciaLaboral(perfilRefLaboral);
             }
@@ -261,8 +259,12 @@ const Perfil = ({ params }) => {
     };
 
     useEffect(() => {
+
         loadData();
-    }, []);
+        if (estadoAut == 'unauthenticated') {
+            router.push('/login');
+        }
+    }, [session, status]);
 
     if (loading) {
         return <div>Cargando...</div>;
@@ -324,8 +326,9 @@ const Perfil = ({ params }) => {
         });
     };
 
+    
     const handleGuardarPerfil = async (data) => {
-        
+
         const nombres = document.getElementById('nombres').value;
         const apellidoPaterno = document.getElementById('apellidoPadre').value;
         const apellidoMaterno = document.getElementById('apellidoMadre').value;
@@ -385,7 +388,6 @@ const Perfil = ({ params }) => {
         }
     };
     const handleRegistraPerfil = async (event) => {
-        event.preventDefault(); // Evitar recarga de la página
 
         const nombres = document.getElementById('nombres').value;
         const apellidoPaterno = document.getElementById('apellidoPadre').value;
@@ -423,7 +425,7 @@ const Perfil = ({ params }) => {
             numeroDocumento: numeroDocumento,
             fotografia: fotografia,
         };
-        
+
         try {
             let result = await agregarPerfil(datos);
 
@@ -456,7 +458,7 @@ const Perfil = ({ params }) => {
 
         const datos = {
             postulanteId: idPerfil,
-            parNivelFormacion: NivelFormacionId,
+            parNivelFormacionId: NivelFormacionId,
             centroEstudios: centroEstudios,
             tituloObtenido: tituloObtenido,
             fechaTitulo: fechaTitulo,
@@ -498,7 +500,6 @@ const Perfil = ({ params }) => {
             });
         }
     };
-    
     const handleGuardarCurso = async () => {
         const tipoCapacitacion = document.getElementById('tipoCapacitacion').value;
         const nombres = document.getElementById('nombres').value;
@@ -512,7 +513,7 @@ const Perfil = ({ params }) => {
         const datos = {
             postulanteId: idPerfil,
             parTipoCapacitacionId: tipoCapacitacion,
-            nombres: nombres,
+            nombre: nombres,
             centroEstudios: centroEstudio,
             pais: pais,
             horasAcademicas: duracion,
@@ -658,9 +659,9 @@ const Perfil = ({ params }) => {
         const principalesFunciones = document.getElementById('principalesFunciones').value;
         const fechaInicio = document.getElementById('fechaInicio').value;
         const fechaFin = document.getElementById('fechaFin').value;
-        const totalExperiencia = document.getElementById('totalExperiencia').value;
+        //const totalExperiencia = document.getElementById('totalExperiencia').value;
         const motivoDesvinculación = document.getElementById('motivoDesvinculación').value;
-        const actualmenteTrabajando = document.getElementById('currentlyWorking').value;
+        const actualmenteTrabajando = document.getElementById('currentlyWorking').checked;
 
         const datos = {
             postulanteId: idPerfil,
@@ -674,10 +675,11 @@ const Perfil = ({ params }) => {
             funciones: principalesFunciones,
             fechaInicio: fechaInicio,
             fechaConclusion: fechaFin,
-            parProgramaId: totalExperiencia,
             motivoDesvinculacion: motivoDesvinculación,
             actualmenteTrabajando: actualmenteTrabajando,
         };
+        console.log("datos esp laboral");
+        console.log(datos);
 
         try {
             let result;
@@ -724,7 +726,7 @@ const Perfil = ({ params }) => {
 
         const datos = {
             postulanteId: idPerfil,
-            nombres: nombres,
+            nombre: nombres,
             cargo: cargo,
             empresa: empresa,
             telefono: telefono,
@@ -778,7 +780,7 @@ const Perfil = ({ params }) => {
 
         const datos = {
             postulanteId: idPerfil,
-            nombres: nombres,
+            nombre: nombres,
             cargo: cargo,
             empresa: empresa,
             telefono: telefono,
@@ -822,6 +824,7 @@ const Perfil = ({ params }) => {
             });
         }
     };
+    const onSubmitHandler = idPerfil > 0 ? handleGuardarPerfil : handleRegistraPerfil;
 
     return (
         <div>
@@ -833,107 +836,112 @@ const Perfil = ({ params }) => {
                 <div className="container">
                     <div className="row">
                         <div className="col-xl-12 col-lg-12">
+                            {estadoAut != 'unauthenticated' ? (
+                                <>
 
-                            <div className="Tabs">
-                                <div className="pcss3t pcss3t-effect-scale pcss3t-theme-1">
-                                    <input type="radio" name="pcss3t" defaultChecked id="tab1" className="tab-content-first" />
-                                    <label htmlFor="tab1"><i className="icon-bolt"></i>Datos del postulante</label>
+                                    <div className="Tabs">
 
-                                    <input type="radio" name="pcss3t" id="tab2" className="tab-content-2" disabled={idPerfil === 0} />
-                                    <label htmlFor="tab2"><i className="icon-picture"></i>Información académica</label>
+                                        <div className="pcss3t pcss3t-effect-scale pcss3t-theme-1">
+                                            <input type="radio" name="pcss3t" defaultChecked id="tab1" className="tab-content-first" />
+                                            <label htmlFor="tab1"><i className="icon-bolt"></i>Datos del postulante</label>
 
-                                    <input type="radio" name="pcss3t" id="tab3" className="tab-content-3" disabled={idPerfil === 0} />
-                                    <label htmlFor="tab3"><i className="icon-cogs"></i>Cursos/Talleres</label>
+                                            <input type="radio" name="pcss3t" id="tab2" className="tab-content-2" disabled={idPerfil === 0} />
+                                            <label htmlFor="tab2"><i className="icon-picture"></i>Información académica</label>
 
-                                    <input type="radio" name="pcss3t" id="tab4" className="tab-content-4" disabled={idPerfil === 0} />
-                                    <label htmlFor="tab4"><i className="icon-globe"></i>Idiomas</label>
+                                            <input type="radio" name="pcss3t" id="tab3" className="tab-content-3" disabled={idPerfil === 0} />
+                                            <label htmlFor="tab3"><i className="icon-cogs"></i>Cursos/Talleres</label>
 
-                                    <input type="radio" name="pcss3t" id="tab5" className="tab-content-5" disabled={idPerfil === 0} />
-                                    <label htmlFor="tab5"><i className="icon-globe"></i>Sistemas</label>
+                                            <input type="radio" name="pcss3t" id="tab4" className="tab-content-4" disabled={idPerfil === 0} />
+                                            <label htmlFor="tab4"><i className="icon-globe"></i>Idiomas</label>
 
-                                    <input type="radio" name="pcss3t" id="tab6" className="tab-content-6" disabled={idPerfil === 0} />
-                                    <label htmlFor="tab6"><i className="icon-globe"></i>Experiencia Laboral</label>
+                                            <input type="radio" name="pcss3t" id="tab5" className="tab-content-5" disabled={idPerfil === 0} />
+                                            <label htmlFor="tab5"><i className="icon-globe"></i>Sistemas</label>
 
-                                    <input type="radio" name="pcss3t" id="tab7" className="tab-content-7" disabled={idPerfil === 0} />
-                                    <label htmlFor="tab7"><i className="icon-globe"></i>Ref. Personal</label>
+                                            <input type="radio" name="pcss3t" id="tab6" className="tab-content-6" disabled={idPerfil === 0} />
+                                            <label htmlFor="tab6"><i className="icon-globe"></i>Experiencia Laboral</label>
 
-                                    <input type="radio" name="pcss3t" id="tab8" className="tab-content-last" disabled={idPerfil === 0} />
-                                    <label htmlFor="tab8"><i className="icon-globe"></i>Ref. Laboral</label>
+                                            <input type="radio" name="pcss3t" id="tab7" className="tab-content-7" disabled={idPerfil === 0} />
+                                            <label htmlFor="tab7"><i className="icon-globe"></i>Ref. Personal</label>
 
-                                    <ul>
-                                        <li className="tab-content tab-content-first typography">
-                                            <div className="container">
-                                                <h2>Datos Generales del Postulante</h2>
-                                                <form className="row g-3" onSubmit={handleSubmit(idPerfil > 0 ? handleGuardarPerfil : handleRegistraPerfil)}>
-                                                    <div className="col-md-6">
-                                                        <label className="form-label">Nombres *</label>
-                                                        <input
-                                                            type="text"
-                                                            id="nombres"
-                                                            className="form-control"
-                                                            name="nombres"
-                                                            defaultValue={datosPersonales?.nombres || ""}
-                                                            {...register("nombres", { required: "El campo 'Nombres' es obligatorio." })}
-                                                        />
-                                                        {errors.nombres && <span style={{ color: "red" }}>{errors.nombres.message}</span>}
-                                                    </div>
-                                                    <div className="col-md-6">
-                                                        <label className="form-label">Apellido del padre *</label>
-                                                        <input
-                                                            type="text"
-                                                            id="apellidoPadre"
-                                                            className="form-control"
-                                                            name="apellidoPadre"
-                                                            defaultValue={datosPersonales?.apellidoPaterno || ""}
-                                                            {...register("apellidoPaterno", { required: "Apellido es obligatorio" })}
-                                                            required
-                                                        />
-                                                        {errors.apellidoPaterno && <span style={{ color: "red" }}>{errors.apellidoPaterno.message}</span>}
-                                                    </div>
-                                                    <div className="col-md-6">
-                                                        <label className="form-label">Apellido de la madre *</label>
-                                                        <input
-                                                        type="text"
-                                                        id="apellidoMadre"
-                                                        className="form-control"
-                                                        name="apellidoMadre"
-                                                        defaultValue={datosPersonales?.apellidoMaterno || ""}
-                                                        {...register("apellidoMaterno", { required: "Apellido es requerido" })}
-                                                        required
-                                                        />
-                                                    </div>
-                                                    <div className="col-md-6">
-                                                        <label className="form-label">Fecha de Nacimiento *</label>
-                                                        <input
-                                                        type="date"
-                                                        id="fechaNacimiento"
-                                                        className="form-control"
-                                                        name="fechaNacimiento"
-                                                        defaultValue={datosPersonales?.fechaNacimiento || ""}
-                                                        {...register("fechaNacimiento", { required: "Apellido es requerido" })}
-                                                        required
-                                                        />
-                                                    </div>
-                                                    <div className="col-md-6">
-                                                        <label className="form-label">Lugar de Nacimiento *</label>
-                                                        <input
-                                                        type="text"
-                                                        id="lugarNacimiento"
-                                                        className="form-control"
-                                                        name="ciudadNacimiento"
-                                                        defaultValue={datosPersonales?.ciudadNacimiento || ""}
-                                                        {...register("ciudadNacimiento", { required: "La Ciudad de nacimiento es un dato requerido" })}
-                                                        required
-                                                        />
-                                                        {errors.ciudadNacimiento && <span style={{ color: "red" }}>{errors.ciudadNacimiento.message}</span>}
-                                                    </div>
+                                            <input type="radio" name="pcss3t" id="tab8" className="tab-content-last" disabled={idPerfil === 0} />
+                                            <label htmlFor="tab8"><i className="icon-globe"></i>Ref. Laboral</label>
+
+                                            <ul>
+                                                <li className="tab-content tab-content-first typography">
+                                                    <div className="container">
 
 
+                                                        <h2>Datos Generales del Postulante</h2>
+                                                        <form className="row g-3" onSubmit={handleSubmit(onSubmitHandler)}>
+                                                            <div className="col-md-6">
+                                                                <label className="form-label">Nombres *</label>
+                                                                <input
+                                                                    type="text"
+                                                                    id="nombres"
+                                                                    className="form-control"
+                                                                    name="nombres"
+                                                                    defaultValue={datosPersonales?.nombres || ""}
+                                                                    {...register("nombres", { required: "El campo 'Nombres' es obligatorio." })}
+                                                                />
+                                                                {errors.nombres && <span style={{ color: "red" }}>{errors.nombres.message}</span>}
+                                                            </div>
+                                                            <div className="col-md-6">
+                                                                <label className="form-label">Apellido del padre *</label>
+                                                                <input
+                                                                    type="text"
+                                                                    id="apellidoPadre"
+                                                                    className="form-control"
+                                                                    name="apellidoPadre"
+                                                                    defaultValue={datosPersonales?.apellidoPaterno || ""}
+                                                                    {...register("apellidoPaterno", { required: "Apellido es obligatorio" })}
+                                                                    required
+                                                                />
+                                                                {errors.apellidoPaterno && <span style={{ color: "red" }}>{errors.apellidoPaterno.message}</span>}
+                                                            </div>
+                                                            <div className="col-md-6">
+                                                                <label className="form-label">Apellido de la madre *</label>
+                                                                <input
+                                                                    type="text"
+                                                                    id="apellidoMadre"
+                                                                    className="form-control"
+                                                                    name="apellidoMadre"
+                                                                    defaultValue={datosPersonales?.apellidoMaterno || ""}
+                                                                    {...register("apellidoMaterno", { required: "Apellido es requerido" })}
+                                                                    required
+                                                                />
+                                                            </div>
+                                                            <div className="col-md-6">
+                                                                <label className="form-label">Fecha de Nacimiento *</label>
+                                                                <input
+                                                                    type="date"
+                                                                    id="fechaNacimiento"
+                                                                    className="form-control"
+                                                                    name="fechaNacimiento"
+                                                                    defaultValue={datosPersonales?.fechaNacimiento || ""}
+                                                                    {...register("fechaNacimiento", { required: "Apellido es requerido" })}
+                                                                    required
+                                                                />
+                                                            </div>
+                                                            <div className="col-md-6">
+                                                                <label className="form-label">Lugar de Nacimiento *</label>
+                                                                <input
+                                                                    type="text"
+                                                                    id="lugarNacimiento"
+                                                                    className="form-control"
+                                                                    name="ciudadNacimiento"
+                                                                    defaultValue={datosPersonales?.ciudadNacimiento || ""}
+                                                                    {...register("ciudadNacimiento", { required: "La Ciudad de nacimiento es un dato requerido" })}
+                                                                    required
+                                                                />
+                                                                {errors.ciudadNacimiento && <span style={{ color: "red" }}>{errors.ciudadNacimiento.message}</span>}
+                                                            </div>
 
 
 
 
-                                                    {/* <div>
+
+
+                                                            {/* <div>
                                                         <label htmlFor="nombre">Nombre de Seguro</label>
                                                         <input id="nombre" type="text"
                                                             {...register("nombre", { required: "Nombre del seguro es requerido" })} />
@@ -950,352 +958,357 @@ const Perfil = ({ params }) => {
 
 
 
-                                                    <div className="col-md-6">
-                                                        <label className="form-label">País de Nacimiento *</label>
-                                                        <select id="paisNacimiento" onChange={handleChange} className="form-select" name="paisNacimiento" required>
-                                                            <option value="Bolivia">Bolivia</option>
-                                                            <option value="Otro">Otro</option>
-                                                        </select>
-                                                    </div>
-                                                    <div className="col-md-6">
-                                                        <label className="form-label">Lugar de Residencia</label>
-                                                        <input
-                                                        type="text"
-                                                        id="lugarResidencia"
-                                                        className="form-control"
-                                                        name="ciudadResidencia"
-                                                        defaultValue={datosPersonales?.ciudadResidencia || ""}
-                                                        {...register("ciudadResidencia", { required: "La Ciudad de residencia es un dato requerido" })}
-                                                        required
-                                                        />
-                                                        {errors.ciudadResidencia && <span style={{ color: "red" }}>{errors.ciudadResidencia.message}</span>}
-                                                    </div>
-                                                    <div className="col-md-6">
-                                                        <label className="form-label">País de Residencia</label>
-                                                        <select id="paisResidencia" onChange={handleChange} className="form-select" name="paisResidencia">
-                                                            <option value="Bolivia">Bolivia</option>
-                                                            <option value="Otro">Otro</option>
-                                                        </select>
-                                                    </div>
-                                                    <div className="col-md-6">
-                                                        <label className="form-label">Dirección</label>
-                                                        <input
-                                                        type="text"
-                                                        id="direccion"
-                                                        className="form-control"
-                                                        name="direccion"
-                                                        defaultValue={datosPersonales?.direccion || ""}
-                                                        {...register("direccion", { required: "La Dirección es un dato requerido" })}
-                                                        required
-                                                        />
-                                                        {errors.direccion && <span style={{ color: "red" }}>{errors.direccion.message}</span>}
-                                                    </div>
-                                                    <div className="col-md-6">
-                                                        <label className="form-label">Zona</label>
-                                                        <input
-                                                        type="text"
-                                                        id="zona"
-                                                        className="form-control"
-                                                        name="zona"
-                                                        defaultValue={datosPersonales?.zona || ""}
-                                                        {...register("zona", { required: "La Zona es un dato requerido" })}
-                                                        required
-                                                        />
-                                                        {errors.zona && <span style={{ color: "red" }}>{errors.zona.message}</span>}
-                                                    </div>
-                                                    <div className="col-md-6">
-                                                        <label className="form-label">Teléfono *</label>
-                                                        <input
-                                                        type="text"
-                                                        id="telefono"
-                                                        className="form-control"
-                                                        name="telefono"
-                                                        defaultValue={datosPersonales?.telefono || ""}
-                                                        {...register("telefono")}
-                                                        required
-                                                        />
-                                                        {errors.telefono && <span style={{ color: "red" }}>{errors.telefono.message}</span>}
-                                                    </div>
-                                                    <div className="col-md-6">
-                                                        <label className="form-label">Teléfono Móvil</label>
-                                                        <input
-                                                        type="text"
-                                                        id="telefonoMovil"
-                                                        className="form-control"
-                                                        name="telefonoMovil"
-                                                        defaultValue={datosPersonales?.telefonoMovil || ""}
-                                                        {...register("telefonoMovil")}
-                                                        />
-                                                    </div>
-                                                    <div className="col-md-6">
-                                                        <label className="form-label">Email *</label>
-                                                        <input
-                                                        type="text"
-                                                        id="email"
-                                                        className="form-control"
-                                                        name="email"
-                                                        defaultValue={datosPersonales?.email || ""}
-                                                        {...register("email", { required: "El email es un dato requerido" })}
-                                                        required
-                                                        />
-                                                        {errors.email && <span style={{ color: "red" }}>{errors.email.message}</span>}
-                                                    </div>
-                                                    <div className="col-md-6">
-                                                        <label className="form-label">Tipo de Documento *</label>
-                                                        <select id="tipoDocumento" className="form-select" name="documentoIdentidad" onChange={handleChange} required>
-                                                            <option value="CI">Cédula de Identidad</option>
-                                                            <option value="Pasaporte">Pasaporte</option>
-                                                        </select>
-                                                    </div>
-                                                    <div className="col-md-6">
-                                                        <label className="form-label">Número de Documento *</label>
-                                                        <input
-                                                        type="text"
-                                                        id="numeroDocumento"
-                                                        className="form-control"
-                                                        name="numeroDocumento"
-                                                        defaultValue={datosPersonales?.numeroDocumento || ""}
-                                                        {...register("numeroDocumento", { required: "El número de documento de identidad es un dato requerido" })}
-                                                        required
-                                                        />
-                                                        {errors.numeroDocumento && <span style={{ color: "red" }}>{errors.numeroDocumento.message}</span>}
-                                                    </div>
-                                                    <div className="col-md-6">
-                                                        <label className="form-label">Expedido en</label>
-                                                        <input
-                                                        type="text"
-                                                        id="expedidoEn"
-                                                        className="form-control"
-                                                        name="expedidoEn"
-                                                        defaultValue={datosPersonales?.documentoExpedido || ""}
-                                                        {...register("documentoExpedido", { required: "El número de documento de identidad es un dato requerido" })}
-                                                        required
-                                                        />
-                                                        {errors.documentoExpedido && <span style={{ color: "red" }}>{errors.documentoExpedido.message}</span>}
-                                                    </div>
-                                                    <div className="col-md-6">
-                                                        <label className="form-label">Fotografía del Postulante</label>
-                                                        <div className="custom-file">
-                                                            <input
-                                                                type="file"
-                                                                className="custom-file-input"
-                                                                id="customFile"
-                                                                accept="image/*"
-                                                                onChange={handleImageChange}
-                                                            />
-                                                            <label className="custom-file-label" htmlFor="customFile">Seleccionar archivo</label>
-                                                        </div>
-                                                        {selectedImage && (
-                                                            <div className="mt-3">
-                                                                <img
-                                                                    src={selectedImage}
-                                                                    alt="Vista previa"
-                                                                    style={{ width: '100px', height: '100px', objectFit: 'cover', marginTop: '10px' }}
+                                                            <div className="col-md-6">
+                                                                <label className="form-label">País de Nacimiento *</label>
+                                                                <select id="paisNacimiento" onChange={handleChange} className="form-select" name="paisNacimiento" required>
+                                                                    <option value="Bolivia">Bolivia</option>
+                                                                    <option value="Otro">Otro</option>
+                                                                </select>
+                                                            </div>
+                                                            <div className="col-md-6">
+                                                                <label className="form-label">Lugar de Residencia</label>
+                                                                <input
+                                                                    type="text"
+                                                                    id="lugarResidencia"
+                                                                    className="form-control"
+                                                                    name="ciudadResidencia"
+                                                                    defaultValue={datosPersonales?.ciudadResidencia || ""}
+                                                                    {...register("ciudadResidencia", { required: "La Ciudad de residencia es un dato requerido" })}
+                                                                    required
+                                                                />
+                                                                {errors.ciudadResidencia && <span style={{ color: "red" }}>{errors.ciudadResidencia.message}</span>}
+                                                            </div>
+                                                            <div className="col-md-6">
+                                                                <label className="form-label">País de Residencia</label>
+                                                                <select id="paisResidencia" onChange={handleChange} className="form-select" name="paisResidencia">
+                                                                    <option value="Bolivia">Bolivia</option>
+                                                                    <option value="Otro">Otro</option>
+                                                                </select>
+                                                            </div>
+                                                            <div className="col-md-6">
+                                                                <label className="form-label">Dirección</label>
+                                                                <input
+                                                                    type="text"
+                                                                    id="direccion"
+                                                                    className="form-control"
+                                                                    name="direccion"
+                                                                    defaultValue={datosPersonales?.direccion || ""}
+                                                                    {...register("direccion", { required: "La Dirección es un dato requerido" })}
+                                                                    required
+                                                                />
+                                                                {errors.direccion && <span style={{ color: "red" }}>{errors.direccion.message}</span>}
+                                                            </div>
+                                                            <div className="col-md-6">
+                                                                <label className="form-label">Zona</label>
+                                                                <input
+                                                                    type="text"
+                                                                    id="zona"
+                                                                    className="form-control"
+                                                                    name="zona"
+                                                                    defaultValue={datosPersonales?.zona || ""}
+                                                                    {...register("zona", { required: "La Zona es un dato requerido" })}
+                                                                    required
+                                                                />
+                                                                {errors.zona && <span style={{ color: "red" }}>{errors.zona.message}</span>}
+                                                            </div>
+                                                            <div className="col-md-6">
+                                                                <label className="form-label">Teléfono *</label>
+                                                                <input
+                                                                    type="text"
+                                                                    id="telefono"
+                                                                    className="form-control"
+                                                                    name="telefono"
+                                                                    defaultValue={datosPersonales?.telefono || ""}
+                                                                    {...register("telefono")}
+                                                                    required
+                                                                />
+                                                                {errors.telefono && <span style={{ color: "red" }}>{errors.telefono.message}</span>}
+                                                            </div>
+                                                            <div className="col-md-6">
+                                                                <label className="form-label">Teléfono Móvil</label>
+                                                                <input
+                                                                    type="text"
+                                                                    id="telefonoMovil"
+                                                                    className="form-control"
+                                                                    name="telefonoMovil"
+                                                                    defaultValue={datosPersonales?.telefonoMovil || ""}
+                                                                    {...register("telefonoMovil")}
                                                                 />
                                                             </div>
-                                                        )}
-                                                    </div>
+                                                            <div className="col-md-6">
+                                                                <label className="form-label">Email *</label>
+                                                                <input
+                                                                    type="text"
+                                                                    id="email"
+                                                                    className="form-control"
+                                                                    name="email"
+                                                                    defaultValue={datosPersonales?.email || ""}
+                                                                    {...register("email", { required: "El email es un dato requerido" })}
+                                                                    required
+                                                                />
+                                                                {errors.email && <span style={{ color: "red" }}>{errors.email.message}</span>}
+                                                            </div>
+                                                            <div className="col-md-6">
+                                                                <label className="form-label">Tipo de Documento *</label>
+                                                                <select id="tipoDocumento" className="form-select" name="documentoIdentidad" onChange={handleChange} required>
+                                                                    <option value="CI">Cédula de Identidad</option>
+                                                                    <option value="Pasaporte">Pasaporte</option>
+                                                                </select>
+                                                            </div>
+                                                            <div className="col-md-6">
+                                                                <label className="form-label">Número de Documento *</label>
+                                                                <input
+                                                                    type="text"
+                                                                    id="numeroDocumento"
+                                                                    className="form-control"
+                                                                    name="numeroDocumento"
+                                                                    defaultValue={datosPersonales?.numeroDocumento || ""}
+                                                                    {...register("numeroDocumento", { required: "El número de documento de identidad es un dato requerido" })}
+                                                                    required
+                                                                />
+                                                                {errors.numeroDocumento && <span style={{ color: "red" }}>{errors.numeroDocumento.message}</span>}
+                                                            </div>
+                                                            <div className="col-md-6">
+                                                                <label className="form-label">Expedido en</label>
+                                                                <input
+                                                                    type="text"
+                                                                    id="expedidoEn"
+                                                                    className="form-control"
+                                                                    name="expedidoEn"
+                                                                    defaultValue={datosPersonales?.documentoExpedido || ""}
+                                                                    {...register("documentoExpedido", { required: "El número de documento de identidad es un dato requerido" })}
+                                                                    required
+                                                                />
+                                                                {errors.documentoExpedido && <span style={{ color: "red" }}>{errors.documentoExpedido.message}</span>}
+                                                            </div>
+                                                            <div className="col-md-6">
+                                                                <label className="form-label">Fotografía del Postulante</label>
+                                                                <div className="custom-file">
+                                                                    <input
+                                                                        type="file"
+                                                                        className="custom-file-input"
+                                                                        id="customFile"
+                                                                        accept="image/*"
+                                                                        onChange={handleImageChange}
+                                                                    />
+                                                                    <label className="custom-file-label" htmlFor="customFile">Seleccionar archivo</label>
+                                                                </div>
+                                                                {selectedImage && (
+                                                                    <div className="mt-3">
+                                                                        <img
+                                                                            src={selectedImage}
+                                                                            alt="Vista previa"
+                                                                            style={{ width: '100px', height: '100px', objectFit: 'cover', marginTop: '10px' }}
+                                                                        />
+                                                                    </div>
+                                                                )}
+                                                            </div>
 
-                                                    <div className="col-12">
-                                                    { 
-                                                    idPerfil === 0 ? (
-                                                        <button type="submit" className="btn btn-primary">
-                                                            Registrar Perfil
-                                                        </button>
+                                                            <div className="col-12">
+                                                                {
+                                                                    idPerfil === 0 ? (
+                                                                        <button type="submit" className="btn btn-primary">
+                                                                            Registrar Perfil
+                                                                        </button>
+                                                                    ) : (
+                                                                        <button type="submit" className="btn btn-primary">
+                                                                            Actualizar Perfil
+                                                                        </button>
+                                                                    )}
+                                                            </div>
+                                                        </form>
+
+                                                    </div>
+                                                </li>
+
+                                                <li className="tab-content tab-content-2 typography">
+                                                    <div className={Estilos.container}>
+                                                        <h2>INFORMACIÓN SOBRE FORMACIÓN ACADÉMICA</h2>
+                                                        {idPerfil > 0 ? (
+                                                            <>
+                                                                <button className={Estilos.addButton} onClick={handleInfoAcademicaModalOpen}>+ ADICIONAR NUEVO</button>
+
+                                                                <PerfilFormacionAcademicaLista
+                                                                    formacionLista={formacionLista}
+                                                                    onEditClick={handleInfoAcademicaModalOpen}
+                                                                    idPerfil={idPerfil}
+                                                                />
+                                                                <PerfilFormacionAcademicaModal
+                                                                    show={showInfoAcademicaModal}
+                                                                    onClose={handleInfoAcademicaModalClose}
+                                                                    onSave={handleGuardarFormacionAcademica}
+                                                                    selectedInfoAcademica={selectedInfoAcademica}
+                                                                    ParNivelFormacion={ParNivelFormacion}
+                                                                />
+                                                            </>
                                                         ) : (
-                                                        <button type="submit" className="btn btn-primary">
-                                                            Actualizar Perfil
-                                                        </button>
+                                                            <h3><br /><center>Primero debe registrar sus Datos Personales</center></h3>
                                                         )}
                                                     </div>
-                                                </form>
-                                            </div>
-                                        </li>
+                                                </li>
 
-                                        <li className="tab-content tab-content-2 typography">
-                                            <div className={Estilos.container}>
-                                                <h2>INFORMACIÓN SOBRE FORMACIÓN ACADÉMICA</h2>
-                                                { idPerfil > 0 ? (
-                                                <>
-                                                    <button className={Estilos.addButton} onClick={handleInfoAcademicaModalOpen}>+ ADICIONAR NUEVO</button>
+                                                <li className="tab-content tab-content-3 typography">
+                                                    <div className={Estilos.container}>
+                                                        <h2>CURSOS/TALLERES</h2>
+                                                        {idPerfil > 0 ? (
+                                                            <>
+                                                                <button className={Estilos.addButton} onClick={handleCursosModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                    <PerfilFormacionAcademicaLista
-                                                        formacionLista={formacionLista}
-                                                        onEditClick={handleInfoAcademicaModalOpen}
-                                                        idPerfil={idPerfil}
-                                                    />
-                                                    <PerfilFormacionAcademicaModal
-                                                        show={showInfoAcademicaModal}
-                                                        onClose={handleInfoAcademicaModalClose}
-                                                        onSave={handleGuardarFormacionAcademica}
-                                                        selectedInfoAcademica={selectedInfoAcademica}
-                                                        ParNivelFormacion={ParNivelFormacion}
-                                                    />
-                                                </>
-                                                ) : (
-                                                    <h3><br/><center>Primero debe registrar sus Datos Personales</center></h3>
-                                                )}
-                                            </div>
-                                        </li>
+                                                                <PerfilCursosLista
+                                                                    cursosLista={cursosLista}
+                                                                    onEditClick={handleCursosModalOpen}
+                                                                    idPerfil={idPerfil}
+                                                                />
+                                                                <PerfilCursosModal
+                                                                    show={showCursosModal}
+                                                                    onClose={handleCursosModalClose}
+                                                                    onSave={handleGuardarCurso}
+                                                                    selectedCurso={selectedCurso}
+                                                                    parTipoCapacitacion={ParTipoCapacitacion}
+                                                                />
+                                                            </>
+                                                        ) : (
+                                                            <h3><br /><center>Primero debe registrar sus Datos Personales</center></h3>
+                                                        )}
+                                                    </div>
+                                                </li>
 
-                                        <li className="tab-content tab-content-3 typography">
-                                            <div className={Estilos.container}>
-                                                <h2>CURSOS/TALLERES</h2>
-                                                { idPerfil > 0 ? (
-                                                <>
-                                                    <button className={Estilos.addButton} onClick={handleCursosModalOpen}>+ ADICIONAR NUEVO</button>
+                                                <li className="tab-content tab-content-4 typography">
+                                                    <div className={Estilos.container}>
+                                                        <h2>IDIOMAS</h2>
+                                                        {idPerfil > 0 ? (
+                                                            <>
+                                                                <button className={Estilos.addButton} onClick={handleIdiomasModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                    <PerfilCursosLista
-                                                        cursosLista={cursosLista}
-                                                        onEditClick={handleCursosModalOpen}
-                                                        idPerfil={idPerfil}
-                                                    />
-                                                    <PerfilCursosModal
-                                                        show={showCursosModal}
-                                                        onClose={handleCursosModalClose}
-                                                        onSave={handleGuardarCurso}
-                                                        selectedCurso={selectedCurso}
-                                                        parTipoCapacitacion={ParTipoCapacitacion}
-                                                    />
-                                                </>
-                                                ) : (
-                                                    <h3><br/><center>Primero debe registrar sus Datos Personales</center></h3>
-                                                )}
-                                            </div>
-                                        </li>
+                                                                <PerfilIdiomasLista
+                                                                    idiomasLista={idiomasLista}
+                                                                    onEditClick={handleIdiomasModalOpen}
+                                                                    idPerfil={idPerfil}
+                                                                />
+                                                                <PerfilIdiomasModal
+                                                                    show={showIdiomasModal}
+                                                                    onClose={handleIdiomasModalClose}
+                                                                    onSave={handleGuardarIdioma}
+                                                                    selectedIdioma={selectedIdioma}
+                                                                    ParIdioma={ParIdioma}
+                                                                    ParNivelConocimiento={ParNivelConocimiento}
+                                                                />
+                                                            </>
+                                                        ) : (
+                                                            <h3><br /><center>Primero debe registrar sus Datos Personales</center></h3>
+                                                        )}
+                                                    </div>
+                                                </li>
 
-                                        <li className="tab-content tab-content-4 typography">
-                                            <div className={Estilos.container}>
-                                                <h2>IDIOMAS</h2>
-                                                { idPerfil > 0 ? (
-                                                <>
-                                                    <button className={Estilos.addButton} onClick={handleIdiomasModalOpen}>+ ADICIONAR NUEVO</button>
+                                                <li className="tab-content tab-content-5 typography">
+                                                    <div className={Estilos.container}>
+                                                        <h2>SISTEMAS</h2>
+                                                        {idPerfil > 0 ? (
+                                                            <>
+                                                                <button className={Estilos.addButton} onClick={handleSistemasModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                    <PerfilIdiomasLista
-                                                        idiomasLista={idiomasLista}
-                                                        onEditClick={handleIdiomasModalOpen}
-                                                        idPerfil={idPerfil}
-                                                    />
-                                                    <PerfilIdiomasModal
-                                                        show={showIdiomasModal}
-                                                        onClose={handleIdiomasModalClose}
-                                                        onSave={handleGuardarIdioma}
-                                                        selectedIdioma={selectedIdioma}
-                                                        ParIdioma={ParIdioma}
-                                                        ParNivelConocimiento={ParNivelConocimiento}
-                                                    />
-                                                </>
-                                                ) : (
-                                                    <h3><br/><center>Primero debe registrar sus Datos Personales</center></h3>
-                                                )}
-                                            </div>
-                                        </li>
+                                                                <PerfilSistemasLista
+                                                                    sistemasLista={sistemasLista}
+                                                                    onEditClick={handleSistemasModalOpen}
+                                                                    idPerfil={idPerfil}
+                                                                />
+                                                                <PerfilSistemasModal
+                                                                    show={showSistemasModal}
+                                                                    onClose={handleSistemasModalClose}
+                                                                    onSave={handleGuardarSistema}
+                                                                    selectedSistema={selectedSistema}
+                                                                    ParPrograma={ParPrograma}
+                                                                    ParNivelConocimiento={ParNivelConocimiento}
+                                                                />
+                                                            </>
+                                                        ) : (
+                                                            <h3><br /><center>Primero debe registrar sus Datos Personales</center></h3>
+                                                        )}
+                                                    </div>
+                                                </li>
 
-                                        <li className="tab-content tab-content-5 typography">
-                                            <div className={Estilos.container}>
-                                                <h2>SISTEMAS</h2>
-                                                { idPerfil > 0 ? (
-                                                <>
-                                                    <button className={Estilos.addButton} onClick={handleSistemasModalOpen}>+ ADICIONAR NUEVO</button>
+                                                <li className="tab-content tab-content-6 typography">
+                                                    <div className={Estilos.container}>
+                                                        <h2>EXPERIENCIA LABORAL</h2>
+                                                        {idPerfil > 0 ? (
+                                                            <>
+                                                                <button className={Estilos.addButton} onClick={() => handleExpLaboralModalOpen(null)}>+ ADICIONAR EXPERIENCIA LABORAL</button>
 
-                                                    <PerfilSistemasLista
-                                                        sistemasLista={sistemasLista}
-                                                        onEditClick={handleSistemasModalOpen}
-                                                        idPerfil={idPerfil}
-                                                    />
-                                                    <PerfilSistemasModal
-                                                        show={showSistemasModal}
-                                                        onClose={handleSistemasModalClose}
-                                                        onSave={handleGuardarSistema}
-                                                        selectedSistema={selectedSistema}
-                                                        ParPrograma={ParPrograma}
-                                                        ParNivelConocimiento={ParNivelConocimiento}
-                                                    />
-                                                </>
-                                                ) : (
-                                                    <h3><br/><center>Primero debe registrar sus Datos Personales</center></h3>
-                                                )}
-                                            </div>
-                                        </li>
+                                                                <PerfilExperienciaLaboralLista
+                                                                    experienciaLaboralLista={experienciaLaboralLista}
+                                                                    onEditClick={handleExpLaboralModalOpen}
+                                                                    idPerfil={idPerfil}
+                                                                />
+                                                                <PerfilExperienciaLaboralModal
+                                                                    show={showExpLaboralModal}
+                                                                    onClose={handleExpLaboralModalClose}
+                                                                    onSave={handleGuardarExpLaboral}
+                                                                    selectedExpLaboral={selectedExpLaboral}
+                                                                />
+                                                            </>
+                                                        ) : (
+                                                            <h3><br /><center>Primero debe registrar sus Datos Personales</center></h3>
+                                                        )}
+                                                    </div>
+                                                </li>
 
-                                        <li className="tab-content tab-content-6 typography">
-                                            <div className={Estilos.container}>
-                                                <h2>EXPERIENCIA LABORAL</h2>
-                                                { idPerfil > 0 ? (
-                                                <>
-                                                    <button className={Estilos.addButton} onClick={() => handleExpLaboralModalOpen(null)}>+ ADICIONAR EXPERIENCIA LABORAL</button>
+                                                <li className="tab-content tab-content-7 typography">
+                                                    <div className={Estilos.container}>
+                                                        <h2>REFERENCIAS PERSONALES</h2>
+                                                        {idPerfil > 0 ? (
+                                                            <>
+                                                                <button className={Estilos.addButton} onClick={handleRefPersonalModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                    <PerfilExperienciaLaboralLista
-                                                        experienciaLaboralLista={experienciaLaboralLista}
-                                                        onEditClick={handleExpLaboralModalOpen}
-                                                        idPerfil={idPerfil}
-                                                    />
-                                                    <PerfilExperienciaLaboralModal
-                                                        show={showExpLaboralModal}
-                                                        onClose={handleExpLaboralModalClose}
-                                                        onSave={handleGuardarExpLaboral}
-                                                        selectedExpLaboral={selectedExpLaboral}
-                                                    />
-                                                </>
-                                                ) : (
-                                                    <h3><br/><center>Primero debe registrar sus Datos Personales</center></h3>
-                                                )}
-                                            </div>
-                                        </li>
+                                                                <PerfilReferenciaPersonalLista
+                                                                    referenciaPersonalLista={referenciaPersonalLista}
+                                                                    onEditClick={handleRefPersonalModalOpen}
+                                                                    idPerfil={idPerfil}
+                                                                />
+                                                                <PerfilReferenciaPersonalModal
+                                                                    show={showRefPersonalModal}
+                                                                    onClose={handleRefPersonalModalClose}
+                                                                    onSave={handleGuardarRefPersonal}
+                                                                    selectedRefPersonal={selectedRefPersonal}
+                                                                    parParentesco={ParParentesco}
+                                                                />
+                                                            </>
+                                                        ) : (
+                                                            <h3><br /><center>Primero debe registrar sus Datos Personales</center></h3>
+                                                        )}
+                                                    </div>
+                                                </li>
 
-                                        <li className="tab-content tab-content-7 typography">
-                                            <div className={Estilos.container}>
-                                                <h2>REFERENCIAS PERSONALES</h2>
-                                                { idPerfil > 0 ? (
-                                                <>
-                                                    <button className={Estilos.addButton} onClick={handleRefPersonalModalOpen}>+ ADICIONAR NUEVO</button>
+                                                <li className="tab-content tab-content-last typography">
+                                                    <div className={Estilos.container}>
+                                                        <h2>REFERENCIAS LABORALES</h2>
+                                                        {idPerfil > 0 ? (
+                                                            <>
+                                                                <button className={Estilos.addButton} onClick={handleRefLaboralModalOpen}>+ ADICIONAR NUEVO</button>
 
-                                                    <PerfilReferenciaPersonalLista
-                                                        referenciaPersonalLista={referenciaPersonalLista}
-                                                        onEditClick={handleRefPersonalModalOpen}
-                                                        idPerfil={idPerfil}
-                                                    />
-                                                    <PerfilReferenciaPersonalModal
-                                                        show={showRefPersonalModal}
-                                                        onClose={handleRefPersonalModalClose}
-                                                        onSave={handleGuardarRefPersonal}
-                                                        selectedRefPersonal={selectedRefPersonal}
-                                                        parParentesco={ParParentesco}
-                                                    />
-                                                </>
-                                                ) : (
-                                                    <h3><br/><center>Primero debe registrar sus Datos Personales</center></h3>
-                                                )}
-                                            </div>
-                                        </li>
-
-                                        <li className="tab-content tab-content-last typography">
-                                            <div className={Estilos.container}>
-                                                <h2>REFERENCIAS LABORALES</h2>
-                                                { idPerfil > 0 ? (
-                                                <>
-                                                    <button className={Estilos.addButton} onClick={handleRefLaboralModalOpen}>+ ADICIONAR NUEVO</button>
-
-                                                    <PerfilReferenciaLaboralLista
-                                                        referenciaLaboralLista={referenciaLaboralLista}
-                                                        onEditClick={handleRefLaboralModalOpen}
-                                                        idPerfil={idPerfil}
-                                                    />
-                                                    <PerfilReferenciaLaboralModal
-                                                        show={showRefLaboralModal}
-                                                        onClose={handleRefLaboralModalClose}
-                                                        onSave={handleGuardarRefLaboral}
-                                                        selectedRefLaboral={selectedRefLaboral}
-                                                    />
-                                                </>
-                                                ) : (
-                                                    <h3><br/><center>Primero debe registrar sus Datos Personales</center></h3>
-                                                )}
-                                            </div>
-                                        </li>
-                                    </ul>
-                                </div>
-                            </div>
+                                                                <PerfilReferenciaLaboralLista
+                                                                    referenciaLaboralLista={referenciaLaboralLista}
+                                                                    onEditClick={handleRefLaboralModalOpen}
+                                                                    idPerfil={idPerfil}
+                                                                />
+                                                                <PerfilReferenciaLaboralModal
+                                                                    show={showRefLaboralModal}
+                                                                    onClose={handleRefLaboralModalClose}
+                                                                    onSave={handleGuardarRefLaboral}
+                                                                    selectedRefLaboral={selectedRefLaboral}
+                                                                />
+                                                            </>
+                                                        ) : (
+                                                            <h3><br /><center>Primero debe registrar sus Datos Personales</center></h3>
+                                                        )}
+                                                    </div>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </>
+                            ) : (
+                                <h3><br /><center>Debe estar autenticado.</center></h3>
+                            )}
                         </div>
                     </div>
                 </div>

@@ -4,10 +4,14 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../app/api/auth/[...nextauth]/route';
 import https from 'https';
 
-
+const httpsAgent = new https.Agent({
+    rejectUnauthorized: false,
+});
+ 
 const apiClient = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
-    timeout: 10000
+    timeout: 10000,
+    httpsAgent
 });
 
 const isClient = typeof window !== 'undefined';
@@ -15,7 +19,6 @@ const isClient = typeof window !== 'undefined';
 apiClient.interceptors.request.use(
     async (config) => {
         if (process.env.NEXT_PHASE === 'phase-production-build') {
-            console.log("🚧 api-config: Omitiendo sesión durante el build.");
             return config;
         }
 
@@ -42,18 +45,19 @@ apiClient.interceptors.request.use(
 );
 
 apiClient.interceptors.response.use(
-    response => response,
-    error => {
+    (response) => response,
+    (error) => {
         if (error.response) {
-            console.log("🌐 API Base URL:", process.env.NEXT_PUBLIC_API_BASE_URL);
 
             const { status, data } = error.response;
-            const mensaje = data.mensaje || 'Error en la solicitud';
+            const mensaje = data.mensaje || "Error en la solicitud";
             const datos = data.datos || null;
+
             console.error(`🚨 Error en respuesta (${status}): ${mensaje}`);
-            console.error(`📍 Endpoint: ${config.baseURL}${config.url}`);
-            console.error(`🛠️ Datos enviados:`, config.data);
+            console.error(`📍 Endpoint: ${error.config?.baseURL || ""}${error.config?.url || ""}`);
+            console.error(`🛠️ Datos enviados:`, error.config?.data);
             console.error(`🔄 Respuesta recibida:`, data);
+
             switch (status) {
                 case 400:
                     return Promise.reject({ status: 400, message: mensaje, datos: datos });
@@ -67,14 +71,14 @@ apiClient.interceptors.response.use(
         } else if (error.request) {
             console.error(`📡 Solicitud sin respuesta. Configuración:`, error.request);
 
-            return Promise.reject({ status: 500, message: 'Error de red. Inténtalo de nuevo más tarde.', datos: null });
+            return Promise.reject({ status: 500, message: "Error de red. Inténtalo de nuevo más tarde.", datos: null });
         } else {
-            console.log(error);
             console.error(`❌ Error general:`, error.message || error);
 
-            return Promise.reject({ status: 500, message: 'Error en la solicitud. Inténtalo de nuevo más tarde.', datos: null });
+            return Promise.reject({ status: 500, message: "Error en la solicitud. Inténtalo de nuevo más tarde.", datos: null });
         }
     }
 );
+
 
 export default apiClient;

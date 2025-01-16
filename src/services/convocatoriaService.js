@@ -9,13 +9,23 @@ export const obtenerConvocatorias = async () => {
   }
 };
 export const obtenerConvocatoria = async (id) => {
+  if (!id) {
+    throw new Error("El ID de la convocatoria es obligatorio.");
+  }
+
   try {
     const response = await apiClient.get(`/api/Convocatoria/${id}`);
-    return response.data.datos;
+    if (response?.data?.datos) {
+      return response.data.datos;
+    } else {
+      throw new Error("La respuesta no contiene datos válidos.");
+    }
   } catch (error) {
-    throw error;
+    console.error("🚨 Error al obtener la convocatoria:", error.message || error);
+    throw error.response?.data || { message: "Error desconocido al obtener la convocatoria." };
   }
 };
+
 
 /* Perfil */
 export const obtenerPerfil = async (id) => {
@@ -157,10 +167,26 @@ export const agregarPerfilCurso = async (capacitacion) => {
     const response = await apiClient.post('/api/Capacitacion', capacitacion);
     return response.data;
   } catch (error) {
-    console.error("Error al agregar capacitación:", error.response?.data || error.message);
-    throw error;
+    // Extraer información del error
+    const { response, config } = error;
+
+    if (response) {
+      // Errores relacionados con la respuesta del servidor
+      console.error("Error al agregar capacitación:", response.data);
+      console.error(`📍 Endpoint: ${config?.baseURL || ''}${config?.url || ''}`);
+      console.error("🛠️ Datos enviados:", config?.data);
+    } else if (error.request) {
+      // Errores relacionados con la solicitud (sin respuesta del servidor)
+      console.error("Error en la solicitud, sin respuesta del servidor.");
+    } else {
+      // Errores al configurar la solicitud
+      console.error("Error al configurar la solicitud:", error.message);
+    }
+
+    throw error; // Lanza el error para manejarlo en el nivel superior
   }
 };
+
 export const eliminarPerfilCurso = async (id) => {
   try {
     const response = await apiClient.delete(`/api/Capacitacion/${id}`);

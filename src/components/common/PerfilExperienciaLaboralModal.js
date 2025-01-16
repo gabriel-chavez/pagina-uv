@@ -148,7 +148,7 @@ const PerfilExperienciaLaboralModal = ({
                   Actualmente trabajando
                 </label>
               </div>
-              <div className="mb-3">
+              {/* <div className="mb-3">
                 <label className="form-label">Total experiencia</label>
                 <input
                   type="text"
@@ -157,7 +157,7 @@ const PerfilExperienciaLaboralModal = ({
                   defaultValue={selectedExpLaboral?.experiencia || ''}
                   required
                 />
-              </div>
+              </div> */}
               <div className="mb-3">
                 <label className="form-label">Motivo de Desvinculación</label>
                 <input
@@ -165,9 +165,11 @@ const PerfilExperienciaLaboralModal = ({
                   id="motivoDesvinculación"
                   className="form-control"
                   defaultValue={selectedExpLaboral?.motivoDesvinculacion || ''}
-                  required
+                  disabled={currentlyWorking} // Deshabilitar si 'currentlyWorking' es true
+                  required={!currentlyWorking}
                 />
               </div>
+              
             </form>
           </div>
           <div className="modal-footer">
