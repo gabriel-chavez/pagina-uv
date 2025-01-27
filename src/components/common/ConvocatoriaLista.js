@@ -17,45 +17,38 @@ const ConvocatoriaLista = ({ convocatorias }) => {
       <ul className="insurance-details__convocatoria_detalle">
         {convocatorias.map((convocatoria) => (
           <li key={convocatoria.id}>
-            <Link href={`/convocatorias/${convocatoria.id}`}>
               <div className='row'>
                 <div className='col-md-1 d-none d-md-block'>
                   <img src='/assets/images/icon/icon-univida.png' width="100%" className="insurance-details__convocatoria_icono" alt="Icono Univida"/>
                 </div>
                 <div className='col-md-11'>
                   <div className='row'>
-                    <div className='insurance-details__convocatoria_lista_titulo col-md-12'>
-                      <h4>{convocatoria.nombre}</h4>
+                    <div className='insurance-details__convocatoria_lista_titulo col-md-6'>
+                      <h4 className='postulacionCargo'>{convocatoria.nombre}</h4>
+                      <div className='postulacionDescripcion'>
+                        <small>
+                          {convocatoria.descripcion.split(' ').slice(0, 15).join(' ')}...
+                        </small>
+                      </div>
+                    </div>
+                    <div className='col-md-4'>
+                      <div className='postulacionCodigo'>
+                        <em className='fa fa-file'/>
+                        Ref: {convocatoria.codigo}
+                      </div>
+                      <div className='postulacionFecha'>
+                        <em className='fa fa-calendar'/>
+                        Fecha límite de postulación: {formatFecha(convocatoria.fechaFin)}
+                      </div>
+                    </div>
+                    <div className='col-md-2 col-button'>
+                      <Link className='btn-postular' href={`/convocatorias/${convocatoria.id}`}>
+                        Postular
+                      </Link>
                     </div>
                   </div>
-                  <div className='row'>
-                    <div className='col-md-6'>
-                      <em className='fa fa-building' /> 
-                      {convocatoria.descripcion.split(' ').slice(0, 20).join(' ')}...
-                    </div>
-                    <div className='col-md-3'>
-                      <em className='fa fa-file'/>
-                      {convocatoria.codigo}
-                    </div>
-                    <div className='col-md-3'>
-                      <em className='fa fa-calendar'/>
-                      {formatFecha(convocatoria.fechaFin)}
-                    </div>
-                  </div>
-                  <div className='row d-none d-md-block'>
-                    <div className='col-md-12'>
-                      <hr />
-                    </div>
-                  </div>
-                </div>
-                <div className='col-md-1 d-block d-md-none'>
-                  <button className='btn btn-primary w-100'>
-                    Más detalle
-                  </button>
-                  <hr />
                 </div>
               </div>
-            </Link>
           </li>
         ))}
       </ul>

@@ -4,8 +4,8 @@
     margin: 0; 
 }
 .insurance-details__convocatoria_detalle li{
-    border: 1px solid #fff;/*#007ec647;*/
-    border-radius: 5px;
+    border: 1px solid #0860a9;
+    border-radius: 25px;
     margin-bottom: 15px;
     padding: 5px;
     background: #fff;
@@ -490,4 +490,33 @@ a {
     line-height: 1.6 !important;
     border-radius: 5px;
     padding: 5px;
+  }
+  .btn-postular{
+    padding: 10px 40px;
+    border: solid 1px #0860a9;
+    color: #0860a9;
+    font-weight: bold;
+    border-radius: 20px;
+    transition: border 1s ease, background 1s ease;
+  }
+  .btn-postular:hover{
+    background: #0860a9;
+    color: #fff;
+  }
+  .col-button{
+    padding-top: 20px;
+  }
+  .postulacionFecha{
+    color: #c40d42;;
+  }
+  .postulacionCodigo{
+    color: #0860a9;
+    font-weight: bold;
+  }
+  .postulacionCargo{
+    color:#0860a9;
+  }
+  .postulacionDescripcion{
+    color:#808080;
+    line-height: 20px;
   }
