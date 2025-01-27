@@ -5,7 +5,7 @@ import Estilos from '@/estilos/InfoAcademica.module.css';
 import { obtenerPerfilReferenciaPersonal } from '@/services/convocatoriaService';
 import { eliminarPerfilReferenciaPersonal } from '@/services/convocatoriaService';
 
-const PerfilReferenciaPersonalLista = ({ referenciaPersonalLista, onEditClick, idPerfil }) => {
+const PerfilReferenciaPersonalLista = ({ referenciaPersonalLista, setReferenciaPersonal, onEditClick, idPerfil }) => {
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [selectedRefPersonal, setSelectedRefPersonal] = useState(null);
 
@@ -20,7 +20,7 @@ const PerfilReferenciaPersonalLista = ({ referenciaPersonalLista, onEditClick, i
 
             Swal.fire({
                 title: '¡Éxito!',
-                text: result.mensaje || 'Referencia Personal eliminado correctamente',
+                text: result.mensaje || 'Referencia Personal eliminada correctamente',
                 icon: 'success',
                 confirmButtonText: 'Aceptar',
             }).then(async () => {
@@ -28,12 +28,12 @@ const PerfilReferenciaPersonalLista = ({ referenciaPersonalLista, onEditClick, i
                 setSelectedRefPersonal(null);
 
                 const perfilRefPersonal = await obtenerPerfilReferenciaPersonal(idPerfil);
-                setReferenciaPersonal(perfilRefPersonal);
+                setReferenciaPersonal(perfilRefPersonal); // Actualiza el estado en el componente padre
             });
         } catch (error) {
             Swal.fire({
                 title: 'Error',
-                text: 'Hubo un problema al eliminar la referencia persona.',
+                text: result.mensaje,
                 icon: 'error',
                 confirmButtonText: 'Intentar nuevamente',
             });
@@ -67,11 +67,11 @@ const PerfilReferenciaPersonalLista = ({ referenciaPersonalLista, onEditClick, i
                                 <td>{referenciaPersonal.telefonoMovil}</td>
                                 <td>{referenciaPersonal.email}</td>
                                 <td>
-                                    <button onClick={() => onEditClick(referenciaPersonal.id)}>
+                                    <button className='btn-edit' onClick={() => onEditClick(referenciaPersonal.id)}>
                                         <span className="fa fa-edit"></span>
                                     </button>
                                     &nbsp;
-                                    <button onClick={() => handleDeleteClick(referenciaPersonal)}>
+                                    <button className='btn-delete' onClick={() => handleDeleteClick(referenciaPersonal)}>
                                         <span className="fa fa-trash"></span>
                                     </button>
                                 </td>

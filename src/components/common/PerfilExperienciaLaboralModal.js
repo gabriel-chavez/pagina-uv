@@ -9,9 +9,67 @@ const PerfilExperienciaLaboralModal = ({
   const [currentlyWorking, setCurrentlyWorking] = useState(
     selectedExpLaboral?.fechaTermino ? false : true
   );
+  const [formData, setFormData] = useState({
+    empresa: selectedExpLaboral?.empresa || '',
+    cargo: selectedExpLaboral?.cargo || '',
+    sector: selectedExpLaboral?.sector || '',
+    nroDependientes: selectedExpLaboral?.dependientes || '',
+    nombreSuperior: selectedExpLaboral?.nombreSuperior || '',
+    cargoSuperior: selectedExpLaboral?.cargoSuperior || '',
+    telefono: selectedExpLaboral?.telefonoEmpresa || '',
+    principalesFunciones: selectedExpLaboral?.funciones || '',
+    fechaInicio: selectedExpLaboral?.fechaInicio || '',
+    fechaFin: currentlyWorking ? '' : selectedExpLaboral?.fechaTermino || '',
+    motivoDesvinculación: selectedExpLaboral?.motivoDesvinculacion || '',
+  });
+
+  const [errors, setErrors] = useState({});
 
   const handleCheckboxChange = () => {
     setCurrentlyWorking(!currentlyWorking);
+    setFormData({
+      ...formData,
+      fechaFin: '',
+      motivoDesvinculación: '',
+    });
+    setErrors({}); // Limpiar los errores al cambiar el estado del checkbox
+  };
+
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    setFormData({ ...formData, [id]: value });
+  };
+
+  const validateForm = () => {
+    const newErrors = {};
+
+    // Validaciones obligatorias
+    if (!formData.empresa) newErrors.empresa = 'El campo Empresa es obligatorio.';
+    if (!formData.cargo) newErrors.cargo = 'El campo Cargo es obligatorio.';
+    if (!formData.sector) newErrors.sector = 'El campo Sector es obligatorio.';
+    if (!formData.nroDependientes) newErrors.nroDependientes = 'El campo Nro. Dependientes es obligatorio.';
+    if (!formData.nombreSuperior) newErrors.nombreSuperior = 'El campo Nombre del superior es obligatorio.';
+    if (!formData.cargoSuperior) newErrors.cargoSuperior = 'El campo Cargo del superior es obligatorio.';
+    if (!formData.telefono) newErrors.telefono = 'El campo Teléfono empresa es obligatorio.';
+    if (!formData.principalesFunciones) newErrors.principalesFunciones = 'El campo Principales funciones es obligatorio.';
+    if (!formData.fechaInicio) newErrors.fechaInicio = 'El campo Fecha Inicio es obligatorio.';
+
+    if (!currentlyWorking) {
+      if (!formData.fechaFin) newErrors.fechaFin = 'El campo Fecha Término es obligatorio.';
+      if (!formData.motivoDesvinculación) newErrors.motivoDesvinculación = 'El campo Motivo de Desvinculación es obligatorio.';
+    }
+
+    setErrors(newErrors);
+
+    // Devuelve true si no hay errores
+    return Object.keys(newErrors).length === 0;
+  };
+
+  const handleSave = () => {
+    if (validateForm()) {
+      // Si la validación es exitosa, se ejecuta onSave
+      onSave(formData);
+    }
   };
 
   if (!show) return null;
@@ -41,9 +99,11 @@ const PerfilExperienciaLaboralModal = ({
                   type="text"
                   id="empresa"
                   className="form-control"
-                  defaultValue={selectedExpLaboral?.empresa || ''}
+                  value={formData.empresa}
+                  onChange={handleInputChange}
                   required
                 />
+                {errors.empresa && <small className="text-danger">{errors.empresa}</small>}
               </div>
               <div className="mb-3">
                 <label className="form-label">Cargo</label>
@@ -51,9 +111,11 @@ const PerfilExperienciaLaboralModal = ({
                   type="text"
                   id="cargo"
                   className="form-control"
-                  defaultValue={selectedExpLaboral?.cargo || ''}
+                  value={formData.cargo}
+                  onChange={handleInputChange}
                   required
                 />
+                {errors.cargo && <small className="text-danger">{errors.cargo}</small>}
               </div>
               <div className="mb-3">
                 <label className="form-label">Sector</label>
@@ -61,9 +123,11 @@ const PerfilExperienciaLaboralModal = ({
                   type="text"
                   id="sector"
                   className="form-control"
-                  defaultValue={selectedExpLaboral?.sector || ''}
+                  value={formData.sector}
+                  onChange={handleInputChange}
                   required
                 />
+                {errors.sector && <small className="text-danger">{errors.sector}</small>}
               </div>
               <div className="mb-3">
                 <label className="form-label">Nro. Dependientes</label>
@@ -71,9 +135,11 @@ const PerfilExperienciaLaboralModal = ({
                   type="number"
                   id="nroDependientes"
                   className="form-control"
-                  defaultValue={selectedExpLaboral?.dependientes || ''}
+                  value={formData.nroDependientes}
+                  onChange={handleInputChange}
                   required
                 />
+                {errors.nroDependientes && <small className="text-danger">{errors.nroDependientes}</small>}
               </div>
               <div className="mb-3">
                 <label className="form-label">Nombre del superior</label>
@@ -81,9 +147,11 @@ const PerfilExperienciaLaboralModal = ({
                   type="text"
                   id="nombreSuperior"
                   className="form-control"
-                  defaultValue={selectedExpLaboral?.nombreSuperior || ''}
+                  value={formData.nombreSuperior}
+                  onChange={handleInputChange}
                   required
                 />
+                {errors.nombreSuperior && <small className="text-danger">{errors.nombreSuperior}</small>}
               </div>
               <div className="mb-3">
                 <label className="form-label">Cargo del superior</label>
@@ -91,9 +159,11 @@ const PerfilExperienciaLaboralModal = ({
                   type="text"
                   id="cargoSuperior"
                   className="form-control"
-                  defaultValue={selectedExpLaboral?.cargoSuperior || ''}
+                  value={formData.cargoSuperior}
+                  onChange={handleInputChange}
                   required
                 />
+                {errors.cargoSuperior && <small className="text-danger">{errors.cargoSuperior}</small>}
               </div>
               <div className="mb-3">
                 <label className="form-label">Teléfono empresa</label>
@@ -101,9 +171,11 @@ const PerfilExperienciaLaboralModal = ({
                   type="tel"
                   id="telefono"
                   className="form-control"
-                  defaultValue={selectedExpLaboral?.telefonoEmpresa || ''}
+                  value={formData.telefono}
+                  onChange={handleInputChange}
                   required
                 />
+                {errors.telefono && <small className="text-danger">{errors.telefono}</small>}
               </div>
               <div className="mb-3">
                 <label className="form-label">Principales funciones</label>
@@ -111,9 +183,11 @@ const PerfilExperienciaLaboralModal = ({
                   className="form-control"
                   id="principalesFunciones"
                   rows="3"
-                  defaultValue={selectedExpLaboral?.funciones || ''}
+                  value={formData.principalesFunciones}
+                  onChange={handleInputChange}
                   required
                 ></textarea>
+                {errors.principalesFunciones && <small className="text-danger">{errors.principalesFunciones}</small>}
               </div>
               <div className="mb-3">
                 <label className="form-label">Fecha Inicio</label>
@@ -121,9 +195,11 @@ const PerfilExperienciaLaboralModal = ({
                   type="date"
                   id="fechaInicio"
                   className="form-control"
-                  defaultValue={selectedExpLaboral?.fechaInicio || ''}
+                  value={formData.fechaInicio}
+                  onChange={handleInputChange}
                   required
                 />
+                {errors.fechaInicio && <small className="text-danger">{errors.fechaInicio}</small>}
               </div>
               <div className="mb-3">
                 <label className="form-label">Fecha Término</label>
@@ -131,10 +207,12 @@ const PerfilExperienciaLaboralModal = ({
                   type="date"
                   id="fechaFin"
                   className="form-control"
-                  defaultValue={currentlyWorking ? '' : selectedExpLaboral?.fechaTermino || ''}
+                  value={formData.fechaFin}
+                  onChange={handleInputChange}
                   disabled={currentlyWorking}
                   required={!currentlyWorking}
                 />
+                {errors.fechaFin && <small className="text-danger">{errors.fechaFin}</small>}
               </div>
               <div className="form-check mb-3">
                 <input
@@ -148,28 +226,19 @@ const PerfilExperienciaLaboralModal = ({
                   Actualmente trabajando
                 </label>
               </div>
-              {/* <div className="mb-3">
-                <label className="form-label">Total experiencia</label>
-                <input
-                  type="text"
-                  id="totalExperiencia"
-                  className="form-control"
-                  defaultValue={selectedExpLaboral?.experiencia || ''}
-                  required
-                />
-              </div> */}
               <div className="mb-3">
                 <label className="form-label">Motivo de Desvinculación</label>
                 <input
                   type="text"
                   id="motivoDesvinculación"
                   className="form-control"
-                  defaultValue={selectedExpLaboral?.motivoDesvinculacion || ''}
-                  disabled={currentlyWorking} // Deshabilitar si 'currentlyWorking' es true
+                  value={formData.motivoDesvinculación}
+                  onChange={handleInputChange}
+                  disabled={currentlyWorking} 
                   required={!currentlyWorking}
                 />
+                {errors.motivoDesvinculación && <small className="text-danger">{errors.motivoDesvinculación}</small>}
               </div>
-              
             </form>
           </div>
           <div className="modal-footer">
@@ -183,7 +252,7 @@ const PerfilExperienciaLaboralModal = ({
             <button
               type="button"
               className="btn btn-primary"
-              onClick={onSave}
+              onClick={handleSave}
             >
               Guardar
             </button>

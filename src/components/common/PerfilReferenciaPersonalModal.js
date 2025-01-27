@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 
 const PerfilRefPersonalModal = ({
   show,
@@ -7,10 +7,52 @@ const PerfilRefPersonalModal = ({
   selectedRefPersonal,
   parParentesco
 }) => {
-  if (!show) return null; // No renderizar nada si el modal no debe mostrarse
+  const [formData, setFormData] = useState({
+    nombres: selectedRefPersonal?.nombres || '',
+    empresa: selectedRefPersonal?.empresa || '',
+    cargo: selectedRefPersonal?.cargo || '',
+    parentesco: selectedRefPersonal?.parParentescoId || '',
+    telefono: selectedRefPersonal?.telefono || '',
+    telefonoMovil: selectedRefPersonal?.celular || '',
+    email: selectedRefPersonal?.correoElectronico || '',
+  });
+
+  const [errors, setErrors] = useState({});
+
+  const handleInputChange = (e) => {
+    const { id, value } = e.target;
+    const key = id.replace(/Parentesco$/, ''); 
+    setFormData((prev) => ({ ...prev, [key]: value }));
+  };
+
+  const handleGuardarRefPersonal = () => {
+    const newErrors = {};
+
+    if (!formData.nombres) newErrors.nombres = 'El nombre es obligatorio.';
+    if (!formData.parentesco) newErrors.parentesco = 'Debe seleccionar un parentesco.';
+    if (!formData.telefonoMovil) newErrors.telefonoMovil = 'El teléfono móvil es obligatorio.';
+
+    setErrors(newErrors);
+
+    if (Object.keys(newErrors).length > 0) return;
+
+    onSave(formData);
+
+    setFormData({
+      nombres: '',
+      empresa: '',
+      cargo: '',
+      parentesco: '',
+      telefono: '',
+      telefonoMovil: '',
+      email: '',
+    });
+  };
+
+  if (!show) return null;
 
   return (
-    <div className="modal fade show d-block" style={{backgroundColor: 'rgba(0, 0, 0, 0.2)',}} tabIndex="-1" role="dialog">
+    <div className="modal fade show d-block" style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }} tabIndex="-1" role="dialog">
       <div className="modal-dialog" role="document">
         <div className="modal-content">
           <div className="modal-header">
@@ -21,23 +63,42 @@ const PerfilRefPersonalModal = ({
             <form>
               <div className="mb-3">
                 <label className="form-label">Nombre</label>
-                <input type="text" id='nombre' className="form-control" defaultValue={selectedRefPersonal?.nombre || ''} required />
+                <input
+                  type="text"
+                  id="nombresParentesco"
+                  className={`form-control ${errors.nombres ? 'is-invalid' : ''}`}
+                  value={formData.nombres}
+                  onChange={handleInputChange}
+                />
+                {errors.nombres && <div className="invalid-feedback">{errors.nombres}</div>}
               </div>
               <div className="mb-3">
                 <label className="form-label">Empresa</label>
-                <input type="text" id='empresa' className="form-control" defaultValue={selectedRefPersonal?.empresa || ''} />
+                <input
+                  type="text"
+                  id="empresa"
+                  className="form-control"
+                  value={formData.empresa}
+                  onChange={handleInputChange}
+                />
               </div>
               <div className="mb-3">
                 <label className="form-label">Cargo</label>
-                <input type="text" id='cargo' className="form-control" defaultValue={selectedRefPersonal?.cargo || ''} />
+                <input
+                  type="text"
+                  id="cargo"
+                  className="form-control"
+                  value={formData.cargo}
+                  onChange={handleInputChange}
+                />
               </div>
               <div className="mb-3">
                 <label className="form-label">Parentesco</label>
                 <select
-                  className="form-control"
                   id="parentesco"
-                  defaultValue={selectedRefPersonal?.parParentescoId || ''}
-                  required
+                  className={`form-control ${errors.parentesco ? 'is-invalid' : ''}`}
+                  value={formData.parentesco}
+                  onChange={handleInputChange}
                 >
                   <option value="">Selecciona una opción</option>
                   {parParentesco.map((Parentesco) => (
@@ -46,18 +107,38 @@ const PerfilRefPersonalModal = ({
                     </option>
                   ))}
                 </select>
+                {errors.parentesco && <div className="invalid-feedback">{errors.parentesco}</div>}
               </div>
               <div className="mb-3">
                 <label className="form-label">Teléfono</label>
-                <input type="tel" id='telefono' className="form-control" defaultValue={selectedRefPersonal?.telefono || ''} required />
+                <input
+                  type="tel"
+                  id="telefonoParentesco"
+                  className="form-control"
+                  value={formData.telefono}
+                  onChange={handleInputChange}
+                />
               </div>
               <div className="mb-3">
                 <label className="form-label">Celular</label>
-                <input type="tel" id='telefonoMovil' className="form-control" defaultValue={selectedRefPersonal?.celular || ''} required />
+                <input
+                  type="tel"
+                  id="telefonoMovilParentesco"
+                  className={`form-control ${errors.telefonoMovil ? 'is-invalid' : ''}`}
+                  value={formData.telefonoMovil}
+                  onChange={handleInputChange}
+                />
+                {errors.telefonoMovil && <div className="invalid-feedback">{errors.telefonoMovil}</div>}
               </div>
               <div className="mb-3">
                 <label className="form-label">Correo electrónico</label>
-                <input type="email" id='email' className="form-control" defaultValue={selectedRefPersonal?.correoElectronico || ''} required />
+                <input
+                  type="email"
+                  id="emailParentesco"
+                  className="form-control"
+                  value={formData.email}
+                  onChange={handleInputChange}
+                />
               </div>
             </form>
           </div>
@@ -65,7 +146,7 @@ const PerfilRefPersonalModal = ({
             <button type="button" className="btn btn-secondary" onClick={onClose}>
               Cancelar
             </button>
-            <button type="button" className="btn btn-primary" onClick={onSave}>
+            <button type="button" className="btn btn-primary" onClick={handleGuardarRefPersonal}>
               Guardar
             </button>
           </div>

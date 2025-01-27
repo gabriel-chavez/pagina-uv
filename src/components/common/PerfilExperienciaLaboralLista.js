@@ -5,7 +5,7 @@ import Estilos from '@/estilos/InfoAcademica.module.css';
 import { obtenerPerfilExperienciaLaboral } from '@/services/convocatoriaService'; 
 import { eliminarPerfilExperienciaLaboral } from '@/services/convocatoriaService';
 
-const PerfilExperienciaLaboralLista = ({ experienciaLaboralLista, onEditClick, idPerfil }) => {
+const PerfilExperienciaLaboralLista = ({ experienciaLaboralLista, set, onEditClick, idPerfil }) => {
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [selectedExpLaboral, setSelectedExpLaboral] = useState(null);
 
@@ -65,11 +65,11 @@ const PerfilExperienciaLaboralLista = ({ experienciaLaboralLista, onEditClick, i
                             <strong>Sector:</strong> {expLaboral.sector}
                         </div>
                         <div className={Estilos.actions}>
-                            <button className={Estilos.btnEditar} onClick={() => onEditClick(expLaboral.id)}>
+                            <button className={`${Estilos.btnEditar} btn-edit`} onClick={() => onEditClick(expLaboral.id)}>
                                 <span className="fa fa-edit"></span>
                             </button>
                             &nbsp;
-                            <button className={Estilos.btnEliminar} onClick={() => handleDeleteClick(expLaboral)}>
+                            <button className={`${Estilos.btnEliminar} btn-delete`} onClick={() => handleDeleteClick(expLaboral)}>
                                 <span className="fa fa-trash"></span>
                             </button>
                         </div>

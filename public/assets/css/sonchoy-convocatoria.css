@@ -476,3 +476,18 @@ a {
   .modal-dialog-wide {
     max-width: 80%; /* Ajusta el ancho según necesites, por ejemplo, 80% del ancho de la pantalla */
   }
+
+  .btn-edit{
+    background: #0397bb;
+    color: #fff;
+    line-height: 1.6 !important;
+    border-radius: 5px;
+    padding: 5px;
+  }
+  .btn-delete{
+    background: #c40d42;
+    color: #fff;
+    line-height: 1.6 !important;
+    border-radius: 5px;
+    padding: 5px;
+  }

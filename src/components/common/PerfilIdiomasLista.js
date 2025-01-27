@@ -5,7 +5,7 @@ import Estilos from '@/estilos/InfoAcademica.module.css';
 import { obtenerPerfilIdiomas } from '@/services/convocatoriaService'; 
 import { eliminarPerfilIdioma } from '@/services/convocatoriaService';
 
-const PerfilIdiomasLista = ({ idiomasLista, onEditClick, idPerfil}) => {
+const PerfilIdiomasLista = ({ idiomasLista, setIdiomas, onEditClick, idPerfil}) => {
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [selectedIdioma, setSelectedIdioma] = useState(null);
 console.log(idiomasLista);
@@ -61,11 +61,11 @@ console.log(idiomasLista);
                                 <td>{idioma.parNivelConocimientoEscritura.descripcion}</td>
                                 <td>{idioma.parNivelConocimientoConversacion.descripcion}</td>
                                 <td>
-                                    <button onClick={() => onEditClick(idioma.id)}>
+                                    <button className='btn-edit' onClick={() => onEditClick(idioma.id)}>
                                         <span className="fa fa-edit"></span>
                                     </button>
                                     &nbsp;
-                                    <button onClick={() => handleDeleteClick(idioma)}>
+                                    <button className='btn-delete' onClick={() => handleDeleteClick(idioma)}>
                                         <span className="fa fa-trash"></span>
                                     </button>
                                 </td>

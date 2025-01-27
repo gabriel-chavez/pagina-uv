@@ -5,7 +5,7 @@ import Estilos from '@/estilos/InfoAcademica.module.css';
 import { obtenerPerfilFormacionAcademica } from '@/services/convocatoriaService';
 import { eliminarPerfilFormacionAcademica } from '@/services/convocatoriaService';
 
-const PerfilFormacionAcademicaLista = ({ formacionLista, onEditClick, idPerfil}) => {
+const PerfilFormacionAcademicaLista = ({ formacionLista, setFormacionAcademica, onEditClick, idPerfil}) => {
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [selectedFormacionAcademica, setSelectedFormacionAcademica] = useState(null);
 
@@ -74,11 +74,11 @@ const PerfilFormacionAcademicaLista = ({ formacionLista, onEditClick, idPerfil})
                         <td>{formacion.ciudad}</td>
                         <td>{formacion.pais}</td>
                         <td>
-                            <button onClick={() => onEditClick(formacion.id)}>
+                            <button className='btn-edit' onClick={() => onEditClick(formacion.id)}>
                                 <span className="fa fa-edit"></span>
                             </button>
                             &nbsp;
-                            <button onClick={() => handleDeleteClick(formacion)}>
+                            <button className='btn-delete' onClick={() => handleDeleteClick(formacion)}>
                                 <span className="fa fa-trash"></span>
                             </button>
                         </td>

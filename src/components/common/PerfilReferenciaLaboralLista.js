@@ -5,7 +5,7 @@ import Estilos from '@/estilos/InfoAcademica.module.css';
 import { obtenerPerfilReferenciaLaboral } from '@/services/convocatoriaService';
 import { eliminarPerfilReferenciaLaboral } from '@/services/convocatoriaService';
 
-const PerfilReferenciaLaboralLista = ({ referenciaLaboralLista, onEditClick, idPerfil }) => {
+const PerfilReferenciaLaboralLista = ({ referenciaLaboralLista, setReferenciaLaboral, onEditClick, idPerfil }) => {
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [selectedRefLaboral, setSelectedRefLaboral] = useState(null);
 
@@ -67,11 +67,11 @@ const PerfilReferenciaLaboralLista = ({ referenciaLaboralLista, onEditClick, idP
                                 <td>{referenciaLaboral.telefonoMovil}</td>
                                 <td>{referenciaLaboral.email}</td>
                                 <td>
-                                    <button onClick={() => onEditClick(referenciaLaboral.id)}>
+                                    <button className='btn-edit' onClick={() => onEditClick(referenciaLaboral.id)}>
                                         <span className="fa fa-edit"></span>
                                     </button>
                                     &nbsp;
-                                    <button onClick={() => handleDeleteClick(referenciaLaboral)}>
+                                    <button className='btn-delete' onClick={() => handleDeleteClick(referenciaLaboral)}>
                                         <span className="fa fa-trash"></span>
                                     </button>
                                 </td>

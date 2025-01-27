@@ -5,7 +5,7 @@ import Estilos from '@/estilos/InfoAcademica.module.css';
 import { obtenerPerfilSistemas } from '@/services/convocatoriaService';
 import { eliminarPerfilSistema } from '@/services/convocatoriaService';
 
-const PerfilSistemasLista = ({ sistemasLista, onEditClick, idPerfil }) => {
+const PerfilSistemasLista = ({ sistemasLista, setSistemas, onEditClick, idPerfil }) => {
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [selectedSistema, setSelectedSistema] = useState(null);
 
@@ -33,7 +33,7 @@ const PerfilSistemasLista = ({ sistemasLista, onEditClick, idPerfil }) => {
         } catch (error) {
             Swal.fire({
                 title: 'Error',
-                text: 'Hubo un problema al eliminar el sistema.',
+                text: result.mensaje,
                 icon: 'error',
                 confirmButtonText: 'Intentar nuevamente',
             });
@@ -57,11 +57,11 @@ const PerfilSistemasLista = ({ sistemasLista, onEditClick, idPerfil }) => {
                                 <td>{sistema.parPrograma.descripcion}</td>
                                 <td>{sistema.parNivelConocimiento.descripcion}</td>
                                 <td>
-                                    <button onClick={() => onEditClick(sistema.id)}>
+                                    <button className='btn-edit' onClick={() => onEditClick(sistema.id)}>
                                         <span className="fa fa-edit"></span>
                                     </button>
                                     &nbsp;
-                                    <button onClick={() => handleDeleteClick(sistema)}>
+                                    <button className='btn-delete' onClick={() => handleDeleteClick(sistema)}>
                                         <span className="fa fa-trash"></span>
                                     </button>
                                 </td>

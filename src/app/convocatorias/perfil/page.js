@@ -317,7 +317,6 @@ const Perfil = ({ params }) => {
         }
     };
 
-
     const handleChange = (e) => {
         const { name, value } = e.target;
         setDatosPersonales({
@@ -325,7 +324,6 @@ const Perfil = ({ params }) => {
             [name]: value,
         });
     };
-
     
     const handleGuardarPerfil = async (data) => {
 
@@ -381,7 +379,7 @@ const Perfil = ({ params }) => {
             console.error('Error al guardar los datos personales', error);
             Swal.fire({
                 title: 'Error',
-                text: 'Hubo un problema al guardar los datos personales.',
+                text: error?.response?.data?.mensaje || 'Hubo un problema al guardar el curso. Intenta nuevamente.',
                 icon: 'error',
                 confirmButtonText: 'Intentar nuevamente',
             });
@@ -442,14 +440,14 @@ const Perfil = ({ params }) => {
             console.error('Error al guardar los datos personales', error);
             Swal.fire({
                 title: 'Error',
-                text: 'Hubo un problema al guardar los datos personales.',
+                text: result.mensaje,
                 icon: 'error',
                 confirmButtonText: 'Intentar nuevamente',
             });
         }
     };
     const handleGuardarFormacionAcademica = async () => {
-        const NivelFormacionId = document.getElementById('NivelFormacionId').value;
+        const NivelFormacionId = document.getElementById('nivelFormacion').value;
         const centroEstudios = document.getElementById('centroEstudios').value;
         const tituloObtenido = document.getElementById('tituloObtenido').value;
         const fechaTitulo = document.getElementById('fechaTitulo').value;
@@ -489,7 +487,7 @@ const Perfil = ({ params }) => {
             console.error('Error al guardar la formación académica:', error);
             Swal.fire({
                 title: 'Error',
-                text: 'Hubo un problema al guardar la formación académica.',
+                text: error?.response?.data?.mensaje || 'Hubo un problema al guardar el curso. Intenta nuevamente.',
                 icon: 'error',
                 confirmButtonText: 'Intentar nuevamente',
             }).then(async () => {
@@ -509,7 +507,7 @@ const Perfil = ({ params }) => {
         const modalidad = document.getElementById('modalidad').value;
         const fechaInicio = document.getElementById('fechaInicio').value;
         const fechaFin = document.getElementById('fechaFin').value;
-
+    
         const datos = {
             postulanteId: idPerfil,
             parTipoCapacitacionId: tipoCapacitacion,
@@ -521,7 +519,7 @@ const Perfil = ({ params }) => {
             fechaInicio: fechaInicio,
             fechaFin: fechaFin,
         };
-
+    
         try {
             let result;
             if (selectedCurso?.id) {
@@ -529,7 +527,7 @@ const Perfil = ({ params }) => {
             } else {
                 result = await agregarPerfilCurso(datos);
             }
-
+    
             Swal.fire({
                 title: '¡Éxito!',
                 text: result.mensaje,
@@ -537,25 +535,26 @@ const Perfil = ({ params }) => {
                 confirmButtonText: 'Aceptar',
             }).then(async () => {
                 handleCursosModalClose();
-
+    
                 const perfilCursos = await obtenerPerfilCursos(idPerfil);
                 setCursos(perfilCursos);
             });
         } catch (error) {
             console.error('Error al guardar curso:', error);
+    
             Swal.fire({
                 title: 'Error',
-                text: 'Hubo un problema al guardar el curso.',
+                text: error?.response?.data?.mensaje || 'Hubo un problema al guardar el curso. Intenta nuevamente.',
                 icon: 'error',
                 confirmButtonText: 'Intentar nuevamente',
             }).then(async () => {
                 handleCursosModalClose();
-
+    
                 const perfilCursos = await obtenerPerfilCursos(idPerfil);
                 setCursos(perfilCursos);
             });
         }
-    };
+    }; 
     const handleGuardarIdioma = async () => {
         const idioma = document.getElementById('idioma').value;
         const nivelLectura = document.getElementById('nivelLectura').value;
@@ -593,7 +592,7 @@ const Perfil = ({ params }) => {
             console.error('Error al guardar idioma:', error);
             Swal.fire({
                 title: 'Error',
-                text: 'Hubo un problema al guardar el idioma.',
+                text: error?.response?.data?.mensaje || 'Hubo un problema al guardar el curso. Intenta nuevamente.',
                 icon: 'error',
                 confirmButtonText: 'Intentar nuevamente',
             }).then(async () => {
@@ -637,7 +636,7 @@ const Perfil = ({ params }) => {
             console.error('Error al guardar sistema:', error);
             Swal.fire({
                 title: 'Error',
-                text: 'Hubo un problema al guardar el sistema.',
+                text: error?.response?.data?.mensaje || 'Hubo un problema al guardar el curso. Intenta nuevamente.',
                 icon: 'error',
                 confirmButtonText: 'Intentar nuevamente',
             }).then(async () => {
@@ -702,7 +701,7 @@ const Perfil = ({ params }) => {
             console.error('Error al guardar experiencia laboral:', error);
             Swal.fire({
                 title: 'Error',
-                text: 'Hubo un problema al guardar la experiencia laboral.',
+                text: error?.response?.data?.mensaje || 'Hubo un problema al guardar el curso. Intenta nuevamente.',
                 icon: 'error',
                 confirmButtonText: 'Intentar nuevamente',
             }).then(async () => {
@@ -714,13 +713,13 @@ const Perfil = ({ params }) => {
         }
     };
     const handleGuardarRefPersonal = async () => {
-        const nombres = document.getElementById('nombres').value;
+        const nombres = document.getElementById('nombresParentesco').value;
         const empresa = document.getElementById('empresa').value;
         const cargo = document.getElementById('cargo').value;
         const parentesco = document.getElementById('parentesco').value;
-        const telefono = document.getElementById('telefono').value;
-        const telefonoMovil = document.getElementById('telefonoMovil').value;
-        const email = document.getElementById('email').value;
+        const telefono = document.getElementById('telefonoParentesco').value;
+        const telefonoMovil = document.getElementById('telefonoMovilParentesco').value;
+        const email = document.getElementById('emailParentesco').value;
 
         const datos = {
             postulanteId: idPerfil,
@@ -756,7 +755,7 @@ const Perfil = ({ params }) => {
             console.error('Error al guardar la referencia personal:', error);
             Swal.fire({
                 title: 'Error',
-                text: 'Hubo un problema al guardar la referencia personal.',
+                text: error?.response?.data?.mensaje || 'Hubo un problema al guardar el curso. Intenta nuevamente.',
                 icon: 'error',
                 confirmButtonText: 'Intentar nuevamente',
             }).then(async () => {
@@ -768,13 +767,13 @@ const Perfil = ({ params }) => {
         }
     };
     const handleGuardarRefLaboral = async () => {
-        const nombres = document.getElementById('nombres').value;
+        const nombres = document.getElementById('nombresReferencia').value;
         const empresa = document.getElementById('empresa').value;
         const cargo = document.getElementById('cargo').value;
         const relacion = document.getElementById('relacion').value;
-        const telefono = document.getElementById('telefono').value;
-        const telefonoMovil = document.getElementById('telefonoMovil').value;
-        const email = document.getElementById('email').value;
+        const telefono = document.getElementById('telefonoReferencia').value;
+        const telefonoMovil = document.getElementById('telefonoMovilReferencia').value;
+        const email = document.getElementById('emailReferencia').value;
 
         const datos = {
             postulanteId: idPerfil,
@@ -810,7 +809,7 @@ const Perfil = ({ params }) => {
             console.error('Error al guardar la referencia laboral:', error);
             Swal.fire({
                 title: 'Error',
-                text: 'Hubo un problema al guardar la referencia laboral.',
+                text: error?.response?.data?.mensaje || 'Hubo un problema al guardar el curso. Intenta nuevamente.',
                 icon: 'error',
                 confirmButtonText: 'Intentar nuevamente',
             }).then(async () => {
@@ -1104,6 +1103,7 @@ const Perfil = ({ params }) => {
 
                                                                 <PerfilFormacionAcademicaLista
                                                                     formacionLista={formacionLista}
+                                                                    setFormacionAcademica={setFormacionAcademica}
                                                                     onEditClick={handleInfoAcademicaModalOpen}
                                                                     idPerfil={idPerfil}
                                                                 />
@@ -1130,6 +1130,7 @@ const Perfil = ({ params }) => {
 
                                                                 <PerfilCursosLista
                                                                     cursosLista={cursosLista}
+                                                                    setCursos={setCursos}
                                                                     onEditClick={handleCursosModalOpen}
                                                                     idPerfil={idPerfil}
                                                                 />
@@ -1156,6 +1157,7 @@ const Perfil = ({ params }) => {
 
                                                                 <PerfilIdiomasLista
                                                                     idiomasLista={idiomasLista}
+                                                                    setIdiomas={setIdiomas}
                                                                     onEditClick={handleIdiomasModalOpen}
                                                                     idPerfil={idPerfil}
                                                                 />
@@ -1183,6 +1185,7 @@ const Perfil = ({ params }) => {
 
                                                                 <PerfilSistemasLista
                                                                     sistemasLista={sistemasLista}
+                                                                    setSistemas={setSistemas}
                                                                     onEditClick={handleSistemasModalOpen}
                                                                     idPerfil={idPerfil}
                                                                 />
@@ -1210,6 +1213,7 @@ const Perfil = ({ params }) => {
 
                                                                 <PerfilExperienciaLaboralLista
                                                                     experienciaLaboralLista={experienciaLaboralLista}
+                                                                    setExperienciaLaboral={setExperienciaLaboral}
                                                                     onEditClick={handleExpLaboralModalOpen}
                                                                     idPerfil={idPerfil}
                                                                 />
@@ -1235,6 +1239,7 @@ const Perfil = ({ params }) => {
 
                                                                 <PerfilReferenciaPersonalLista
                                                                     referenciaPersonalLista={referenciaPersonalLista}
+                                                                    setReferenciaPersonal={setReferenciaPersonal}
                                                                     onEditClick={handleRefPersonalModalOpen}
                                                                     idPerfil={idPerfil}
                                                                 />
@@ -1261,6 +1266,7 @@ const Perfil = ({ params }) => {
 
                                                                 <PerfilReferenciaLaboralLista
                                                                     referenciaLaboralLista={referenciaLaboralLista}
+                                                                    setReferenciaLaboral={setReferenciaLaboral}
                                                                     onEditClick={handleRefLaboralModalOpen}
                                                                     idPerfil={idPerfil}
                                                                 />
