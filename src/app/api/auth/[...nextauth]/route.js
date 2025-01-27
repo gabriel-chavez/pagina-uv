@@ -1,10 +1,7 @@
-// src/app/api/auth/[...nextauth]/route.js
-
 import { login } from "@/services/seguridadService";
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 
-// Definir authOptions
 export const authOptions = {
   providers: [
     CredentialsProvider({
@@ -12,16 +9,42 @@ export const authOptions = {
       credentials: {
         usuario: { label: "Usuario", type: "text", placeholder: "test@test.com" },
         password: { label: "Password", type: "password" },
+        recaptchaToken: { label: "reCAPTCHA Token", type: "text" }, 
       },
-      async authorize(credentials) {        
-        const token = await login(credentials.usuario, credentials?.password);
+      async authorize(credentials) {
+        const { usuario, password, recaptchaToken } = credentials;
+
+        // Verificar reCAPTCHA con Google
+        const recaptchaResponse = await fetch(
+          "https://www.google.com/recaptcha/api/siteverify",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/x-www-form-urlencoded",
+            },
+            body: new URLSearchParams({
+              secret: process.env.RECAPTCHA_SECRET_KEY, 
+              response: recaptchaToken,
+            }),
+          }
+        );
+
+        const recaptchaData = await recaptchaResponse.json();
+
+        if (!recaptchaData.success) {
+          console.error("Verificación de reCAPTCHA fallida:", recaptchaData);
+          throw new Error("La verificación de reCAPTCHA falló. Por favor, intenta de nuevo.");
+        }
+
+        // Llamada al servicio de login
+        const token = await login(usuario, password);
+
         console.log("token=>>>>", token);
         if (token.error) {
-       //   console.log("token=>>>>", token);
           throw new Error(token.error);
         }
 
-        return token.datos; 
+        return token.datos;
       },
     }),
   ],
@@ -35,27 +58,25 @@ export const authOptions = {
 
     async session({ session, token }) {
       session.user = token; 
-    //  console.log("route.js: session:", session, "token:", token);
       return session;
     },
   },
   session: {
     strategy: "jwt",
-    maxAge: 30 * 60, 
-    updateAge: 5 * 60, 
+    maxAge: 30 * 60,
+    updateAge: 5 * 60,
   },
   jwt: {
-    signingKey: process.env.JWT_SIGNING_KEY,  
+    signingKey: process.env.JWT_SIGNING_KEY,
     verificationOptions: {
       algorithms: ['HS256'],
     },
   },
   pages: {
-    signIn: "/login", 
-  }
-  
+    signIn: "/login",
+  },
 };
 
-const handler = NextAuth(authOptions); 
+const handler = NextAuth(authOptions);
 
-export { handler as GET, handler as POST }; 
+export { handler as GET, handler as POST };

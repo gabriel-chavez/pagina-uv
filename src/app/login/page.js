@@ -1,5 +1,6 @@
 "use client";
 export const dynamic = 'force-dynamic';
+import { useRef } from "react";
 
 import { signIn } from "next-auth/react";
 import { useRouter } from "next/navigation";
@@ -13,15 +14,16 @@ const LoginPage = () => {
   const [password, setPassword] = useState(""); 
   const [recaptchaToken, setRecaptchaToken] = useState(null);
   const router = useRouter();
+  const recaptchaRef = useRef(null);
 
   const handleSubmit = async (event) => {
     event.preventDefault();
     setErrors([]);
 
-    // if (!recaptchaToken) {
-    //   setErrors(["Por favor, verifica que no eres un robot."]);
-    //   return;
-    // }
+    if (!recaptchaToken) {
+      setErrors(["Por favor, verifica que no eres un robot."]);
+      return;
+    }
 
     const responseNextAuth = await signIn("credentials", {
       usuario,
@@ -31,7 +33,8 @@ const LoginPage = () => {
     });
     console.log(responseNextAuth);
     if (responseNextAuth?.error) {
-      //console.log("page.js:", responseNextAuth);
+      recaptchaRef.current.reset();  
+      setRecaptchaToken(null);
       setErrors(responseNextAuth.error.split(","));
       return;
     }
@@ -94,6 +97,7 @@ const LoginPage = () => {
               <ReCAPTCHA
                 sitekey="6LcvLjciAAAAAALicqZR92XT9u9E_KHCDXxvPbgg"
                 onChange={handleRecaptchaChange}
+                ref={recaptchaRef}
               />
             </div>
 
