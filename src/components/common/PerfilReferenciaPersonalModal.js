@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const PerfilRefPersonalModal = ({
   show,
@@ -8,20 +8,35 @@ const PerfilRefPersonalModal = ({
   parParentesco
 }) => {
   const [formData, setFormData] = useState({
-    nombres: selectedRefPersonal?.nombres || '',
-    empresa: selectedRefPersonal?.empresa || '',
-    cargo: selectedRefPersonal?.cargo || '',
-    parentesco: selectedRefPersonal?.parParentescoId || '',
-    telefono: selectedRefPersonal?.telefono || '',
-    telefonoMovil: selectedRefPersonal?.celular || '',
-    email: selectedRefPersonal?.correoElectronico || '',
+    nombres: '',
+    empresa: '',
+    cargo: '',
+    parentesco: '',
+    telefono: '',
+    telefonoMovil: '',
+    emailParentesco: '',
   });
 
   const [errors, setErrors] = useState({});
 
+  // Sincronizar el estado del formulario con `selectedRefPersonal` cuando cambia
+  useEffect(() => {
+    if (selectedRefPersonal) {
+      setFormData({
+        nombres: selectedRefPersonal.nombres || '',
+        empresa: selectedRefPersonal.empresa || '',
+        cargo: selectedRefPersonal.cargo || '',
+        parentesco: selectedRefPersonal.parParentescoId || '',
+        telefono: selectedRefPersonal.telefono || '',
+        telefonoMovil: selectedRefPersonal.celular || '',
+        email: selectedRefPersonal.correoElectronico || '',
+      });
+    }
+  }, [selectedRefPersonal]);
+
   const handleInputChange = (e) => {
     const { id, value } = e.target;
-    const key = id.replace(/Parentesco$/, ''); 
+    const key = id.replace(/Parentesco$/, ''); // Ajustar el nombre del campo
     setFormData((prev) => ({ ...prev, [key]: value }));
   };
 
@@ -136,7 +151,7 @@ const PerfilRefPersonalModal = ({
                   type="email"
                   id="emailParentesco"
                   className="form-control"
-                  value={formData.email}
+                  value={formData.emailParentesco}
                   onChange={handleInputChange}
                 />
               </div>

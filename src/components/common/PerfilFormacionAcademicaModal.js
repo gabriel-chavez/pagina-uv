@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const PerfilFormacionAcademicaModal = ({
   show,
@@ -8,15 +8,28 @@ const PerfilFormacionAcademicaModal = ({
   ParNivelFormacion,
 }) => {
   const [formData, setFormData] = useState({
-    nivelFormacion: selectedInfoAcademica?.parNivelFormacionId || '',
-    centroEstudios: selectedInfoAcademica?.centroEstudios || '',
-    tituloObtenido: selectedInfoAcademica?.tituloObtenido || '',
-    fechaTitulo: selectedInfoAcademica?.fechaTitulo || '',
-    ciudad: selectedInfoAcademica?.ciudad || '',
-    pais: selectedInfoAcademica?.pais || 'Bolivia', // Valor por defecto
+    nivelFormacion: '',
+    centroEstudios: '',
+    tituloObtenido: '',
+    fechaTitulo: '',
+    ciudad: '',
+    pais: 'Bolivia', // Valor por defecto
   });
 
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    if (selectedInfoAcademica) {
+      setFormData({
+        nivelFormacion: selectedInfoAcademica.parNivelFormacionId || '',
+        centroEstudios: selectedInfoAcademica.centroEstudios || '',
+        tituloObtenido: selectedInfoAcademica.tituloObtenido || '',
+        fechaTitulo: selectedInfoAcademica.fechaTitulo || '',
+        ciudad: selectedInfoAcademica.ciudad || '',
+        pais: selectedInfoAcademica.pais || 'Bolivia', // Valor por defecto
+      });
+    }
+  }, [selectedInfoAcademica]);
 
   if (!show) return null; // No renderizar nada si el modal no debe mostrarse
 
@@ -57,7 +70,6 @@ const PerfilFormacionAcademicaModal = ({
       pais: 'Bolivia',
     });
   };
-  
 
   return (
     <div className="modal fade show d-block" style={{ backgroundColor: 'rgba(0, 0, 0, 0.2)' }} tabIndex="-1" role="dialog">

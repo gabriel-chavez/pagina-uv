@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const PerfilCursosModal = ({
   show,
@@ -7,32 +7,58 @@ const PerfilCursosModal = ({
   selectedCurso,
   parTipoCapacitacion
 }) => {
-  const [tipoCapacitacion, setTipoCapacitacion] = useState(selectedCurso?.parTipoCapacitacionId || '');
-  const [nombres, setNombres] = useState(selectedCurso?.nombres || '');
-  const [centroEstudio, setCentroEstudio] = useState(selectedCurso?.centroEstudios || '');
-  const [pais, setPais] = useState(selectedCurso?.pais || 'Bolivia');
-  const [duracion, setDuracion] = useState(selectedCurso?.horasAcademicas || '');
-  const [modalidad, setModalidad] = useState(selectedCurso?.modalidad || 'Presencial');
-  const [fechaInicio, setFechaInicio] = useState(selectedCurso?.fechaInicio || '');
-  const [fechaFin, setFechaFin] = useState(selectedCurso?.fechaFin || '');
+  const [tipoCapacitacion, setTipoCapacitacion] = useState('');
+  const [nombres, setNombres] = useState('');
+  const [centroEstudio, setCentroEstudio] = useState('');
+  const [pais, setPais] = useState('Bolivia');
+  const [duracion, setDuracion] = useState('');
+  const [modalidad, setModalidad] = useState('Presencial');
+  const [fechaInicio, setFechaInicio] = useState('');
+  const [fechaFin, setFechaFin] = useState('');
   const [errors, setErrors] = useState({});
+
+  // Limpiar los errores cuando el formulario se cierre
+  useEffect(() => {
+    if (!show) {
+      setErrors({});
+    }
+  }, [show]);
+
+  // Actualizar los campos cuando el selectedCurso cambie
+  useEffect(() => {
+    if (selectedCurso) {
+      setTipoCapacitacion(selectedCurso.parTipoCapacitacionId || '');
+      setNombres(selectedCurso.nombres || '');
+      setCentroEstudio(selectedCurso.centroEstudios || '');
+      setPais(selectedCurso.pais || 'Bolivia');
+      setDuracion(selectedCurso.horasAcademicas || '');
+      setModalidad(selectedCurso.modalidad || 'Presencial');
+      setFechaInicio(selectedCurso.fechaInicio || '');
+      setFechaFin(selectedCurso.fechaFin || '');
+    }
+  }, [selectedCurso]);
 
   if (!show) return null;
 
   const handleSave = () => {
     const newErrors = {};
 
+    // Validaciones
     if (!tipoCapacitacion) newErrors.tipoCapacitacion = 'Debe seleccionar un tipo de capacitación.';
     if (!nombres) newErrors.nombres = 'El nombre del curso/taller es obligatorio.';
     if (!centroEstudio) newErrors.centroEstudio = 'El centro de estudio es obligatorio.';
     if (!duracion) newErrors.duracion = 'La duración es obligatoria.';
     if (!fechaInicio) newErrors.fechaInicio = 'La fecha de inicio es obligatoria.';
     if (!fechaFin) newErrors.fechaFin = 'La fecha de fin es obligatoria.';
+    if (fechaFin && fechaInicio && new Date(fechaFin) < new Date(fechaInicio)) {
+      newErrors.fechaFin = 'La fecha de fin no puede ser anterior a la fecha de inicio.';
+    }
 
     setErrors(newErrors);
 
     if (Object.keys(newErrors).length > 0) return;
 
+    // Guardar la información
     onSave({
       tipoCapacitacion,
       nombres,
@@ -78,7 +104,6 @@ const PerfilCursosModal = ({
                   id="tipoCapacitacion"
                   value={tipoCapacitacion}
                   onChange={(e) => setTipoCapacitacion(e.target.value)}
-                  required
                 >
                   <option value="">Selecciona una opción</option>
                   {parTipoCapacitacion && parTipoCapacitacion.length > 0 ? (
@@ -103,7 +128,6 @@ const PerfilCursosModal = ({
                   className={`form-control ${errors.nombres ? 'is-invalid' : ''}`}
                   value={nombres}
                   onChange={(e) => setNombres(e.target.value)}
-                  required
                 />
                 {errors.nombres && <div className="invalid-feedback">{errors.nombres}</div>}
               </div>
@@ -117,7 +141,6 @@ const PerfilCursosModal = ({
                   className={`form-control ${errors.centroEstudio ? 'is-invalid' : ''}`}
                   value={centroEstudio}
                   onChange={(e) => setCentroEstudio(e.target.value)}
-                  required
                 />
                 {errors.centroEstudio && <div className="invalid-feedback">{errors.centroEstudio}</div>}
               </div>
@@ -130,7 +153,6 @@ const PerfilCursosModal = ({
                   id="pais"
                   value={pais}
                   onChange={(e) => setPais(e.target.value)}
-                  required
                 >
                   <option value="Bolivia">Bolivia</option>
                   <option value="Otro">Otro</option>
@@ -141,20 +163,18 @@ const PerfilCursosModal = ({
               <div className="mb-3">
                 <label className="form-label">Duración (Hrs)</label>
                 <input
-                type="text"
-                className={`form-control ${errors.duracion ? 'is-invalid' : ''}`}
-                id="duracion"
-                value={duracion}
-                onChange={(e) => {
+                  type="text"
+                  className={`form-control ${errors.duracion ? 'is-invalid' : ''}`}
+                  id="duracion"
+                  value={duracion}
+                  onChange={(e) => {
                     const newValue = e.target.value;
                     if (/^\d*$/.test(newValue)) {
-                    setDuracion(newValue); 
+                      setDuracion(newValue);
                     }
-                }}
-                inputMode="numeric" 
-                required
+                  }}
+                  inputMode="numeric"
                 />
-
                 {errors.duracion && <div className="invalid-feedback">{errors.duracion}</div>}
               </div>
 
@@ -166,7 +186,6 @@ const PerfilCursosModal = ({
                   id="modalidad"
                   value={modalidad}
                   onChange={(e) => setModalidad(e.target.value)}
-                  required
                 >
                   <option value="Presencial">Presencial</option>
                   <option value="En línea">En línea</option>
@@ -182,7 +201,6 @@ const PerfilCursosModal = ({
                   id="fechaInicio"
                   value={fechaInicio}
                   onChange={(e) => setFechaInicio(e.target.value)}
-                  required
                 />
                 {errors.fechaInicio && <div className="invalid-feedback">{errors.fechaInicio}</div>}
               </div>
@@ -196,7 +214,6 @@ const PerfilCursosModal = ({
                   id="fechaFin"
                   value={fechaFin}
                   onChange={(e) => setFechaFin(e.target.value)}
-                  required
                 />
                 {errors.fechaFin && <div className="invalid-feedback">{errors.fechaFin}</div>}
               </div>

@@ -9,7 +9,7 @@ export const authOptions = {
       credentials: {
         usuario: { label: "Usuario", type: "text", placeholder: "test@test.com" },
         password: { label: "Password", type: "password" },
-        recaptchaToken: { label: "reCAPTCHA Token", type: "text" }, 
+        //recaptchaToken: { label: "reCAPTCHA Token", type: "text" }, 
       },
       async authorize(credentials) {
         const { usuario, password, recaptchaToken } = credentials;
@@ -31,10 +31,10 @@ export const authOptions = {
 
         const recaptchaData = await recaptchaResponse.json();
 
-        if (!recaptchaData.success) {
-          console.error("Verificación de reCAPTCHA fallida:", recaptchaData);
-          throw new Error("La verificación de reCAPTCHA falló. Por favor, intenta de nuevo.");
-        }
+        // if (!recaptchaData.success) {
+        //   console.error("Verificación de reCAPTCHA fallida:", recaptchaData);
+        //   throw new Error("La verificación de reCAPTCHA falló. Por favor, intenta de nuevo.");
+        // }
 
         // Llamada al servicio de login
         const token = await login(usuario, password);

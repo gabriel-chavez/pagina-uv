@@ -1,20 +1,29 @@
-'use client';
-
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const PerfilSistemasModal = ({
   show,
   onClose,
   onSave,
-  selectedSistema,
+  selectedSistema, // Registro que se está editando
   ParPrograma,
   ParNivelConocimiento,
 }) => {
-  const [programa, setPrograma] = useState(selectedSistema?.parProgramaId || '');
-  const [nivelConocimiento, setNivelConocimiento] = useState(selectedSistema?.parNivelConocimientoId || '');
+  const [programa, setPrograma] = useState('');
+  const [nivelConocimiento, setNivelConocimiento] = useState('');
   const [errors, setErrors] = useState({});
 
-  // Asegurarse de no renderizar el modal si `show` es false
+  // Efecto para actualizar los valores del formulario cuando `selectedSistema` cambia
+  useEffect(() => {
+    if (selectedSistema) {
+      setPrograma(selectedSistema.parProgramaId || '');
+      setNivelConocimiento(selectedSistema.parNivelConocimientoId || '');
+    } else {
+      setPrograma('');
+      setNivelConocimiento('');
+    }
+  }, [selectedSistema]); // Se ejecuta cada vez que `selectedSistema` cambia
+
+  // Si el modal no debe mostrarse, no renderizar nada
   if (!show) return null;
 
   const handleSave = () => {
@@ -26,12 +35,18 @@ const PerfilSistemasModal = ({
 
     if (Object.keys(newErrors).length > 0) return;
 
-    // Llama a la función onSave con los datos capturados
     onSave({ programa, nivelConocimiento });
 
-    // Reiniciar el formulario si es necesario
+    // Opcional: reiniciar el formulario
     setPrograma('');
     setNivelConocimiento('');
+  };
+
+  const handleClose = () => {
+    setPrograma('');
+    setNivelConocimiento('');
+    setErrors({});
+    onClose();
   };
 
   return (
@@ -44,8 +59,10 @@ const PerfilSistemasModal = ({
       <div className="modal-dialog" role="document">
         <div className="modal-content">
           <div className="modal-header">
-            <h5 className="modal-title">Agregar Sistema</h5>
-            <button type="button" className="btn-close" onClick={onClose}></button>
+            <h5 className="modal-title">
+              {selectedSistema ? 'Editar Sistema' : 'Agregar Sistema'}
+            </h5>
+            <button type="button" className="btn-close" onClick={handleClose}></button>
           </div>
           <div className="modal-body">
             <form>
@@ -84,12 +101,14 @@ const PerfilSistemasModal = ({
                     </option>
                   ))}
                 </select>
-                {errors.nivelConocimiento && <div className="invalid-feedback">{errors.nivelConocimiento}</div>}
+                {errors.nivelConocimiento && (
+                  <div className="invalid-feedback">{errors.nivelConocimiento}</div>
+                )}
               </div>
             </form>
           </div>
           <div className="modal-footer">
-            <button type="button" className="btn btn-secondary" onClick={onClose}>
+            <button type="button" className="btn btn-secondary" onClick={handleClose}>
               Cancelar
             </button>
             <button type="button" className="btn btn-primary" onClick={handleSave}>

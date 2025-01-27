@@ -20,15 +20,15 @@ const LoginPage = () => {
     event.preventDefault();
     setErrors([]);
 
-    if (!recaptchaToken) {
-      setErrors(["Por favor, verifica que no eres un robot."]);
-      return;
-    }
+    // if (!recaptchaToken) {
+    //   setErrors(["Por favor, verifica que no eres un robot."]);
+    //   return;
+    // }
 
     const responseNextAuth = await signIn("credentials", {
       usuario,
       password,
-      recaptchaToken,
+      //recaptchaToken,
       redirect: false,
     });
     console.log(responseNextAuth);

@@ -73,7 +73,7 @@ const PerfilCursosLista = ({ cursosLista, setCursos, onEditClick, idPerfil }) =>
                         <td>{curso.nombre}</td>
                         <td>{curso.centroEstudios}</td>
                         <td>{curso.pais}</td>
-                        <td>{curso.horasAcademicas}</td>
+                        <td>{curso.horasAcademicas} Hrs.</td>
                         <td>{curso.modalidad}</td>
                         <td>{formatFecha(curso.fechaInicio)}</td>
                         <td>{formatFecha(curso.fechaFin)}</td>

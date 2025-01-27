@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const PerfilIdiomasModal = ({
   show,
@@ -8,11 +8,21 @@ const PerfilIdiomasModal = ({
   ParIdioma,
   ParNivelConocimiento,
 }) => {
-  const [idioma, setIdioma] = useState(selectedIdioma?.parIdiomaId || '');
-  const [nivelLectura, setNivelLectura] = useState(selectedIdioma?.parNivelConocimientoLecturaId || '');
-  const [nivelEscritura, setNivelEscritura] = useState(selectedIdioma?.parNivelConocimientoEscrituraId || '');
-  const [nivelComprension, setNivelComprension] = useState(selectedIdioma?.parNivelConocimientoConversacionId || '');
+  const [idioma, setIdioma] = useState('');
+  const [nivelLectura, setNivelLectura] = useState('');
+  const [nivelEscritura, setNivelEscritura] = useState('');
+  const [nivelComprension, setNivelComprension] = useState('');
   const [errors, setErrors] = useState({});
+
+  useEffect(() => {
+    // Solo actualizar los valores si selectedIdioma tiene datos
+    if (selectedIdioma) {
+      setIdioma(selectedIdioma.parIdiomaId || '');
+      setNivelLectura(selectedIdioma.parNivelConocimientoLecturaId || '');
+      setNivelEscritura(selectedIdioma.parNivelConocimientoEscrituraId || '');
+      setNivelComprension(selectedIdioma.parNivelConocimientoConversacionId || '');
+    }
+  }, [selectedIdioma]); // Este efecto se dispara cada vez que selectedIdioma cambia
 
   if (!show) return null;
 

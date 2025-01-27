@@ -103,9 +103,6 @@ const PerfilExperienciaLaboralLista = ({ experienciaLaboralLista, set, onEditCli
                                 <strong>Fecha Término:</strong> {formatFecha(expLaboral.fechaConclusion)}
                             </div>
                             <div>
-                                <strong>Total experiencia:</strong> 
-                            </div>
-                            <div>
                                 <strong>Motivo de Desvinculación:</strong> {expLaboral.motivoDesvinculacion}
                             </div>
                         </div>
