@@ -13,7 +13,26 @@ const ConvocatoriaLista = ({ convocatorias }) => {
   
   return (
     <div className="insurance-details__convocatoria_lista">        
-      <h3 className="insurance-details__convocatoria_titulo">Convocatorias</h3>
+      <div className='text-center'>
+        <h3>Bolsa de trabajo</h3>
+        <p>
+          ¡Te damos la bienvenida a nuestra bolsa de trabajo!
+        </p>
+        <p>
+          A continuación encontrarás la lista de convocatorias disponibles a las que puedes aplicar en este momento.
+        </p>
+        <p>
+          En caso de no estar registrado con anterioridad puedes hacer clic en el botón a continuación
+        </p>
+        <p>
+          <Link className='btn-registrar' href={`./registrar`}>
+            Registrarse
+          </Link>
+          <br />
+        </p>
+      </div>
+      <h3 className="insurance-details__convocatoria_titulo">Convocatorias disponibles</h3>
+      <br/>
       <ul className="insurance-details__convocatoria_detalle">
         {convocatorias.map((convocatoria) => (
           <li key={convocatoria.id}>

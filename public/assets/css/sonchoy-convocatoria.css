@@ -491,6 +491,18 @@ a {
     border-radius: 5px;
     padding: 5px;
   }
+  .btn-registrar{
+    padding: 10px 40px;
+    border: solid 1px #c40d42;
+    color: #c40d42;
+    font-weight: bold;
+    border-radius: 20px;
+    transition: border 1s ease, background 1s ease;
+  }
+  .btn-registrar:hover{
+    background: #c40d42;
+    color: #fff;
+  }
   .btn-postular{
     padding: 10px 40px;
     border: solid 1px #0860a9;
@@ -507,7 +519,7 @@ a {
     padding-top: 20px;
   }
   .postulacionFecha{
-    color: #c40d42;;
+    color: #c40d42;
   }
   .postulacionCodigo{
     color: #0860a9;
@@ -519,4 +531,7 @@ a {
   .postulacionDescripcion{
     color:#808080;
     line-height: 20px;
+  }
+  .insurance-details__convocatoria_lista h3{
+    color: #0860a9;
   }
