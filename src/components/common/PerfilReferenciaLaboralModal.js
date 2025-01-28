@@ -22,13 +22,14 @@ const PerfilRefLaboralModal = ({
   useEffect(() => {
     if (selectedRefLaboral) {
       setFormData({
-        nombres: selectedRefLaboral.nombres || '',
+        nombres: selectedRefLaboral.nombre || '',
         empresa: selectedRefLaboral.empresa || '',
         cargo: selectedRefLaboral.cargo || '',
         parentesco: selectedRefLaboral.parentesco || '',
         telefono: selectedRefLaboral.telefono || '',
-        telefonoMovil: selectedRefLaboral.celular || '',
-        email: selectedRefLaboral.correoElectronico || '',
+        telefonoMovil: selectedRefLaboral.telefonoMovil || '',
+        email: selectedRefLaboral.email || '',
+        relacion: selectedRefLaboral.relacion || '',
       });
     }
   }, [selectedRefLaboral]); // Este useEffect se ejecuta cada vez que selectedRefLaboral cambia
@@ -49,7 +50,7 @@ const PerfilRefLaboralModal = ({
     if (!formData.relacion) newErrors.relacion = 'La relación laboral es obligatoria.';
     if (!formData.telefonoMovil) newErrors.telefonoMovil = 'El teléfono móvil es obligatorio.';
     if (!formData.email || !/\S+@\S+\.\S+/.test(formData.email)) newErrors.email = 'El correo electrónico es inválido.';
-    if (formData.telefonoMovil && !/^\d{9}$/.test(formData.telefonoMovil)) newErrors.telefonoMovil = 'El teléfono móvil debe tener 9 dígitos.';
+    if (formData.telefonoMovil && !/^\d{8}$/.test(formData.telefonoMovil)) newErrors.telefonoMovil = 'El teléfono móvil debe tener 9 dígitos.';
     if (formData.telefono && !/^\d{7,10}$/.test(formData.telefono)) newErrors.telefono = 'El teléfono debe tener entre 7 y 10 dígitos.';
 
     setErrors(newErrors);

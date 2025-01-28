@@ -23,13 +23,13 @@ const PerfilRefPersonalModal = ({
   useEffect(() => {
     if (selectedRefPersonal) {
       setFormData({
-        nombres: selectedRefPersonal.nombres || '',
+        nombres: selectedRefPersonal.nombre || '',
         empresa: selectedRefPersonal.empresa || '',
         cargo: selectedRefPersonal.cargo || '',
         parentesco: selectedRefPersonal.parParentescoId || '',
         telefono: selectedRefPersonal.telefono || '',
-        telefonoMovil: selectedRefPersonal.celular || '',
-        email: selectedRefPersonal.correoElectronico || '',
+        telefonoMovil: selectedRefPersonal.telefonoMovil || '',
+        email: selectedRefPersonal.email || '',
       });
     }
   }, [selectedRefPersonal]);
@@ -148,10 +148,10 @@ const PerfilRefPersonalModal = ({
               <div className="mb-3">
                 <label className="form-label">Correo electrónico</label>
                 <input
-                  type="email"
+                  type="text"
                   id="emailParentesco"
                   className="form-control"
-                  value={formData.emailParentesco}
+                  value={formData.email}
                   onChange={handleInputChange}
                 />
               </div>

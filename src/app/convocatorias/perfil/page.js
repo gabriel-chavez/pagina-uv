@@ -500,7 +500,7 @@ const Perfil = ({ params }) => {
     };
     const handleGuardarCurso = async () => {
         const tipoCapacitacion = document.getElementById('tipoCapacitacion').value;
-        const nombres = document.getElementById('nombres').value;
+        const nombreCurso = document.getElementById('nombreCurso').value;
         const centroEstudio = document.getElementById('centroEstudio').value;
         const pais = document.getElementById('pais').value;
         const duracion = document.getElementById('duracion').value;
@@ -511,7 +511,7 @@ const Perfil = ({ params }) => {
         const datos = {
             postulanteId: idPerfil,
             parTipoCapacitacionId: tipoCapacitacion,
-            nombre: nombres,
+            nombre: nombreCurso,
             centroEstudios: centroEstudio,
             pais: pais,
             horasAcademicas: duracion,
@@ -654,7 +654,7 @@ const Perfil = ({ params }) => {
         const nroDependientes = document.getElementById('nroDependientes').value;
         const nombreSuperior = document.getElementById('nombreSuperior').value;
         const cargoSuperior = document.getElementById('cargoSuperior').value;
-        const telefono = document.getElementById('telefono').value;
+        const telefono = document.getElementById('telefonoEmpresa').value;
         const principalesFunciones = document.getElementById('principalesFunciones').value;
         const fechaInicio = document.getElementById('fechaInicio').value;
         const fechaFin = document.getElementById('fechaFin').value;

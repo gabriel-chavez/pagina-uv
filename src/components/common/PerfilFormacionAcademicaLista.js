@@ -67,7 +67,7 @@ const PerfilFormacionAcademicaLista = ({ formacionLista, setFormacionAcademica, 
             {formacionLista && formacionLista.length > 0 ? (
                 formacionLista.map((formacion) => (
                     <tr key={formacion.id}>
-                        <td>{formacion.parNivelFormacionId}</td>
+                        <td>{formacion.parNivelFormacion.descripcion}</td>
                         <td>{formacion.centroEstudios}</td>
                         <td>{formacion.tituloObtenido}</td>
                         <td>{formatFecha(formacion.fechaTitulo)}</td>

@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 
 const PerfilExperienciaLaboralModal = ({
   show,
@@ -6,24 +6,42 @@ const PerfilExperienciaLaboralModal = ({
   onSave,
   selectedExpLaboral,
 }) => {
-  const [currentlyWorking, setCurrentlyWorking] = useState(
-    selectedExpLaboral?.fechaTermino ? false : true
-  );
+  const [currentlyWorking, setCurrentlyWorking] = useState(false);
   const [formData, setFormData] = useState({
-    empresa: selectedExpLaboral?.empresa || '',
-    cargo: selectedExpLaboral?.cargo || '',
-    sector: selectedExpLaboral?.sector || '',
-    nroDependientes: selectedExpLaboral?.dependientes || '',
-    nombreSuperior: selectedExpLaboral?.nombreSuperior || '',
-    cargoSuperior: selectedExpLaboral?.cargoSuperior || '',
-    telefono: selectedExpLaboral?.telefonoEmpresa || '',
-    principalesFunciones: selectedExpLaboral?.funciones || '',
-    fechaInicio: selectedExpLaboral?.fechaInicio || '',
-    fechaFin: currentlyWorking ? '' : selectedExpLaboral?.fechaTermino || '',
-    motivoDesvinculación: selectedExpLaboral?.motivoDesvinculacion || '',
+    empresa: '',
+    cargo: '',
+    sector: '',
+    nroDependientes: '',
+    nombreSuperior: '',
+    cargoSuperior: '',
+    telefono: '',
+    principalesFunciones: '',
+    fechaInicio: '',
+    fechaFin: '',
+    motivoDesvinculación: '',
   });
 
   const [errors, setErrors] = useState({});
+
+  // Actualiza el formulario y el estado del checkbox al recibir un nuevo `selectedExpLaboral`
+  useEffect(() => {
+    if (selectedExpLaboral) {
+      setFormData({
+        empresa: selectedExpLaboral.empresa || '',
+        cargo: selectedExpLaboral.cargo || '',
+        sector: selectedExpLaboral.sector || '',
+        nroDependientes: selectedExpLaboral.nroDependientes || '',
+        nombreSuperior: selectedExpLaboral.nombreSuperior || '',
+        cargoSuperior: selectedExpLaboral.cargoSuperior || '',
+        telefonoEmpresa: selectedExpLaboral.telefonoEmpresa || '',
+        principalesFunciones: selectedExpLaboral.funciones || '',
+        fechaInicio: selectedExpLaboral.fechaInicio || '',
+        fechaFin: selectedExpLaboral.fechaTermino || '',
+        motivoDesvinculación: selectedExpLaboral.motivoDesvinculacion || '',
+      });
+      setCurrentlyWorking(!selectedExpLaboral.fechaTermino);
+    }
+  }, [selectedExpLaboral]);
 
   const handleCheckboxChange = () => {
     setCurrentlyWorking(!currentlyWorking);
@@ -50,7 +68,7 @@ const PerfilExperienciaLaboralModal = ({
     if (!formData.nroDependientes) newErrors.nroDependientes = 'El campo Nro. Dependientes es obligatorio.';
     if (!formData.nombreSuperior) newErrors.nombreSuperior = 'El campo Nombre del superior es obligatorio.';
     if (!formData.cargoSuperior) newErrors.cargoSuperior = 'El campo Cargo del superior es obligatorio.';
-    if (!formData.telefono) newErrors.telefono = 'El campo Teléfono empresa es obligatorio.';
+    if (!formData.telefonoEmpresa) newErrors.telefono = 'El campo Teléfono empresa es obligatorio.';
     if (!formData.principalesFunciones) newErrors.principalesFunciones = 'El campo Principales funciones es obligatorio.';
     if (!formData.fechaInicio) newErrors.fechaInicio = 'El campo Fecha Inicio es obligatorio.';
 
@@ -169,7 +187,7 @@ const PerfilExperienciaLaboralModal = ({
                 <label className="form-label">Teléfono empresa</label>
                 <input
                   type="tel"
-                  id="telefono"
+                  id="telefonoEmpresa"
                   className="form-control"
                   value={formData.telefono}
                   onChange={handleInputChange}
@@ -234,7 +252,7 @@ const PerfilExperienciaLaboralModal = ({
                   className="form-control"
                   value={formData.motivoDesvinculación}
                   onChange={handleInputChange}
-                  disabled={currentlyWorking} 
+                  disabled={currentlyWorking}
                   required={!currentlyWorking}
                 />
                 {errors.motivoDesvinculación && <small className="text-danger">{errors.motivoDesvinculación}</small>}

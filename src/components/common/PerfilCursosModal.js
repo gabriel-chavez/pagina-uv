@@ -8,7 +8,7 @@ const PerfilCursosModal = ({
   parTipoCapacitacion
 }) => {
   const [tipoCapacitacion, setTipoCapacitacion] = useState('');
-  const [nombres, setNombres] = useState('');
+  const [nombreCurso, setNombreCurso] = useState('');
   const [centroEstudio, setCentroEstudio] = useState('');
   const [pais, setPais] = useState('Bolivia');
   const [duracion, setDuracion] = useState('');
@@ -28,7 +28,7 @@ const PerfilCursosModal = ({
   useEffect(() => {
     if (selectedCurso) {
       setTipoCapacitacion(selectedCurso.parTipoCapacitacionId || '');
-      setNombres(selectedCurso.nombres || '');
+      setNombreCurso(selectedCurso.nombre || '');
       setCentroEstudio(selectedCurso.centroEstudios || '');
       setPais(selectedCurso.pais || 'Bolivia');
       setDuracion(selectedCurso.horasAcademicas || '');
@@ -45,7 +45,7 @@ const PerfilCursosModal = ({
 
     // Validaciones
     if (!tipoCapacitacion) newErrors.tipoCapacitacion = 'Debe seleccionar un tipo de capacitación.';
-    if (!nombres) newErrors.nombres = 'El nombre del curso/taller es obligatorio.';
+    if (!nombreCurso) newErrors.nombreCurso = 'El nombre del curso/taller es obligatorio.';
     if (!centroEstudio) newErrors.centroEstudio = 'El centro de estudio es obligatorio.';
     if (!duracion) newErrors.duracion = 'La duración es obligatoria.';
     if (!fechaInicio) newErrors.fechaInicio = 'La fecha de inicio es obligatoria.';
@@ -61,7 +61,7 @@ const PerfilCursosModal = ({
     // Guardar la información
     onSave({
       tipoCapacitacion,
-      nombres,
+      nombreCurso,
       centroEstudio,
       pais,
       duracion,
@@ -72,7 +72,7 @@ const PerfilCursosModal = ({
 
     // Reiniciar el formulario
     setTipoCapacitacion('');
-    setNombres('');
+    setNombreCurso('');
     setCentroEstudio('');
     setPais('Bolivia');
     setDuracion('');
@@ -124,12 +124,12 @@ const PerfilCursosModal = ({
                 <label className="form-label">Nombre del Curso/Taller</label>
                 <input
                   type="text"
-                  id="nombres"
-                  className={`form-control ${errors.nombres ? 'is-invalid' : ''}`}
-                  value={nombres}
-                  onChange={(e) => setNombres(e.target.value)}
+                  id="nombreCurso"
+                  className={`form-control ${errors.nombreCurso ? 'is-invalid' : ''}`}
+                  value={nombreCurso}
+                  onChange={(e) => setNombreCurso(e.target.value)}
                 />
-                {errors.nombres && <div className="invalid-feedback">{errors.nombres}</div>}
+                {errors.nombreCurso && <div className="invalid-feedback">{errors.nombreCurso}</div>}
               </div>
 
               {/* Campo Centro Estudio */}

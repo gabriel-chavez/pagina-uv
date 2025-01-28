@@ -62,7 +62,7 @@ const PerfilReferenciaPersonalLista = ({ referenciaPersonalLista, setReferenciaP
                                 <td>{referenciaPersonal.nombre}</td>
                                 <td>{referenciaPersonal.empresa}</td>
                                 <td>{referenciaPersonal.cargo}</td>
-                                <td>{referenciaPersonal.parParentescoId}</td>
+                                <td>{referenciaPersonal.parParentesco.descripcion}</td>
                                 <td>{referenciaPersonal.telefono}</td>
                                 <td>{referenciaPersonal.telefonoMovil}</td>
                                 <td>{referenciaPersonal.email}</td>
