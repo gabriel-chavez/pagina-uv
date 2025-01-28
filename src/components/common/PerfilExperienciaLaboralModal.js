@@ -25,6 +25,7 @@ const PerfilExperienciaLaboralModal = ({
 
   // Actualiza el formulario y el estado del checkbox al recibir un nuevo `selectedExpLaboral`
   useEffect(() => {
+    console.log('selectedExpLaboral: ', selectedExpLaboral);
     if (selectedExpLaboral) {
       setFormData({
         empresa: selectedExpLaboral.empresa || '',
@@ -36,7 +37,7 @@ const PerfilExperienciaLaboralModal = ({
         telefonoEmpresa: selectedExpLaboral.telefonoEmpresa || '',
         principalesFunciones: selectedExpLaboral.funciones || '',
         fechaInicio: selectedExpLaboral.fechaInicio || '',
-        fechaFin: selectedExpLaboral.fechaTermino || '',
+        fechaFin: selectedExpLaboral.fechaConclusion || '',
         motivoDesvinculación: selectedExpLaboral.motivoDesvinculacion || '',
       });
       setCurrentlyWorking(!selectedExpLaboral.fechaTermino);

@@ -654,7 +654,7 @@ const Perfil = ({ params }) => {
         const nroDependientes = document.getElementById('nroDependientes').value;
         const nombreSuperior = document.getElementById('nombreSuperior').value;
         const cargoSuperior = document.getElementById('cargoSuperior').value;
-        const telefono = document.getElementById('telefonoEmpresa').value;
+        const telefonoEmpresa = document.getElementById('telefonoEmpresa').value;
         const principalesFunciones = document.getElementById('principalesFunciones').value;
         const fechaInicio = document.getElementById('fechaInicio').value;
         const fechaFin = document.getElementById('fechaFin').value;
@@ -670,7 +670,7 @@ const Perfil = ({ params }) => {
             nroDependientes: nroDependientes,
             nombreSuperior: nombreSuperior,
             cargoSuperior: cargoSuperior,
-            telefonoEmpresa: telefono,
+            telefonoEmpresa: telefonoEmpresa,
             funciones: principalesFunciones,
             fechaInicio: fechaInicio,
             fechaConclusion: fechaFin,
