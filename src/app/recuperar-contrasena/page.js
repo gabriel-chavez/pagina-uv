@@ -5,11 +5,13 @@ import { useRouter } from "next/navigation";
 import { useState } from "react";
 import Link from "next/link";
 import { recuperarContrasena } from "@/services/seguridadService";
+import ReCAPTCHA from "react-google-recaptcha";
 
 const RecuperarContrasena = () => {
     const [email, setEmail] = useState("");
     const [errors, setErrors] = useState([]);
     const [success, setSuccess] = useState(null);
+    const [recaptchaToken, setRecaptchaToken] = useState(null);
     const router = useRouter();
 
     const handleSubmit = async (event) => {
@@ -17,15 +19,23 @@ const RecuperarContrasena = () => {
         setErrors([]);
         setSuccess(null);
 
+        if (!recaptchaToken) {
+            setErrors(["Por favor, complete el reCAPTCHA."]);
+            return;
+        }
+
         try {
-            const res = await recuperarContrasena({ Email: email })
+            const res = await recuperarContrasena({ Email: email, recaptchaToken })
             console.log(res);
             setSuccess(res.mensaje);
             setEmail("");
         } catch (error) {
-
             setErrors([error.message]);
         }
+    };
+
+    const handleRecaptchaChange = (value) => {
+        setRecaptchaToken(value);
     };
 
     return (
@@ -50,6 +60,13 @@ const RecuperarContrasena = () => {
                                 value={email}
                                 onChange={(event) => setEmail(event.target.value)}
                                 required
+                            />
+                        </div>
+
+                        <div className="d-flex justify-content-center mb-3">
+                            <ReCAPTCHA
+                                sitekey="6LcvLjciAAAAAALicqZR92XT9u9E_KHCDXxvPbgg"
+                                onChange={handleRecaptchaChange}
                             />
                         </div>
 
