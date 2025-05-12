@@ -28,7 +28,7 @@ const PerfilCursosLista = ({ cursosLista, setCursos, onEditClick, idPerfil }) =>
                 setSelectedCurso(null);
 
                 const perfilCursos = await obtenerPerfilCursos(idPerfil);
-                setCursos(perfilCursos); 
+                setCursos(perfilCursos.datos); 
             });
         } catch (error) {
             Swal.fire({

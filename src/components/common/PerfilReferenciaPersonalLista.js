@@ -28,7 +28,7 @@ const PerfilReferenciaPersonalLista = ({ referenciaPersonalLista, setReferenciaP
                 setSelectedRefPersonal(null);
 
                 const perfilRefPersonal = await obtenerPerfilReferenciaPersonal(idPerfil);
-                setReferenciaPersonal(perfilRefPersonal); // Actualiza el estado en el componente padre
+                setReferenciaPersonal(perfilRefPersonal.datos); // Actualiza el estado en el componente padre
             });
         } catch (error) {
             Swal.fire({

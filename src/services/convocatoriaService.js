@@ -16,7 +16,7 @@ export const obtenerConvocatoria = async (id) => {
   try {
     const response = await apiClient.get(`/api/Convocatoria/${id}`);
     if (response?.data?.datos) {
-      return response.data.datos;
+      return response.data;
     } else {
       throw new Error("La respuesta no contiene datos válidos.");
     }
@@ -28,10 +28,10 @@ export const obtenerConvocatoria = async (id) => {
 
 
 /* Perfil */
-export const obtenerPerfil = async (id) => {
+export const obtenerPerfil = async () => {
   try {
-    const response = await apiClient.get(`/api/Postulante/${id}`);
-    return response.data.datos;
+    const response = await apiClient.get(`/api/Postulante/ObtenerPorUsuario`);
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -46,47 +46,14 @@ export const agregarPerfil = async (perfil) => {
   }
 };
 
-export const actualizarPerfil = async (id, perfil) => {
-  if (!id) {
-    throw new Error("El ID del perfil es requerido.");
-  }
-  if (!perfil || typeof perfil !== "object") {
-    throw new Error("El perfil debe ser un objeto válido.");
-  }
-  
+export const actualizarPerfil = async (perfil) => {
+   
   try {
-    const response = await apiClient.put(`/api/Postulante/${id}`, perfil);
-    
-    // Validación de la respuesta
-    if (!response || !response.data) {
-      throw new Error("La respuesta de la API es inválida o está vacía.");
-    }
-
-    // Validación del estado HTTP
-    if (response.status < 200 || response.status >= 300) {
-      throw new Error(
-        `Error en la actualización: Código de estado ${response.status}`
-      );
-    }
-
+    const response = await apiClient.put(`/api/Postulante`, perfil);      
     return response.data;
   } catch (error) {
-    // Manejo detallado de errores
-    if (error.response) {
-      console.error(
-        "Error en la respuesta de la API:",
-        error.response.data || error.response.statusText
-      );
-      throw new Error(
-        error.response.data?.mensaje || "Error al actualizar los datos."
-      );
-    } else if (error.request) {
-      console.error("Error en la solicitud: No se recibió respuesta.");
-      throw new Error("No se pudo conectar con el servidor.");
-    } else {
-      console.error("Error desconocido:", error.message);
-      throw error;
-    }
+    console.error("Error al actualizar datos personales:", error.response?.data || error.message);
+    throw error;
   }
 };
 export const guardarImagen = async (archivo) => {
@@ -116,10 +83,10 @@ export const registrarPostulacion = async (postulacion) => {
 };
 
 /* Formación Académica */
-export const obtenerPerfilFormacionAcademica = async (id) => {
+export const obtenerPerfilFormacionAcademica = async () => {
   try {
-    const response = await apiClient.get(`/api/FormacionAcademica/ObtenerPorPostulante/${id}`);
-    return response.data.datos;
+    const response = await apiClient.get(`/api/FormacionAcademica/ObtenerPorPostulante`);
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -153,13 +120,13 @@ export const actualizarPerfilFormacionAcademica = async (id, formacionAcademica)
 };
 
 /* Cursos */
-export const obtenerPerfilCursos = async (id) => {
+export const obtenerPerfilCursos = async () => {
   try {
-    const response = await apiClient.get(`/api/Capacitacion/ObtenerPorPostulante/${id}`);
-    return response.data.datos; // Asegúrate de que 'datos' existe.
+    const response = await apiClient.get(`/api/Capacitacion/ObtenerPorPostulante`);
+    return response.data; 
   } catch (error) {
     console.error("Error al obtener los cursos:", error.response?.data || error.message);
-    throw new Error(error.response?.data?.message || "Error desconocido al obtener los cursos.");
+    throw error;
   }
 };
 export const agregarPerfilCurso = async (capacitacion) => {
@@ -167,24 +134,10 @@ export const agregarPerfilCurso = async (capacitacion) => {
     const response = await apiClient.post('/api/Capacitacion', capacitacion);
     return response.data;
   } catch (error) {
-    // Extraer información del error
-    const { response, config } = error;
-
-    if (response) {
-      // Errores relacionados con la respuesta del servidor
-      console.error("Error al agregar capacitación:", response.data);
-      console.error(`📍 Endpoint: ${config?.baseURL || ''}${config?.url || ''}`);
-      console.error("🛠️ Datos enviados:", config?.data);
-    } else if (error.request) {
-      // Errores relacionados con la solicitud (sin respuesta del servidor)
-      console.error("Error en la solicitud, sin respuesta del servidor.");
-    } else {
-      // Errores al configurar la solicitud
-      console.error("Error al configurar la solicitud:", error.message);
-    }
-
-    throw error; // Lanza el error para manejarlo en el nivel superior
+    console.error("Error al agregar curso:", error.response?.data || error.message);
+    throw error;
   }
+  
 };
 
 export const eliminarPerfilCurso = async (id) => {
@@ -207,10 +160,10 @@ export const actualizarPerfilCurso = async (id, capacitacion) => {
 };
 
 /* Idiomas */
-export const obtenerPerfilIdiomas = async (id) => {
+export const obtenerPerfilIdiomas = async () => {
   try {
-    const response = await apiClient.get(`/api/ConocimientoIdioma/ObtenerPorPostulante/${id}`);
-    return response.data.datos;
+    const response = await apiClient.get(`/api/ConocimientoIdioma/ObtenerPorPostulante`);
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -244,10 +197,10 @@ export const actualizarPerfilIdioma = async (id, conocimientoIdioma) => {
 };
 
 /* Sistemas */
-export const obtenerPerfilSistemas = async (id) => {
+export const obtenerPerfilSistemas = async () => {
   try {
-    const response = await apiClient.get(`/api/ConocimientoSistemas/ObtenerPorPostulante/${id}`);
-    return response.data.datos;
+    const response = await apiClient.get(`/api/ConocimientoSistemas/ObtenerPorPostulante`);
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -281,10 +234,10 @@ export const actualizarPerfilSistema = async (id, sistema) => {
 };
 
 /* Experiencia Laboral */
-export const obtenerPerfilExperienciaLaboral = async (id) => {
+export const obtenerPerfilExperienciaLaboral = async () => {
   try {
-    const response = await apiClient.get(`/api/ExperienciaLaboral/ObtenerPorPostulante/${id}`);
-    return response.data.datos;
+    const response = await apiClient.get(`/api/ExperienciaLaboral/ObtenerPorPostulante`);
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -318,10 +271,10 @@ export const actualizarPerfilExperienciaLaboral = async (id, sistema) => {
 };
 
 /* Referencia Personal */
-export const obtenerPerfilReferenciaPersonal = async (id) => {
+export const obtenerPerfilReferenciaPersonal = async () => {
   try {
-    const response = await apiClient.get(`/api/ReferenciaPersonal/ObtenerPorPostulante/${id}`);
-    return response.data.datos;
+    const response = await apiClient.get(`/api/ReferenciaPersonal/ObtenerPorPostulante`);
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -355,10 +308,10 @@ export const actualizarPerfilReferenciaPersonal = async (id, sistema) => {
 };
 
 /* Referencia Laboral */
-export const obtenerPerfilReferenciaLaboral = async (id) => {
+export const obtenerPerfilReferenciaLaboral = async () => {
   try {
-    const response = await apiClient.get(`/api/ReferenciaLaboral/ObtenerPorPostulante/${id}`);
-    return response.data.datos;
+    const response = await apiClient.get(`/api/ReferenciaLaboral/ObtenerPorPostulante`);
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -395,7 +348,7 @@ export const actualizarPerfilReferenciaLaboral = async (id, sistema) => {
 export const obtenerParIdioma = async () => {
   try {
     const response = await apiClient.get(`/api/ParIdioma`);
-    return response.data.datos;
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -403,7 +356,7 @@ export const obtenerParIdioma = async () => {
 export const obtenerParNivelConocimiento = async () => {
   try {
     const response = await apiClient.get(`/api/ParNivelConocimiento`);
-    return response.data.datos;
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -411,7 +364,7 @@ export const obtenerParNivelConocimiento = async () => {
 export const obtenerParNivelFormacion = async () => {
   try {
     const response = await apiClient.get(`/api/ParNivelFormacion`);
-    return response.data.datos;
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -419,7 +372,7 @@ export const obtenerParNivelFormacion = async () => {
 export const obtenerParParentesco = async () => {
   try {
     const response = await apiClient.get(`/api/ParParentesco`);
-    return response.data.datos;
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -427,7 +380,7 @@ export const obtenerParParentesco = async () => {
 export const obtenerParPrograma = async () => {
   try {
     const response = await apiClient.get(`/api/ParPrograma`);
-    return response.data.datos;
+    return response.data;
   } catch (error) {
     throw error;
   }
@@ -435,7 +388,7 @@ export const obtenerParPrograma = async () => {
 export const obtenerParTipoCapacitacion = async () => {
   try {
     const response = await apiClient.get(`/api/ParTipoCapacitacion`);
-    return response.data.datos;
+    return response.data;
   } catch (error) {
     throw error;
   }

@@ -71,27 +71,31 @@ import { obtenerParParentesco } from '@/services/convocatoriaService';
 
 import { signIn, signOut, useSession } from "next-auth/react";
 
-const Perfil = ({ params }) => {
+const Perfil = () => {
+  
     const router = useRouter();
     const { data: session, status } = useSession();
-    const [idPerfil, setIdPerfil] = useState(session?.user?.postulanteId > 0 ? session.user.postulanteId : 0);
-    
-    const estadoAut = status;
+    const { register, handleSubmit, formState: { errors } } = useForm();
+     const [datosPersonales, setDatosPersonales] = useState({});
+     const [idPerfil, setIdPerfil] = useState( 0);
 
     useEffect(() => {
-        if (session?.user?.postulanteId > 0) {
-            setIdPerfil(session.user.postulanteId);
+       
+        if (status === "loading") {
+            return;
         }
-
-        loadData();
-        if (estadoAut == 'unauthenticated') {
+        if (!session) {
             router.push('/login');
+        } else {
+            CargarDatos();
         }
-    }, [session, status]);
+    }, [session, status, router]);
 
-    const { register, handleSubmit, formState: { errors } } = useForm();
+    if (status === "loading") {
+        return <div>Loading...</div>;
+    }
 
-    const [datosPersonales, setDatosPersonales] = useState({});
+   
     const [formacionLista, setFormacionAcademica] = useState([]);
     const [cursosLista, setCursos] = useState([]);
     const [idiomasLista, setIdiomas] = useState([]);
@@ -109,6 +113,7 @@ const Perfil = ({ params }) => {
 
     const [error, setError] = useState("");
     const [loading, setLoading] = useState(true);
+
     const [selectedImage, setSelectedImage] = useState(null);
     const [archivo, setArchivo] = useState(null);
 
@@ -125,8 +130,8 @@ const Perfil = ({ params }) => {
         setSelectedInfoAcademica(null);
         setShowInfoAcademicaModal(false);
         try {
-            const perfilFormacion = await obtenerPerfilFormacionAcademica(idPerfil);
-            setFormacionAcademica(perfilFormacion);
+            const perfilFormacion = await obtenerPerfilFormacionAcademica();
+            setFormacionAcademica(perfilFormacion.datos);
         } catch (error) {
             console.error('Error al obtener la lista de formación académica actualizada:', error);
         }
@@ -155,8 +160,8 @@ const Perfil = ({ params }) => {
         setSelectedIdioma(null);
         setShowIdiomasModal(false);
         try {
-            const perfilIdiomas = await obtenerPerfilIdiomas(idPerfil);
-            setIdiomas(perfilIdiomas);
+            const perfilIdiomas = await obtenerPerfilIdiomas();
+            setIdiomas(perfilIdiomas.datos);
         } catch (error) {
             console.error('Error al obtener los idiomas actualizados:', error);
         }
@@ -173,8 +178,8 @@ const Perfil = ({ params }) => {
         setSelectedSistema(null);
         setShowSistemasModal(false);
         try {
-            const perfilSistemas = await obtenerPerfilSistemas(idPerfil);
-            setSistemas(perfilSistemas);
+            const perfilSistemas = await obtenerPerfilSistemas();
+            setSistemas(perfilSistemas.datos);
         } catch (error) {
             console.error('Error al obtener los sistemas actualizados:', error);
         }
@@ -216,58 +221,59 @@ const Perfil = ({ params }) => {
         setShowRefLaboralModal(false);
     };
 
-    const loadData = async () => {
-        try {
-            if (idPerfil > 0) {
-                const perfil = await obtenerPerfil(idPerfil);
-                setDatosPersonales(perfil);
+    const CargarDatos = async () => {
+       
 
-                const perfilFormacion = await obtenerPerfilFormacionAcademica(idPerfil);
-                setFormacionAcademica(perfilFormacion);
-
-                const perfilCursos = await obtenerPerfilCursos(idPerfil);
-                setCursos(perfilCursos);
-
-                const perfilIdiomas = await obtenerPerfilIdiomas(idPerfil);
-                setIdiomas(perfilIdiomas);
-
-                const perfilSistemas = await obtenerPerfilSistemas(idPerfil);
-                setSistemas(perfilSistemas);
-
-                const perfilExpLaboral = await obtenerPerfilExperienciaLaboral(idPerfil);
-                setExperienciaLaboral(perfilExpLaboral);
-
-                const perfilRefPersonal = await obtenerPerfilReferenciaPersonal(idPerfil);
-                setReferenciaPersonal(perfilRefPersonal);
-
-                const perfilRefLaboral = await obtenerPerfilReferenciaLaboral(idPerfil);
-                setReferenciaLaboral(perfilRefLaboral);
+            const perfil = await obtenerPerfil();
+            if (Number.isInteger(perfil.datos.id)) {
+                setIdPerfil(perfil.datos.id);
             }
+           
+             setDatosPersonales(perfil.datos);
+
+            const perfilFormacion = await obtenerPerfilFormacionAcademica();
+            console.log(perfilFormacion)
+            setFormacionAcademica(perfilFormacion.datos);
+
+            const perfilCursos = await obtenerPerfilCursos();
+            setCursos(perfilCursos.datos);
+
+            const perfilIdiomas = await obtenerPerfilIdiomas();
+            setIdiomas(perfilIdiomas.datos);
+
+            const perfilSistemas = await obtenerPerfilSistemas();
+            setSistemas(perfilSistemas.datos);
+
+            const perfilExpLaboral = await obtenerPerfilExperienciaLaboral();
+            setExperienciaLaboral(perfilExpLaboral.datos);
+
+            const perfilRefPersonal = await obtenerPerfilReferenciaPersonal();
+            setReferenciaPersonal(perfilRefPersonal.datos);
+
+            const perfilRefLaboral = await obtenerPerfilReferenciaLaboral();
+            setReferenciaLaboral(perfilRefLaboral.datos);
+
 
             /* paramétricas */
             const parNivelFormacion = await obtenerParNivelFormacion();
-            setParNivelFormacion(parNivelFormacion);
+            setParNivelFormacion(parNivelFormacion.datos);
 
             const parIdioma = await obtenerParIdioma();
-            setIdioma(parIdioma);
+            setIdioma(parIdioma.datos);
 
             const parNivelConocimiento = await obtenerParNivelConocimiento();
-            setParNivelConocimiento(parNivelConocimiento);
+            setParNivelConocimiento(parNivelConocimiento.datos);
 
             const parPrograma = await obtenerParPrograma();
-            setParPrograma(parPrograma);
+            setParPrograma(parPrograma.datos);
 
             const parTipoCapacitacion = await obtenerParTipoCapacitacion();
-            setParTipoCapacitacion(parTipoCapacitacion);
+            setParTipoCapacitacion(parTipoCapacitacion.datos);
 
             const parParentesco = await obtenerParParentesco();
-            setParParentesco(parParentesco);
+            setParParentesco(parParentesco.datos);
 
-        } catch (error) {
-            console.error("Error obteniendo los datos:", error);
-        } finally {
-            setLoading(false);
-        }
+        
     };
 
     const handleImageChange = async (event) => {
@@ -324,8 +330,8 @@ const Perfil = ({ params }) => {
             [name]: value,
         });
     };
-    
-    const handleGuardarPerfil = async (data) => {
+
+    const handleActualizarPerfil = async (data) => {
 
         const nombres = document.getElementById('nombres').value;
         const apellidoPaterno = document.getElementById('apellidoPadre').value;
@@ -364,16 +370,16 @@ const Perfil = ({ params }) => {
             fotografia: fotografia,
         };
         try {
-            let result = await actualizarPerfil(idPerfil, datos);
-
+            let result = await actualizarPerfil(datos);
+            console.log(result.datos);
             Swal.fire({
                 title: '¡Éxito!',
                 text: result.mensaje,
                 icon: 'success',
                 confirmButtonText: 'Aceptar',
             }).then(async () => {
-                const perfil = await obtenerPerfil(idPerfil);
-                setDatosPersonales(perfil);
+                const perfil = await obtenerPerfil();
+                setDatosPersonales(perfil.datos);
             });
         } catch (error) {
             console.error('Error al guardar los datos personales', error);
@@ -425,11 +431,11 @@ const Perfil = ({ params }) => {
         };
 
         try {
-            const result = await agregarPerfil(datos); 
+            const result = await agregarPerfil(datos);
+            console.log(result)
             if (Number.isInteger(result.datos.id)) {
                 setIdPerfil(result.datos.id);
             }
-
             Swal.fire({
                 title: "¡Éxito!",
                 text: result.mensaje,
@@ -454,8 +460,7 @@ const Perfil = ({ params }) => {
         const ciudad = document.getElementById('ciudad').value;
         const pais = document.getElementById('pais').value;
 
-        const datos = {
-            postulanteId: idPerfil,
+        const datos = {      
             parNivelFormacionId: NivelFormacionId,
             centroEstudios: centroEstudios,
             tituloObtenido: tituloObtenido,
@@ -480,8 +485,8 @@ const Perfil = ({ params }) => {
             }).then(async () => {
                 handleInfoAcademicaModalClose();
 
-                const perfilFormacion = await obtenerPerfilFormacionAcademica(idPerfil);
-                setFormacionAcademica(perfilFormacion);
+                const perfilFormacion = await obtenerPerfilFormacionAcademica();
+                setFormacionAcademica(perfilFormacion.datos);
             });
         } catch (error) {
             console.error('Error al guardar la formación académica:', error);
@@ -492,9 +497,8 @@ const Perfil = ({ params }) => {
                 confirmButtonText: 'Intentar nuevamente',
             }).then(async () => {
                 handleInfoAcademicaModalClose();
-
-                const perfilFormacion = await obtenerPerfilFormacionAcademica(idPerfil);
-                setFormacionAcademica(perfilFormacion);
+                const perfilFormacion = await obtenerPerfilFormacionAcademica();
+                setFormacionAcademica(perfilFormacion.datos);
             });
         }
     };
@@ -507,9 +511,8 @@ const Perfil = ({ params }) => {
         const modalidad = document.getElementById('modalidad').value;
         const fechaInicio = document.getElementById('fechaInicio').value;
         const fechaFin = document.getElementById('fechaFin').value;
-    
+
         const datos = {
-            postulanteId: idPerfil,
             parTipoCapacitacionId: tipoCapacitacion,
             nombre: nombreCurso,
             centroEstudios: centroEstudio,
@@ -519,7 +522,7 @@ const Perfil = ({ params }) => {
             fechaInicio: fechaInicio,
             fechaFin: fechaFin,
         };
-    
+
         try {
             let result;
             if (selectedCurso?.id) {
@@ -527,7 +530,7 @@ const Perfil = ({ params }) => {
             } else {
                 result = await agregarPerfilCurso(datos);
             }
-    
+
             Swal.fire({
                 title: '¡Éxito!',
                 text: result.mensaje,
@@ -535,13 +538,13 @@ const Perfil = ({ params }) => {
                 confirmButtonText: 'Aceptar',
             }).then(async () => {
                 handleCursosModalClose();
-    
-                const perfilCursos = await obtenerPerfilCursos(idPerfil);
-                setCursos(perfilCursos);
+
+                const perfilCursos = await obtenerPerfilCursos();
+                setCursos(perfilCursos.datos);
             });
         } catch (error) {
             console.error('Error al guardar curso:', error);
-    
+
             Swal.fire({
                 title: 'Error',
                 text: error?.response?.data?.mensaje || 'Hubo un problema al guardar el curso. Intenta nuevamente.',
@@ -549,12 +552,12 @@ const Perfil = ({ params }) => {
                 confirmButtonText: 'Intentar nuevamente',
             }).then(async () => {
                 handleCursosModalClose();
-    
-                const perfilCursos = await obtenerPerfilCursos(idPerfil);
-                setCursos(perfilCursos);
+
+                const perfilCursos = await obtenerPerfilCursos();
+                setCursos(perfilCursos.datos);
             });
         }
-    }; 
+    };
     const handleGuardarIdioma = async () => {
         const idioma = document.getElementById('idioma').value;
         const nivelLectura = document.getElementById('nivelLectura').value;
@@ -562,7 +565,6 @@ const Perfil = ({ params }) => {
         const nivelComprension = document.getElementById('nivelComprension').value;
 
         const datos = {
-            postulanteId: idPerfil,
             parIdiomaId: idioma,
             parNivelConocimientoLecturaId: nivelLectura,
             parNivelConocimientoEscrituraId: nivelEscritura,
@@ -585,8 +587,8 @@ const Perfil = ({ params }) => {
             }).then(async () => {
                 handleIdiomasModalClose();
 
-                const perfilIdiomas = await obtenerPerfilIdiomas(idPerfil);
-                setIdiomas(perfilIdiomas);
+                const perfilIdiomas = await obtenerPerfilIdiomas();
+                setIdiomas(perfilIdiomas.datos);
             });
         } catch (error) {
             console.error('Error al guardar idioma:', error);
@@ -598,8 +600,8 @@ const Perfil = ({ params }) => {
             }).then(async () => {
                 handleIdiomasModalClose();
 
-                const perfilIdiomas = await obtenerPerfilIdiomas(idPerfil);
-                setIdiomas(perfilIdiomas);
+                const perfilIdiomas = await obtenerPerfilIdiomas();
+                setIdiomas(perfilIdiomas.datos);
             });
         }
     };
@@ -608,7 +610,6 @@ const Perfil = ({ params }) => {
         const nivelConocimiento = document.getElementById('nivelConocimiento').value;
 
         const datos = {
-            postulanteId: idPerfil,
             parProgramaId: programa,
             parNivelConocimientoId: nivelConocimiento,
         };
@@ -629,8 +630,8 @@ const Perfil = ({ params }) => {
             }).then(async () => {
                 handleSistemasModalClose();
 
-                const perfilSistemas = await obtenerPerfilSistemas(idPerfil);
-                setSistemas(perfilSistemas);
+                const perfilSistemas = await obtenerPerfilSistemas();
+                setSistemas(perfilSistemas.datos);
             });
         } catch (error) {
             console.error('Error al guardar sistema:', error);
@@ -642,8 +643,8 @@ const Perfil = ({ params }) => {
             }).then(async () => {
                 handleSistemasModalClose();
 
-                const perfilSistemas = await obtenerPerfilSistemas(idPerfil);
-                setSistemas(perfilSistemas);
+                const perfilSistemas = await obtenerPerfilSistemas();
+                setSistemas(perfilSistemas.datos);
             });
         }
     };
@@ -663,7 +664,6 @@ const Perfil = ({ params }) => {
         const actualmenteTrabajando = document.getElementById('currentlyWorking').checked;
 
         const datos = {
-            postulanteId: idPerfil,
             empresa: empresa,
             cargo: cargo,
             sector: sector,
@@ -694,8 +694,8 @@ const Perfil = ({ params }) => {
             }).then(async () => {
                 handleExpLaboralModalClose();
 
-                const perfilExpLaboral = await obtenerPerfilExperienciaLaboral(idPerfil);
-                setExperienciaLaboral(perfilExpLaboral);
+                const perfilExpLaboral = await obtenerPerfilExperienciaLaboral();
+                setExperienciaLaboral(perfilExpLaboral.datos);
             });
         } catch (error) {
             console.error('Error al guardar experiencia laboral:', error);
@@ -707,8 +707,8 @@ const Perfil = ({ params }) => {
             }).then(async () => {
                 handleExpLaboralModalClose();
 
-                const perfilExpLaboral = await obtenerPerfilExperienciaLaboral(idPerfil);
-                setExperienciaLaboral(perfilExpLaboral);
+                const perfilExpLaboral = await obtenerPerfilExperienciaLaboral();
+                setExperienciaLaboral(perfilExpLaboral.datos);
             });
         }
     };
@@ -722,7 +722,6 @@ const Perfil = ({ params }) => {
         const email = document.getElementById('emailParentesco').value;
 
         const datos = {
-            postulanteId: idPerfil,
             nombre: nombres,
             cargo: cargo,
             empresa: empresa,
@@ -748,8 +747,8 @@ const Perfil = ({ params }) => {
             }).then(async () => {
                 handleRefPersonalModalClose();
 
-                const perfilRefPersonal = await obtenerPerfilReferenciaPersonal(idPerfil);
-                setReferenciaPersonal(perfilRefPersonal);
+                const perfilRefPersonal = await obtenerPerfilReferenciaPersonal();
+                setReferenciaPersonal(perfilRefPersonal.datos);
             });
         } catch (error) {
             console.error('Error al guardar la referencia personal:', error);
@@ -761,8 +760,8 @@ const Perfil = ({ params }) => {
             }).then(async () => {
                 handleRefPersonalModalClose();
 
-                const perfilRefPersonal = await obtenerPerfilReferenciaPersonal(idPerfil);
-                setReferenciaPersonal(perfilRefPersonal);
+                const perfilRefPersonal = await obtenerPerfilReferenciaPersonal();
+                setReferenciaPersonal(perfilRefPersonal.datos);
             });
         }
     };
@@ -776,7 +775,6 @@ const Perfil = ({ params }) => {
         const email = document.getElementById('emailReferencia').value;
 
         const datos = {
-            postulanteId: idPerfil,
             nombre: nombres,
             cargo: cargo,
             empresa: empresa,
@@ -802,8 +800,8 @@ const Perfil = ({ params }) => {
             }).then(async () => {
                 handleRefLaboralModalClose();
 
-                const perfilRefLaboral = await obtenerPerfilReferenciaLaboral(idPerfil);
-                setReferenciaLaboral(perfilRefLaboral);
+                const perfilRefLaboral = await obtenerPerfilReferenciaLaboral();
+                setReferenciaLaboral(perfilRefLaboral.datos);
             });
         } catch (error) {
             console.error('Error al guardar la referencia laboral:', error);
@@ -815,12 +813,13 @@ const Perfil = ({ params }) => {
             }).then(async () => {
                 handleRefLaboralModalClose();
 
-                const perfilRefLaboral = await obtenerPerfilReferenciaLaboral(idPerfil);
-                setReferenciaLaboral(perfilRefLaboral);
+                const perfilRefLaboral = await obtenerPerfilReferenciaLaboral();
+                setReferenciaLaboral(perfilRefLaboral.datos);
             });
         }
     };
-    const onSubmitHandler = idPerfil > 0 ? handleGuardarPerfil : handleRegistraPerfil;
+
+    const onSubmitHandler = idPerfil > 0 ? handleActualizarPerfil : handleRegistraPerfil;
 
     return (
         <div>
@@ -832,7 +831,7 @@ const Perfil = ({ params }) => {
                 <div className="container">
                     <div className="row">
                         <div className="col-xl-12 col-lg-12">
-                            {estadoAut != 'unauthenticated' ? (
+                            {status != 'loading' ? (
                                 <>
 
                                     <div className="Tabs">

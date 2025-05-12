@@ -40,24 +40,25 @@ export const authOptions = {
         const token = await login(usuario, password);
 
         console.log("token=>>>>", token);
-        if (token.error) {
+        if (token.error) {     
+          console.log("Error", token.error);     
           throw new Error(token.error);
         }
 
-        return token.datos;
+        return { token: token.Datos.token };
       },
     }),
   ],
   callbacks: {
     async jwt({ token, user }) {
       if (user) {
-        return { ...token, ...user }; 
+        token.token = user.token;
       }
       return token;
     },
 
     async session({ session, token }) {
-      session.user = token; 
+      session.user.token = token.token;
       return session;
     },
   },

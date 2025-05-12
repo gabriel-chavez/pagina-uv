@@ -28,7 +28,7 @@ const PerfilSistemasLista = ({ sistemasLista, setSistemas, onEditClick, idPerfil
                 setSelectedSistema(null);
 
                 const perfilSistemas = await obtenerPerfilSistemas(idPerfil);
-                setSistemas(perfilSistemas); // Actualiza el estado con los sistemas actualizados
+                setSistemas(perfilSistemas.datos); // Actualiza el estado con los sistemas actualizados
             });
         } catch (error) {
             Swal.fire({

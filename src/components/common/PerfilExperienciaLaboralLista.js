@@ -28,7 +28,7 @@ const PerfilExperienciaLaboralLista = ({ experienciaLaboralLista, set, onEditCli
                 setExperienciaLaboral(null);
 
                 const perfilExpLaboral = await obtenerPerfilExperienciaLaboral(idPerfil);
-                setExperienciaLaboral(perfilExpLaboral);
+                setExperienciaLaboral(perfilExpLaboral.datos);
             });
         } catch (error) {
             Swal.fire({

@@ -4,12 +4,12 @@ import { getServerSession } from 'next-auth';
 import { authOptions } from '../app/api/auth/[...nextauth]/route';
 import https from 'https';
 const httpsAgent = new https.Agent({
-    rejectUnauthorized: false, 
+    rejectUnauthorized: process.env.NODE_ENV === 'production',  // Solo desactiva en desarrollo
 });
 
 const apiClient = axios.create({
     baseURL: process.env.NEXT_PUBLIC_API_BASE_URL,
-    timeout: 10000,
+    timeout: 60000,
     httpsAgent
 });
 
@@ -17,9 +17,7 @@ const isClient = typeof window !== 'undefined';
 
 apiClient.interceptors.request.use(
     async (config) => {
-        if (process.env.NEXT_PHASE === 'phase-production-build') {
-            return config;
-        }
+       
 
         let session;
         try {
@@ -56,13 +54,13 @@ apiClient.interceptors.response.use(
 
             switch (status) {
                 case 400:
-                    return Promise.reject({ status: 400, message: mensaje, datos: datos });
+                    return Promise.reject({ status: 400, message: mensaje, datos: datos,exito:false,mensaje:mensaje });
                 case 401:
-                    return Promise.reject({ status: 401, message: mensaje, datos: datos });
+                    return Promise.reject({ status: 401, message: mensaje, datos: datos,exito:false,mensaje:mensaje });
                 case 404:
-                    return Promise.reject({ status: 404, message: mensaje, datos: datos });
+                    return Promise.reject({ status: 404, message: mensaje, datos: datos,exito:false,mensaje:mensaje });
                 default:
-                    return Promise.reject({ status: status, message: mensaje, datos: datos });
+                    return Promise.reject({ status: status, message: mensaje, datos: datos,exito:false,mensaje:mensaje });
             }
         } else if (error.request) {
 

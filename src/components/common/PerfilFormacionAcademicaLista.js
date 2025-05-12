@@ -28,7 +28,7 @@ const PerfilFormacionAcademicaLista = ({ formacionLista, setFormacionAcademica, 
                 setSelectedFormacionAcademica(null);
 
                 const perfilFormacion = await obtenerPerfilFormacionAcademica(idPerfil);
-                setFormacionAcademica(perfilFormacion);
+                setFormacionAcademica(perfilFormacion.datos);
             });
         } catch (error) {
             Swal.fire({

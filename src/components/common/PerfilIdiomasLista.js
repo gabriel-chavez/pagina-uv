@@ -28,7 +28,7 @@ console.log(idiomasLista);
                 setSelectedIdioma(null);
 
                 const perfilIdiomas = await obtenerPerfilIdiomas(idPerfil);
-                setIdiomas(perfilIdiomas); 
+                setIdiomas(perfilIdiomas.datos); 
             });
         } catch (error) {
             Swal.fire({

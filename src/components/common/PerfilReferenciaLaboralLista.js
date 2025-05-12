@@ -28,7 +28,7 @@ const PerfilReferenciaLaboralLista = ({ referenciaLaboralLista, setReferenciaLab
                 setSelectedRefLaboral(null);
 
                 const perfilRefLaboral = await obtenerPerfilReferenciaLaboral(idPerfil);
-                setReferenciaLaboral(perfilRefLaboral);
+                setReferenciaLaboral(perfilRefLaboral.datos);
             });
         } catch (error) {
             Swal.fire({
