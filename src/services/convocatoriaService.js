@@ -47,9 +47,9 @@ export const agregarPerfil = async (perfil) => {
 };
 
 export const actualizarPerfil = async (perfil) => {
-   
+
   try {
-    const response = await apiClient.put(`/api/Postulante`, perfil);      
+    const response = await apiClient.put(`/api/Postulante`, perfil);
     return response.data;
   } catch (error) {
     console.error("Error al actualizar datos personales:", error.response?.data || error.message);
@@ -58,20 +58,37 @@ export const actualizarPerfil = async (perfil) => {
 };
 export const guardarImagen = async (archivo) => {
   const formData = new FormData();
-  formData.append('file', archivo); 
+  formData.append('fotografia', archivo);
 
   try {
-      const response = await apiClient.post('/api/Postulante/guardar-imagen', formData, {
-          headers: {
-              'Content-Type': 'multipart/form-data',
-          },
-      });
-      return response.data;
+    const response = await apiClient.post('/api/Postulante/guardar-imagen', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    return response.data;
   } catch (error) {
-      console.error('Error en guardarImagen:', error.message);
-      throw error; // Relanza el error para manejarlo en otro lugar
+    console.error('Error en guardarImagen:', error.message);
+    throw error; // Relanza el error para manejarlo en otro lugar
   }
 };
+export const obtenerImagenx = (nombreImagen) => {
+  const imageUrl = `${process.env.NEXT_PUBLIC_API_BASE_URL}${'api/Postulante/obtener-imagen'}${nombreImagen}`;
+  return imageUrl;
+};
+export const obtenerImagen = async (nombreImagen) => {
+  try {
+    const response = await apiClient.get(`api/Postulante/obtener-imagen${nombreImagen}`, {
+      responseType: 'blob', 
+    });    
+    const imageUrl = URL.createObjectURL(response.data);  
+    return imageUrl;  
+  } catch (error) {
+    console.error('Error al obtener la imagen:', error.message);
+    throw error; 
+  }
+};
+
 export const registrarPostulacion = async (postulacion) => {
   try {
     const response = await apiClient.post('/api/Postulacion', postulacion);
@@ -123,7 +140,7 @@ export const actualizarPerfilFormacionAcademica = async (id, formacionAcademica)
 export const obtenerPerfilCursos = async () => {
   try {
     const response = await apiClient.get(`/api/Capacitacion/ObtenerPorPostulante`);
-    return response.data; 
+    return response.data;
   } catch (error) {
     console.error("Error al obtener los cursos:", error.response?.data || error.message);
     throw error;
@@ -137,7 +154,7 @@ export const agregarPerfilCurso = async (capacitacion) => {
     console.error("Error al agregar curso:", error.response?.data || error.message);
     throw error;
   }
-  
+
 };
 
 export const eliminarPerfilCurso = async (id) => {

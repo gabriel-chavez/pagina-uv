@@ -28,74 +28,52 @@ import PerfilReferenciaPersonalModal from "@/components/common/PerfilReferenciaP
 import PerfilReferenciaLaboralLista from "@/components/common/PerfilReferenciaLaboralLista";
 import PerfilReferenciaLaboralModal from "@/components/common/PerfilReferenciaLaboralModal";
 
-import { obtenerPerfil } from '@/services/convocatoriaService';
-import { agregarPerfil } from '@/services/convocatoriaService';
-import { actualizarPerfil } from '@/services/convocatoriaService';
-import { guardarImagen } from '@/services/convocatoriaService';
+import {
+    obtenerPerfil,
+    agregarPerfil,
+    actualizarPerfil,
+    guardarImagen,
+    obtenerImagen,
+    obtenerPerfilFormacionAcademica,
+    agregarPerfilFormacionAcademica,
+    actualizarPerfilFormacionAcademica,
+    obtenerPerfilCursos,
+    agregarPerfilCurso,
+    actualizarPerfilCurso,
+    obtenerPerfilIdiomas,
+    agregarPerfilIdioma,
+    actualizarPerfilIdioma,
+    obtenerPerfilSistemas,
+    agregarPerfilSistema,
+    actualizarPerfilSistema,
+    obtenerPerfilExperienciaLaboral,
+    agregarPerfilExperienciaLaboral,
+    actualizarPerfilExperienciaLaboral,
+    obtenerPerfilReferenciaPersonal,
+    agregarPerfilReferenciaPersonal,
+    actualizarPerfilReferenciaPersonal,
+    obtenerPerfilReferenciaLaboral,
+    agregarPerfilReferenciaLaboral,
+    actualizarPerfilReferenciaLaboral,
+    obtenerParNivelFormacion,
+    obtenerParIdioma,
+    obtenerParNivelConocimiento,
+    obtenerParPrograma,
+    obtenerParTipoCapacitacion,
+    obtenerParParentesco
+} from '@/services/convocatoriaService';
 
-import { obtenerPerfilFormacionAcademica } from '@/services/convocatoriaService';
-import { agregarPerfilFormacionAcademica } from '@/services/convocatoriaService';
-import { actualizarPerfilFormacionAcademica } from '@/services/convocatoriaService';
-
-import { obtenerPerfilCursos } from '@/services/convocatoriaService';
-import { agregarPerfilCurso } from '@/services/convocatoriaService';
-import { actualizarPerfilCurso } from '@/services/convocatoriaService';
-
-import { obtenerPerfilIdiomas } from '@/services/convocatoriaService';
-import { agregarPerfilIdioma } from '@/services/convocatoriaService';
-import { actualizarPerfilIdioma } from '@/services/convocatoriaService';
-
-import { obtenerPerfilSistemas } from '@/services/convocatoriaService';
-import { agregarPerfilSistema } from '@/services/convocatoriaService';
-import { actualizarPerfilSistema } from '@/services/convocatoriaService';
-
-import { obtenerPerfilExperienciaLaboral } from '@/services/convocatoriaService';
-import { agregarPerfilExperienciaLaboral } from '@/services/convocatoriaService';
-import { actualizarPerfilExperienciaLaboral } from '@/services/convocatoriaService';
-
-import { obtenerPerfilReferenciaPersonal } from '@/services/convocatoriaService';
-import { agregarPerfilReferenciaPersonal } from '@/services/convocatoriaService';
-import { actualizarPerfilReferenciaPersonal } from '@/services/convocatoriaService';
-
-import { obtenerPerfilReferenciaLaboral } from '@/services/convocatoriaService';
-import { agregarPerfilReferenciaLaboral } from '@/services/convocatoriaService';
-import { actualizarPerfilReferenciaLaboral } from '@/services/convocatoriaService';
-
-/* Parametricas */
-import { obtenerParNivelFormacion } from '@/services/convocatoriaService';
-import { obtenerParIdioma } from '@/services/convocatoriaService';
-import { obtenerParNivelConocimiento } from '@/services/convocatoriaService';
-import { obtenerParPrograma } from '@/services/convocatoriaService';
-import { obtenerParTipoCapacitacion } from '@/services/convocatoriaService';
-import { obtenerParParentesco } from '@/services/convocatoriaService';
 
 import { signIn, signOut, useSession } from "next-auth/react";
 
 const Perfil = () => {
-  
+
     const router = useRouter();
     const { data: session, status } = useSession();
-    const { register, handleSubmit, formState: { errors } } = useForm();
-     const [datosPersonales, setDatosPersonales] = useState({});
-     const [idPerfil, setIdPerfil] = useState( 0);
+    // const { register, handleSubmit, formState: { errors } } = useForm();
+    const [datosPersonales, setDatosPersonales] = useState({});
+    const [idPerfil, setIdPerfil] = useState(0);
 
-    useEffect(() => {
-       
-        if (status === "loading") {
-            return;
-        }
-        if (!session) {
-            router.push('/login');
-        } else {
-            CargarDatos();
-        }
-    }, [session, status, router]);
-
-    if (status === "loading") {
-        return <div>Loading...</div>;
-    }
-
-   
     const [formacionLista, setFormacionAcademica] = useState([]);
     const [cursosLista, setCursos] = useState([]);
     const [idiomasLista, setIdiomas] = useState([]);
@@ -116,6 +94,11 @@ const Perfil = () => {
 
     const [selectedImage, setSelectedImage] = useState(null);
     const [archivo, setArchivo] = useState(null);
+
+    const { register, handleSubmit, formState: { errors }, reset } = useForm({
+        defaultValues: datosPersonales,
+    });
+
 
     /* Modales */
     const [showInfoAcademicaModal, setShowInfoAcademicaModal] = useState(false);
@@ -221,59 +204,101 @@ const Perfil = () => {
         setShowRefLaboralModal(false);
     };
 
-    const CargarDatos = async () => {
-       
 
-            const perfil = await obtenerPerfil();
-            if (Number.isInteger(perfil.datos.id)) {
-                setIdPerfil(perfil.datos.id);
+    useEffect(() => {
+
+        if (status === "loading") {
+            return;
+        }
+        if (!session) {
+            router.push('/login');
+        } else {
+            CargarDatos();
+        }
+    }, [session, status, router]);
+
+    useEffect(() => {
+        if (datosPersonales) {
+            if (datosPersonales.fotografia) {
+                const fetchImage = async () => {
+                    try {
+                        const url = await obtenerImagen(datosPersonales.fotografia);
+                        setSelectedImage(url);
+                    } catch (error) {
+                        console.error('Error al obtener la imagen:', error);
+                    }
+                };
+                fetchImage();
             }
-           
-             setDatosPersonales(perfil.datos);
 
-            const perfilFormacion = await obtenerPerfilFormacionAcademica();
-            console.log(perfilFormacion)
-            setFormacionAcademica(perfilFormacion.datos);
+            reset(datosPersonales);
+        }
+    }, [datosPersonales, reset]);
 
-            const perfilCursos = await obtenerPerfilCursos();
-            setCursos(perfilCursos.datos);
-
-            const perfilIdiomas = await obtenerPerfilIdiomas();
-            setIdiomas(perfilIdiomas.datos);
-
-            const perfilSistemas = await obtenerPerfilSistemas();
-            setSistemas(perfilSistemas.datos);
-
-            const perfilExpLaboral = await obtenerPerfilExperienciaLaboral();
-            setExperienciaLaboral(perfilExpLaboral.datos);
-
-            const perfilRefPersonal = await obtenerPerfilReferenciaPersonal();
-            setReferenciaPersonal(perfilRefPersonal.datos);
-
-            const perfilRefLaboral = await obtenerPerfilReferenciaLaboral();
-            setReferenciaLaboral(perfilRefLaboral.datos);
+    if (status === "loading") {
+        return <div>Cargando...</div>;
+    }
+    if (!datosPersonales) {
+        return <div>Cargando...</div>;
+    }
 
 
-            /* paramétricas */
-            const parNivelFormacion = await obtenerParNivelFormacion();
-            setParNivelFormacion(parNivelFormacion.datos);
 
-            const parIdioma = await obtenerParIdioma();
-            setIdioma(parIdioma.datos);
 
-            const parNivelConocimiento = await obtenerParNivelConocimiento();
-            setParNivelConocimiento(parNivelConocimiento.datos);
+    const CargarDatos = async () => {
 
-            const parPrograma = await obtenerParPrograma();
-            setParPrograma(parPrograma.datos);
 
-            const parTipoCapacitacion = await obtenerParTipoCapacitacion();
-            setParTipoCapacitacion(parTipoCapacitacion.datos);
+        const perfil = await obtenerPerfil();
+        if (Number.isInteger(perfil.datos.id)) {
+            setIdPerfil(perfil.datos.id);
+        }
+        setDatosPersonales(perfil.datos);
+        console.log(datosPersonales)
 
-            const parParentesco = await obtenerParParentesco();
-            setParParentesco(parParentesco.datos);
 
-        
+        const perfilFormacion = await obtenerPerfilFormacionAcademica();
+
+        setFormacionAcademica(perfilFormacion.datos);
+
+        const perfilCursos = await obtenerPerfilCursos();
+        setCursos(perfilCursos.datos);
+
+        const perfilIdiomas = await obtenerPerfilIdiomas();
+        setIdiomas(perfilIdiomas.datos);
+
+        const perfilSistemas = await obtenerPerfilSistemas();
+        setSistemas(perfilSistemas.datos);
+
+        const perfilExpLaboral = await obtenerPerfilExperienciaLaboral();
+        setExperienciaLaboral(perfilExpLaboral.datos);
+
+        const perfilRefPersonal = await obtenerPerfilReferenciaPersonal();
+        setReferenciaPersonal(perfilRefPersonal.datos);
+
+        const perfilRefLaboral = await obtenerPerfilReferenciaLaboral();
+        setReferenciaLaboral(perfilRefLaboral.datos);
+
+
+        /* paramétricas */
+        const parNivelFormacion = await obtenerParNivelFormacion();
+        setParNivelFormacion(parNivelFormacion.datos);
+
+        const parIdioma = await obtenerParIdioma();
+        setIdioma(parIdioma.datos);
+
+        const parNivelConocimiento = await obtenerParNivelConocimiento();
+        setParNivelConocimiento(parNivelConocimiento.datos);
+
+        const parPrograma = await obtenerParPrograma();
+        setParPrograma(parPrograma.datos);
+
+        const parTipoCapacitacion = await obtenerParTipoCapacitacion();
+        setParTipoCapacitacion(parTipoCapacitacion.datos);
+
+        const parParentesco = await obtenerParParentesco();
+        setParParentesco(parParentesco.datos);
+
+
     };
 
     const handleImageChange = async (event) => {
@@ -295,11 +320,11 @@ const Perfil = () => {
                 console.error("Error al cargar la imagen:", error);
             }
         } else {
-            setSelectedImage(null);  // Si no se selecciona archivo, limpia la vista previa
+            setSelectedImage(null);
         }
     };
     const handleSubmitImage = async () => {
-        // Verifica que 'archivo' esté presente
+
         if (!archivo) {
             setError("Debe cargar un archivo válido.");
             return;
@@ -333,56 +358,35 @@ const Perfil = () => {
 
     const handleActualizarPerfil = async (data) => {
 
-        const nombres = document.getElementById('nombres').value;
-        const apellidoPaterno = document.getElementById('apellidoPadre').value;
-        const apellidoMaterno = document.getElementById('apellidoMadre').value;
-        const fechaNacimiento = document.getElementById('fechaNacimiento').value;
-        const lugarNacimiento = document.getElementById('lugarNacimiento').value;
-        const paisNacimiento = document.getElementById('paisNacimiento').value;
-        const lugarResidencia = document.getElementById('lugarResidencia').value;
-        const paisResidencia = document.getElementById('paisResidencia').value;
-        const direccion = document.getElementById('direccion').value;
-        const zona = document.getElementById('zona').value;
-        const telefono = document.getElementById('telefono').value;
-        const telefonoMovil = document.getElementById('telefonoMovil').value;
-        const email = document.getElementById('email').value;
-        const tipoDocumento = document.getElementById('tipoDocumento').value;
-        const numeroDocumento = document.getElementById('numeroDocumento').value;
-        const expedidoEn = document.getElementById('expedidoEn').value;
-        const fotografia = '';
+        let imageUrl = '';
+        if (archivo) {
+            try {    
+                console.log("asdasd")            
+                const imageResponse = await guardarImagen(archivo);
+                imageUrl = imageResponse.datos;
+            } catch (error) {
+                Swal.fire({
+                    title: 'Error',
+                    text: error?.mensaje ,
+                    icon: 'error',
+                    confirmButtonText: 'Intentar nuevamente',
+                });
+                 return;
+            }
+        }
+        let datosPerfil = { ...data, Fotografia: imageUrl };
 
-        const datos = {
-            nombres: nombres,
-            apellidoPaterno: apellidoPaterno,
-            apellidoMaterno: apellidoMaterno,
-            fechaNacimiento: fechaNacimiento,
-            ciudadNacimiento: lugarNacimiento,
-            paisNacimiento: paisNacimiento,
-            ciudadResidencia: lugarResidencia,
-            paisResidencia: paisResidencia,
-            direccion: direccion,
-            zona: zona,
-            telefono: telefono,
-            telefonoMovil: telefonoMovil,
-            email: email,
-            documentoExpedido: expedidoEn,
-            numeroDocumento: numeroDocumento,
-            fotografia: fotografia,
-        };
         try {
-            let result = await actualizarPerfil(datos);
-            console.log(result.datos);
+            let result = await actualizarPerfil(datosPerfil);
             Swal.fire({
                 title: '¡Éxito!',
                 text: result.mensaje,
                 icon: 'success',
                 confirmButtonText: 'Aceptar',
             }).then(async () => {
-                const perfil = await obtenerPerfil();
-                setDatosPersonales(perfil.datos);
+                setDatosPersonales(result.datos);
             });
         } catch (error) {
-            console.error('Error al guardar los datos personales', error);
             Swal.fire({
                 title: 'Error',
                 text: error?.response?.data?.mensaje || 'Hubo un problema al guardar el curso. Intenta nuevamente.',
@@ -391,48 +395,31 @@ const Perfil = () => {
             });
         }
     };
-    const handleRegistraPerfil = async (event) => {
+    const handleRegistraPerfil = async (data) => {
 
-        const nombres = document.getElementById('nombres').value;
-        const apellidoPaterno = document.getElementById('apellidoPadre').value;
-        const apellidoMaterno = document.getElementById('apellidoMadre').value;
-        const fechaNacimiento = document.getElementById('fechaNacimiento').value;
-        const lugarNacimiento = document.getElementById('lugarNacimiento').value;
-        const paisNacimiento = document.getElementById('paisNacimiento').value;
-        const lugarResidencia = document.getElementById('lugarResidencia').value;
-        const paisResidencia = document.getElementById('paisResidencia').value;
-        const direccion = document.getElementById('direccion').value;
-        const zona = document.getElementById('zona').value;
-        const telefono = document.getElementById('telefono').value;
-        const telefonoMovil = document.getElementById('telefonoMovil').value;
-        const email = document.getElementById('email').value;
-        const tipoDocumento = document.getElementById('tipoDocumento').value;
-        const numeroDocumento = document.getElementById('numeroDocumento').value;
-        const expedidoEn = document.getElementById('expedidoEn').value;
-        const fotografia = '';
+         let imageUrl = '';
+        if (archivo) {
+            try {    
+                console.log("asdasd")            
+                const imageResponse = await guardarImagen(archivo);
+                imageUrl = imageResponse.datos;
+            } catch (error) {
+                Swal.fire({
+                    title: 'Error',
+                    text: error?.mensaje ,
+                    icon: 'error',
+                    confirmButtonText: 'Intentar nuevamente',
+                });
+                 return;
+            }
+        }
 
-        const datos = {
-            nombres,
-            apellidoPaterno,
-            apellidoMaterno,
-            fechaNacimiento,
-            ciudadNacimiento: lugarNacimiento,
-            paisNacimiento,
-            ciudadResidencia: lugarResidencia,
-            paisResidencia,
-            direccion,
-            zona,
-            telefono,
-            telefonoMovil,
-            email,
-            documentoExpedido: expedidoEn,
-            numeroDocumento,
-            fotografia,
-        };
 
         try {
-            const result = await agregarPerfil(datos);
-            console.log(result)
+            let datosPerfil = { ...data, Fotografia: imageUrl };
+            console.log(datosPerfil);
+            const result = await agregarPerfil(datosPerfil);
+
             if (Number.isInteger(result.datos.id)) {
                 setIdPerfil(result.datos.id);
             }
@@ -444,9 +431,10 @@ const Perfil = () => {
             });
         } catch (error) {
             console.error('Error al guardar los datos personales', error);
+            console.log(error)
             Swal.fire({
                 title: 'Error',
-                text: result.mensaje,
+                text: error.mensaje,
                 icon: 'error',
                 confirmButtonText: 'Intentar nuevamente',
             });
@@ -460,7 +448,7 @@ const Perfil = () => {
         const ciudad = document.getElementById('ciudad').value;
         const pais = document.getElementById('pais').value;
 
-        const datos = {      
+        const datos = {
             parNivelFormacionId: NivelFormacionId,
             centroEstudios: centroEstudios,
             tituloObtenido: tituloObtenido,
@@ -874,8 +862,6 @@ const Perfil = () => {
                                                                     type="text"
                                                                     id="nombres"
                                                                     className="form-control"
-                                                                    name="nombres"
-                                                                    defaultValue={datosPersonales?.nombres || ""}
                                                                     {...register("nombres", { required: "El campo 'Nombres' es obligatorio." })}
                                                                 />
                                                                 {errors.nombres && <span style={{ color: "red" }}>{errors.nombres.message}</span>}
@@ -884,12 +870,10 @@ const Perfil = () => {
                                                                 <label className="form-label">Apellido del padre *</label>
                                                                 <input
                                                                     type="text"
-                                                                    id="apellidoPadre"
+                                                                    id="apellidoPaterno"
                                                                     className="form-control"
-                                                                    name="apellidoPadre"
-                                                                    defaultValue={datosPersonales?.apellidoPaterno || ""}
                                                                     {...register("apellidoPaterno", { required: "Apellido es obligatorio" })}
-                                                                    required
+
                                                                 />
                                                                 {errors.apellidoPaterno && <span style={{ color: "red" }}>{errors.apellidoPaterno.message}</span>}
                                                             </div>
@@ -897,13 +881,12 @@ const Perfil = () => {
                                                                 <label className="form-label">Apellido de la madre *</label>
                                                                 <input
                                                                     type="text"
-                                                                    id="apellidoMadre"
+                                                                    id="apellidoMaterno"
                                                                     className="form-control"
-                                                                    name="apellidoMadre"
-                                                                    defaultValue={datosPersonales?.apellidoMaterno || ""}
                                                                     {...register("apellidoMaterno", { required: "Apellido es requerido" })}
-                                                                    required
+
                                                                 />
+                                                                {errors.apellidoMaterno && <span style={{ color: "red" }}>{errors.apellidoMaterno.message}</span>}
                                                             </div>
                                                             <div className="col-md-6">
                                                                 <label className="form-label">Fecha de Nacimiento *</label>
@@ -911,28 +894,31 @@ const Perfil = () => {
                                                                     type="date"
                                                                     id="fechaNacimiento"
                                                                     className="form-control"
-                                                                    name="fechaNacimiento"
-                                                                    defaultValue={datosPersonales?.fechaNacimiento || ""}
-                                                                    {...register("fechaNacimiento", { required: "Apellido es requerido" })}
-                                                                    required
+                                                                    {...register("fechaNacimiento", { required: "Fecha de nacimiento requerido" })}
+
                                                                 />
+                                                                {errors.fechaNacimiento && <span style={{ color: "red" }}>{errors.fechaNacimiento.message}</span>}
                                                             </div>
                                                             <div className="col-md-6">
                                                                 <label className="form-label">Lugar de Nacimiento *</label>
                                                                 <input
                                                                     type="text"
-                                                                    id="lugarNacimiento"
+                                                                    id="ciudadNacimiento"
                                                                     className="form-control"
-                                                                    name="ciudadNacimiento"
-                                                                    defaultValue={datosPersonales?.ciudadNacimiento || ""}
                                                                     {...register("ciudadNacimiento", { required: "La Ciudad de nacimiento es un dato requerido" })}
-                                                                    required
+
                                                                 />
                                                                 {errors.ciudadNacimiento && <span style={{ color: "red" }}>{errors.ciudadNacimiento.message}</span>}
                                                             </div>
+
+
                                                             <div className="col-md-6">
                                                                 <label className="form-label">País de Nacimiento *</label>
-                                                                <select id="paisNacimiento" onChange={handleChange} className="form-select" name="paisNacimiento" required>
+                                                                <select
+                                                                    id="paisNacimiento"
+                                                                    className="form-select"
+                                                                    {...register("paisNacimiento", { required: "El país de nacimiento es obligatorio" })}
+                                                                >
                                                                     <option value="Bolivia">Bolivia</option>
                                                                     <option value="Otro">Otro</option>
                                                                 </select>
@@ -941,18 +927,20 @@ const Perfil = () => {
                                                                 <label className="form-label">Lugar de Residencia</label>
                                                                 <input
                                                                     type="text"
-                                                                    id="lugarResidencia"
+                                                                    id="ciudadResidencia"
                                                                     className="form-control"
-                                                                    name="ciudadResidencia"
-                                                                    defaultValue={datosPersonales?.ciudadResidencia || ""}
-                                                                    {...register("ciudadResidencia", { required: "La Ciudad de residencia es un dato requerido" })}
-                                                                    required
+                                                                    {...register("ciudadResidencia")}
+
                                                                 />
-                                                                {errors.ciudadResidencia && <span style={{ color: "red" }}>{errors.ciudadResidencia.message}</span>}
+
                                                             </div>
                                                             <div className="col-md-6">
                                                                 <label className="form-label">País de Residencia</label>
-                                                                <select id="paisResidencia" onChange={handleChange} className="form-select" name="paisResidencia">
+                                                                <select
+                                                                    id="paisResidencia"
+                                                                    className="form-select"
+                                                                    {...register("paisResidencia", { required: "El país de residencia es obligatorio" })}
+                                                                >
                                                                     <option value="Bolivia">Bolivia</option>
                                                                     <option value="Otro">Otro</option>
                                                                 </select>
@@ -963,12 +951,10 @@ const Perfil = () => {
                                                                     type="text"
                                                                     id="direccion"
                                                                     className="form-control"
-                                                                    name="direccion"
-                                                                    defaultValue={datosPersonales?.direccion || ""}
-                                                                    {...register("direccion", { required: "La Dirección es un dato requerido" })}
-                                                                    required
+                                                                    {...register("direccion")}
+
                                                                 />
-                                                                {errors.direccion && <span style={{ color: "red" }}>{errors.direccion.message}</span>}
+
                                                             </div>
                                                             <div className="col-md-6">
                                                                 <label className="form-label">Zona</label>
@@ -976,36 +962,31 @@ const Perfil = () => {
                                                                     type="text"
                                                                     id="zona"
                                                                     className="form-control"
-                                                                    name="zona"
-                                                                    defaultValue={datosPersonales?.zona || ""}
-                                                                    {...register("zona", { required: "La Zona es un dato requerido" })}
-                                                                    required
+                                                                    {...register("zona")}
+
                                                                 />
-                                                                {errors.zona && <span style={{ color: "red" }}>{errors.zona.message}</span>}
+
                                                             </div>
                                                             <div className="col-md-6">
-                                                                <label className="form-label">Teléfono *</label>
+                                                                <label className="form-label">Teléfono</label>
                                                                 <input
                                                                     type="number"
                                                                     id="telefono"
                                                                     className="form-control"
-                                                                    name="telefono"
-                                                                    defaultValue={datosPersonales?.telefono || ""}
                                                                     {...register("telefono")}
-                                                                    required
+
                                                                 />
-                                                                {errors.telefono && <span style={{ color: "red" }}>{errors.telefono.message}</span>}
+
                                                             </div>
                                                             <div className="col-md-6">
-                                                                <label className="form-label">Teléfono Móvil</label>
+                                                                <label className="form-label">Teléfono Móvil *</label>
                                                                 <input
                                                                     type="number"
                                                                     id="telefonoMovil"
                                                                     className="form-control"
-                                                                    name="telefonoMovil"
-                                                                    defaultValue={datosPersonales?.telefonoMovil || ""}
-                                                                    {...register("telefonoMovil")}
+                                                                    {...register("telefonoMovil", { required: "El teléfono móvil es requerido" })}
                                                                 />
+                                                                {errors.telefonoMovil && <span style={{ color: "red" }}>{errors.telefonoMovil.message}</span>}
                                                             </div>
                                                             <div className="col-md-6">
                                                                 <label className="form-label">Email *</label>
@@ -1013,10 +994,8 @@ const Perfil = () => {
                                                                     type="text"
                                                                     id="email"
                                                                     className="form-control"
-                                                                    name="email"
-                                                                    defaultValue={datosPersonales?.email || ""}
                                                                     {...register("email", { required: "El email es un dato requerido" })}
-                                                                    required
+
                                                                 />
                                                                 {errors.email && <span style={{ color: "red" }}>{errors.email.message}</span>}
                                                             </div>
@@ -1033,10 +1012,8 @@ const Perfil = () => {
                                                                     type="number"
                                                                     id="numeroDocumento"
                                                                     className="form-control"
-                                                                    name="numeroDocumento"
-                                                                    defaultValue={datosPersonales?.numeroDocumento || ""}
                                                                     {...register("numeroDocumento", { required: "El número de documento de identidad es un dato requerido" })}
-                                                                    required
+
                                                                 />
                                                                 {errors.numeroDocumento && <span style={{ color: "red" }}>{errors.numeroDocumento.message}</span>}
                                                             </div>
@@ -1044,14 +1021,12 @@ const Perfil = () => {
                                                                 <label className="form-label">Expedido en</label>
                                                                 <input
                                                                     type="text"
-                                                                    id="expedidoEn"
+                                                                    id="documentoExpedido"
                                                                     className="form-control"
-                                                                    name="expedidoEn"
-                                                                    defaultValue={datosPersonales?.documentoExpedido || ""}
-                                                                    {...register("documentoExpedido", { required: "El número de documento de identidad es un dato requerido" })}
-                                                                    required
+                                                                    {...register("documentoExpedido")}
+
                                                                 />
-                                                                {errors.documentoExpedido && <span style={{ color: "red" }}>{errors.documentoExpedido.message}</span>}
+
                                                             </div>
                                                             <div className="col-md-6">
                                                                 <label className="form-label">Fotografía del Postulante</label>

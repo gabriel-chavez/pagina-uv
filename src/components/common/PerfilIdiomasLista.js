@@ -8,7 +8,7 @@ import { eliminarPerfilIdioma } from '@/services/convocatoriaService';
 const PerfilIdiomasLista = ({ idiomasLista, setIdiomas, onEditClick, idPerfil}) => {
     const [showConfirmModal, setShowConfirmModal] = useState(false);
     const [selectedIdioma, setSelectedIdioma] = useState(null);
-console.log(idiomasLista);
+//console.log(idiomasLista);
     const handleDeleteClick = (idioma) => {
         setSelectedIdioma(idioma);
         setShowConfirmModal(true);
